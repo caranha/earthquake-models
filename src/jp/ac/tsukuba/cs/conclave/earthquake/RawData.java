@@ -1,5 +1,6 @@
 /***
  * Simple Comment
+ * 
  */
 
 package jp.ac.tsukuba.cs.conclave.earthquake;
