@@ -9,20 +9,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 
 public class RawData {
-	ArrayList<RawDataPoint> data;
+	public ArrayList<RawDataPoint> data;
 
 	int linecount;
 	
-	double minlong,maxlong;
-	double minlat,maxlat;
-	DateTime mindate, maxdate;
-	double mindepth,maxdepth;
-	double minmag,maxmag;
+	public double minlong,maxlong;
+	public double minlat,maxlat;
+	public DateTime mindate, maxdate;
+	public double mindepth,maxdepth;
+	public double minmag,maxmag;
 	
 	public RawData()
 	{

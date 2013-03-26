@@ -1,8 +1,6 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
 import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 
