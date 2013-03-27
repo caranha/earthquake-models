@@ -9,18 +9,20 @@ import org.joda.time.DateTime;
 
 public class RIModel {
 
-	RIBox eventgrid[][];
+	public RIBox eventgrid[][];
 	
-	double boxsize; // size, in degrees, of a box
-	double startboxX;
-	double startboxY;
-	int boxsizeX;
-	int boxsizeY;
+	public double boxsize; // size, in degrees, of a box
+	public double startboxX;
+	public double startboxY;
+	public int boxsizeX;
+	public int boxsizeY;
 	
 	
-	DateTime initTime,endTime; // instants to begin and end the training of the model
-	double minMag; // minimum magnitude for events to be considered
-	double magDelta; // steps to consider the magnitude
+	public DateTime initTime,endTime; // instants to begin and end the training of the model
+	public double minMag; // minimum magnitude for events to be considered
+	public double magDelta; // steps to consider the magnitude
+	
+	public int highestCount; // highest event count from all cells
 	
 	
 	/**
@@ -47,6 +49,8 @@ public class RIModel {
 		minMag = 2.5;
 		magDelta = 0.1;
 		
+		highestCount = 0;
+		
 		readData(d);
 	}
 	
@@ -65,6 +69,8 @@ public class RIModel {
 				int px = (int)Math.floor((t.longitude - startboxX)/boxsize);
 				int py = (int)Math.floor((t.latitude - startboxY)/boxsize);
 				eventgrid[px][py].addEvent(t.magnitude);
+				if (eventgrid[px][py].eventCount[0] > highestCount)
+					highestCount = eventgrid[px][py].eventCount[0];
 			}
 		}		
 	}
