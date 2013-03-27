@@ -26,11 +26,20 @@ public class RIBox {
 		deltaMag = dm;
 	}
 	
-	public void addEvent(double Magnitude)
+	/**
+	 * Adds a new earthquake event to the internal counter;
+	 * @param Magnitude
+	 * @param count
+	 */
+	public void addEvent(double Magnitude, int[] count)
 	{
 		int index = (int) Math.floor(Magnitude/deltaMag) + 1;
 		for (int i = 0; i < index; i++)
+		{
 			eventCount[i]++;
+			if (eventCount[i] > count[i])
+				count[i] = eventCount[i];
+		}
 	}
 	
 	/**
@@ -42,7 +51,6 @@ public class RIBox {
 	{
 		return eventCount[(int) Math.floor(minMag/deltaMag)];
 	}
-	
 	/* Returns the number of events stronger than minMag, but weaker than MaxMag */
 	public int getEvents(double minMag, double maxMag)
 	{
@@ -67,4 +75,16 @@ public class RIBox {
 			
 	}
 	
+
+	/**
+	 * Get the intensity of the strongest event that has happened in this cell;
+	 * @return
+	 */
+	public double getStrongest()
+	{
+		int ind = 0;
+		while ((ind+1 < eventCount.length) && eventCount[ind+1] > 0)
+			ind++;
+		return (ind*deltaMag);
+	}
 }
