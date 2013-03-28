@@ -11,7 +11,7 @@ public class RawDataPoint {
 	public double magnitude;
 	public double depth; 
 	
-	DateTime time; // time when the event happened
+	public DateTime time; // time when the event happened
 	
 	/*
 	 * Create a new data point based on the normal string format
