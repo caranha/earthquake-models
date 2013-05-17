@@ -1,43 +1,49 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.RI.RIModel;
-import jp.ac.tsukuba.cs.conclave.earthquake.forecast.RELMForecast;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
 public class TestMain {
 
+	
+	
 	public static void main(String[] args) {
-		RawData r = new RawData();
-		//r.loadData("/home/caranha/Desktop/Work/Earthquake_bogdan/data/jma_cat_100l_test");
-		r.loadData("/home/caranha/Desktop/Work/Earthquake_bogdan/data/jma_cat_2000_2012_Mth2.5_formatted.dat");
+		DataList r = new DataList();
+		Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+		logger.setLevel(Level.INFO);
 
-		RELMForecast f = new RELMForecast(r.minlong, r.maxlong, r.minlat,r.maxlat);
-		f.readRawData(r.mindate, r.maxdate, r);
-		System.out.println(f.getTotalEvents());
+		r.loadData("data/jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		r.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
+
+		//System.out.println(r.data.get(0).time.toString());
 		
-//		RIModel tr = new RIModel(r);
-//		double mag = 2.5;
-//	
-//		System.out.println(tr.boxsizeX + " " + tr.boxsizeY);
-//		System.out.println(tr.getHighCount(mag)); // maximum number of events in a single grid
-//
-//		BufferedImage hmap = tr.getIntensityImage();		
-//		File f = new File("himg.png");
-//	    
-//		try {
-//			ImageIO.write(hmap, "png", f);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Iterator<DataPoint> it = r.data.iterator();
 		
-		
+		DataPoint pold = null;
+		DataPoint pnew = null;
+		while (it.hasNext())
+		{
+			pnew = it.next();
+			if (pold != null)
+			{
+				if (pold.compareTo(pnew) == 0 && (pold.FM!=pnew.FM))
+				{
+					DataPoint JMA = (pold.FM == true?pnew:pold);
+					DataPoint Fnet = (pold.FM == true?pold:pnew);
+					
+					
+					System.out.println(pnew.time.toString()+": "+JMA.longitude+" "+JMA.latitude+" "+JMA.magnitude+" "+Fnet.longitude+" "+Fnet.latitude+" "+Fnet.magnitude);
+				}
+			}
+			
+			pold = pnew;
+		}
 		
 	}
 	

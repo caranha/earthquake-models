@@ -8,11 +8,10 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.RI;
 
 import java.util.ArrayList;
-
-import jp.ac.tsukuba.cs.conclave.earthquake.Logger;
+import java.util.logging.Logger;
 
 public class RIBox {
-
+	private final static Logger logger = Logger.getLogger(RIBox.class.getName());
 	int[] eventCount; // counts the number of earthquakes for each magnitude of interest
 	double deltaMag; // magnitude interval
 	
@@ -56,8 +55,8 @@ public class RIBox {
 	{
 		if (minMag > maxMag)
 		{
-			Logger l = Logger.getInstance();
-			l.log("Error counting events: Min is bigger than Max)");
+			
+			logger.severe("Error counting events: Min is bigger than Max)");
 			return -1;
 		}
 		

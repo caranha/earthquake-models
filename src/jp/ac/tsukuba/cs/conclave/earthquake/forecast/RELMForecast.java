@@ -7,8 +7,8 @@ package jp.ac.tsukuba.cs.conclave.earthquake.forecast;
 
 import java.util.Iterator;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.RawData;
-import jp.ac.tsukuba.cs.conclave.earthquake.RawDataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
 import org.joda.time.DateTime;
 
@@ -57,12 +57,12 @@ public class RELMForecast {
 	 * @param eT
 	 * @param r
 	 */
-	public void readRawData(DateTime sT, DateTime eT, RawData r)
+	public void readRawData(DateTime sT, DateTime eT, DataList r)
 	{
-		Iterator<RawDataPoint> it = r.data.iterator();
+		Iterator<DataPoint> it = r.data.iterator();
 		while (it.hasNext())
 		{
-			RawDataPoint t = it.next();
+			DataPoint t = it.next();
 			if ((t.time.isAfter(sT)||t.time.equals(sT)) && 
 				(t.time.isBefore(eT)||t.time.equals(eT)))
 			{

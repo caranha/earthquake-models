@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.RawData;
-import jp.ac.tsukuba.cs.conclave.earthquake.RawDataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
 import org.joda.time.DateTime;
 
@@ -31,7 +31,7 @@ public class RIModel {
 	 * Constructor using default parameter values. Receives a training data set as input.
 	 * @param d
 	 */
-	public RIModel(RawData d)
+	public RIModel(DataList d)
 	{
 		// setting the box size
 		boxsize = 0.05;
@@ -61,12 +61,12 @@ public class RIModel {
 	 * Transforms a rawdata into grid event data. Used after the parameters have been set.
 	 * @param d
 	 */
-	void readData(RawData d)
+	void readData(DataList d)
 	{
-		Iterator<RawDataPoint> it = d.data.iterator();
+		Iterator<DataPoint> it = d.data.iterator();
 		while (it.hasNext())
 		{
-			RawDataPoint t = it.next();
+			DataPoint t = it.next();
 			if (t.magnitude >= minMag)
 			{
 				int px = (int)Math.floor((t.longitude - startboxX)/boxsize);
