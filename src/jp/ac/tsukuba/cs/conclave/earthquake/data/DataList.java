@@ -31,6 +31,33 @@ public class DataList {
 		data = new ArrayList<DataPoint>();
 		linecount = 0;
 	}
+	
+	public void addData(DataPoint d)
+	{
+		data.add(d);
+		if (linecount == 0)
+		{
+			minlong = maxlong = d.longitude;
+			minlat = maxlat = d.latitude;
+			mindate = maxdate = d.time;
+			minmag = maxmag = d.magnitude;
+			mindepth = maxdepth = d.depth;
+		}
+		else
+		{
+			minmag = (d.magnitude < minmag?d.magnitude:minmag);
+			maxmag = (d.magnitude > maxmag?d.magnitude:maxmag);
+			mindepth = (d.depth < mindepth?d.depth:mindepth);
+			maxdepth = (d.depth > maxdepth?d.depth:maxdepth);
+			minlat = (d.latitude < minlat?d.latitude:minlat);
+			maxlat = (d.latitude > maxlat?d.latitude:maxlat);
+			minlong = (d.longitude < minlong?d.longitude:minlong);
+			maxlong = (d.longitude > maxlong?d.longitude:maxlong);
+			mindate = (d.time.isBefore(mindate)?d.time:mindate);
+			maxdate = (d.time.isAfter(maxdate)?d.time:maxdate);
+		}
+		linecount++;
+	}
 
 	
 	/**
@@ -46,7 +73,7 @@ public class DataList {
 		
 		boolean moredata = !data.isEmpty();
 		BufferedReader reader = null;
-		int line_count = 0;
+		int lines_read = 0;
 		
 		try
 		{	
@@ -66,29 +93,8 @@ public class DataList {
 					DataPoint dt = new DataPoint(line,datatype); // passes one line to the data point parser
 					if (dt != null) //Zeratul exists
 					{
-						data.add(dt);
-						if (line_count == 0)
-						{
-							minlong = maxlong = dt.longitude;
-							minlat = maxlat = dt.latitude;
-							mindate = maxdate = dt.time;
-							minmag = maxmag = dt.magnitude;
-							mindepth = maxdepth = dt.depth;
-						}
-						else
-						{
-							minmag = (dt.magnitude < minmag?dt.magnitude:minmag);
-							maxmag = (dt.magnitude > maxmag?dt.magnitude:maxmag);
-							mindepth = (dt.depth < mindepth?dt.depth:mindepth);
-							maxdepth = (dt.depth > maxdepth?dt.depth:maxdepth);
-							minlat = (dt.latitude < minlat?dt.latitude:minlat);
-							maxlat = (dt.latitude > maxlat?dt.latitude:maxlat);
-							minlong = (dt.longitude < minlong?dt.longitude:minlong);
-							maxlong = (dt.longitude > maxlong?dt.longitude:maxlong);
-							mindate = (dt.time.isBefore(mindate)?dt.time:mindate);
-							maxdate = (dt.time.isAfter(maxdate)?dt.time:maxdate);
-						}
-						line_count++;
+						addData(dt);
+						lines_read++;
 					}
 				}
 			reader.close();
@@ -99,13 +105,10 @@ public class DataList {
 			System.exit(1);
 		}
 
-		logger.info("Read "+line_count+" lines from "+filename);		
-
-		linecount += line_count;
+		logger.info("Read "+lines_read+" lines from "+filename);		
 		if (moredata)
 		{
 			Collections.sort(data);
 		}
-
 	}
 }
