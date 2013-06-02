@@ -1,6 +1,5 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,13 +17,19 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
+import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMBase;
 import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMStatModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
 import org.joda.time.Duration;
 import org.joda.time.format.ISODateTimeFormat;
 
-public class ModelPanel implements ActionListener {
+public class ModelPanel implements ActionListener,ListSelectionListener {
 
 	// main panel
 	JPanel pane;
@@ -46,7 +51,7 @@ public class ModelPanel implements ActionListener {
 	// data display data fields
 	JTextArea origininfo;
 	JTextArea modeldata;
-	JTextArea aftershockdata;
+	JList<String> aftershockdata;
 	
 	
 	public ModelPanel()
@@ -93,14 +98,23 @@ public class ModelPanel implements ActionListener {
 		JScrollPane modelscroll = new JScrollPane(modeldata);
 		modelscroll.setBorder(space);
 		
-		aftershockdata = new JTextArea(10,80);
-		aftershockdata.setEditable(false);
+		
+		aftershockdata = new JList<String>();
+		aftershockdata.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		aftershockdata.setLayoutOrientation(JList.VERTICAL);
+		aftershockdata.setVisibleRowCount(10);
+		aftershockdata.addListSelectionListener(this);
 		JScrollPane asdscroll = new JScrollPane(aftershockdata);
 		asdscroll.setBorder(space);
+		
+		
+		
 		
 		basedata.add(originscroll);
 		basedata.add(modelscroll);
 		datadisplay.add(basedata);
+		
+		datadisplay.add(new JLabel("Time   Mag   Dist1   Dist2   Model"));
 		datadisplay.add(asdscroll);
 		datadisplay.add(new JSeparator());
 	}
@@ -157,7 +171,7 @@ public class ModelPanel implements ActionListener {
 			c.modelBase.fillAfterShockList(c.total, timeLimit);
 			
 			String origindata = c.origin.dump()+"\n\n";
-			origindata = origindata + "Aftershock distance: "+c.modelBase.getAftershockRadius(c.origin.magnitude);
+			origindata = origindata + "Aftershock distance: "+FMBase.getAftershockRadius(c.origin.magnitude);
 			origindata = origindata + "\nNumber of Aftershocks: "+c.modelBase.getAfterShockList().size();
 						
 			origininfo.setText(origindata);
@@ -180,7 +194,30 @@ public class ModelPanel implements ActionListener {
 			
 		    modeldata.setText(modelstring);
 		    
-		    String aftershocks="";
+
+		    DataList aslist = c.modelBase.getAfterShockList();
+		    String[] aftershocks = new String[aslist.size()];
+
+		    
+		    for(int i = 0; i < aslist.size();i++)	
+		    {
+		    	String tmps = "";
+		    	DataPoint tmp = aslist.data.get(i);
+		    	tmps += tmp.time.toString(ISODateTimeFormat.basicTimeNoMillis())+"  ";
+		    	tmps += tmp.magnitude+"  ";
+		    	tmps += GeoUtils.crossTrackDistance(c.origin.latitude, c.origin.longitude, 
+		    											   c.origin.S[0], tmp.latitude, tmp.longitude)+"  ";
+		    	tmps += GeoUtils.crossTrackDistance(c.origin.latitude, c.origin.longitude, 
+		    											   c.origin.S[1], tmp.latitude, tmp.longitude)+"  ";
+		    	if (tmp.FM)
+		    	{
+		    		tmps += "M1- S"+tmp.S[0]+" D"+tmp.D[0]+" R"+tmp.R[0] + 
+		    					   " M2- S"+tmp.S[1]+" D"+tmp.D[1]+" R"+tmp.R[1];
+		    	}
+		    	aftershocks[i] = tmps;
+		    }
+		    aftershockdata.setListData(aftershocks);
+		    
 		    
 			
 		}
@@ -246,5 +283,11 @@ public class ModelPanel implements ActionListener {
 		calculateModel = new JButton("Calculate Models");
 		calculateModel.addActionListener(this);
 		quakeselector.add(calculateModel);
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

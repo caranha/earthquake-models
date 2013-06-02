@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 public class DataPoint implements Comparable<DataPoint> {
 
@@ -65,7 +66,12 @@ public class DataPoint implements Comparable<DataPoint> {
 				Integer.parseInt(token[ti[type][2]]), 
 				Integer.parseInt(token[ti[type][3]]), 
 				Integer.parseInt(token[ti[type][4]]), 
-				(int) Math.floor(Double.parseDouble(token[ti[type][5]])));		
+				(int) Math.floor(Double.parseDouble(token[ti[type][5]])));
+		
+		/* fnet time stamps are in UCT - converting them to Japanese time (shouldn't actually do that) */
+		if (type == 1)
+			time = time.plusHours(9);
+		
 		
 		longitude = Double.parseDouble(token[ti[type][6]]);
 		latitude = Double.parseDouble(token[ti[type][7]]);
@@ -120,7 +126,7 @@ public class DataPoint implements Comparable<DataPoint> {
 		String ret = "";
 		ret = ret + "Location: "+longitude+","+latitude+", ";
 		ret = ret + "M"+magnitude+" Depth: "+depth;
-		ret = ret + "\nDate: "+ time.toString();
+		ret = ret + "\nDate: "+ time.toString(ISODateTimeFormat.basicDateTimeNoMillis());
 		
 		if (FM)
 		{
