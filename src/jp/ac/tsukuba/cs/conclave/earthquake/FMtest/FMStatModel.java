@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
+import jp.ac.tsukuba.cs.conclave.earthquake.StatUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
@@ -26,13 +27,14 @@ public class FMStatModel {
 	public ArrayList<Double> modelErrorList; // distance between this model and the closest of the two models of an aftershock
 	public ArrayList<Double> strikeErrorList; // distance between the closest strike only;
 	
+	// TODO: create getters and summarizers for these
 	// Averages of the above errors
-	double distanceAvg;
-	double distanceDev;
-	double modelAvg;
-	double modelDev;
-	double strikeAvg;
-	double strikeDev;
+	public double distanceAvg;
+	public double distanceDev;
+	public double modelAvg;
+	public double modelDev;
+	public double strikeAvg;
+	public double strikeDev;
 	
 	/**
 	 * 
@@ -67,6 +69,53 @@ public class FMStatModel {
 		}
 	}
 
+	/**
+	 * Calculates the distance model. This cannot be calculated if we have too few observations (>2?)
+	 * 
+	 */
+	public void calcDistModel()
+	{
+		 // TODO: Add return or exception if the model has too few observations to calculate this
+		if (sizeDist() < 3)
+			return;
+		
+		double[] ret = StatUtils.averageVariance(distanceErrorList);
+		distanceAvg = ret[0];
+		distanceDev = ret[1];		
+	}
+	
+	/**
+	 * Calculates the model error model. This cannot be calculated if we have too few observations (>2?)
+	 * 
+	 */
+	public void calcMErrorModel()
+	{
+		 // TODO: Add return or exception if the model has too few observations to calculate this
+		if (sizeFM() < 3)
+			return;
+		
+		double[] ret = StatUtils.averageVariance(modelErrorList);
+		modelAvg = ret[0];
+		modelDev = ret[1];		
+	}
+	
+	/**
+	 * Calculates the strike error model. This cannot be calculated if we have too few observations (>2?)
+	 * 
+	 */
+	public void calcStrikeModel()
+	{
+		 // TODO: Add return or exception if the model has too few observations to calculate this
+		if (sizeFM() < 3)
+			return;
+		
+		double[] ret = StatUtils.averageVariance(strikeErrorList);
+		strikeAvg = ret[0];
+		strikeDev = ret[1];		
+	}
+	
+	
+	
 	/**
 	 * @return the number of events with distance errors in this model
 	 */
@@ -129,17 +178,21 @@ public class FMStatModel {
 	public void test()
 	{
 		System.out.println("Contains "+sizeDist()+" distance errors and "+sizeFM()+" model errors. (Distance, Model, Strike below)");
-		String disterr = "";
-		for (int i = 0; i < distanceErrorList.size(); i++)
-			disterr = disterr + distanceErrorList.get(i) + " ";
-		String modelerr = "";
-		for (int i = 0; i < modelErrorList.size(); i++)
-			modelerr = modelerr + modelErrorList.get(i) + " ";
-		String strikeerr = "";
-		for (int i = 0; i < strikeErrorList.size(); i++)
-			strikeerr = strikeerr + strikeErrorList.get(i) + " ";
-		System.out.println(disterr);
-		System.out.println(modelerr);
-		System.out.println(strikeerr);
+		System.out.println("Distance error is: "+distanceAvg+" +- "+distanceDev);
+		System.out.println("Model error is: "+modelAvg+" +- "+modelDev);
+		System.out.println("Strike error is: "+strikeAvg+" +- "+strikeDev);
+		
+//		String disterr = "";
+//		for (int i = 0; i < distanceErrorList.size(); i++)
+//			disterr = disterr + distanceErrorList.get(i) + " ";
+//		String modelerr = "";
+//		for (int i = 0; i < modelErrorList.size(); i++)
+//			modelerr = modelerr + modelErrorList.get(i) + " ";
+//		String strikeerr = "";
+//		for (int i = 0; i < strikeErrorList.size(); i++)
+//			strikeerr = strikeerr + strikeErrorList.get(i) + " ";
+//		System.out.println(disterr);
+//		System.out.println(modelerr);
+//		System.out.println(strikeerr);
 	}
 }

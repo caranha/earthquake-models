@@ -31,9 +31,9 @@ public class TestMain {
 		
 
 		// Getting a List of points of desired Magnitude
-		ArrayList<Integer> magPoints = fnet.getEventsByMagnitude(6.5, 6.6);
+		ArrayList<Integer> magPoints = fnet.getEventsByMagnitude(7, 8);
 	    DataPoint centralPoint = fnet.data.get(magPoints.get(0));
-	    Duration timewindow = new Duration(Duration.standardDays(10));
+	    Duration timewindow = new Duration(Duration.standardHours(10));
 		
 		FMBase fmtester = new FMBase();		
 		fmtester.init(centralPoint);
@@ -45,6 +45,14 @@ public class TestMain {
 
 		model1.loadAftershocks(aftershocks);
 		model2.loadAftershocks(aftershocks);
+
+		model1.calcDistModel();
+		model1.calcMErrorModel();
+		model1.calcStrikeModel();
+
+		model2.calcDistModel();
+		model2.calcMErrorModel();
+		model2.calcStrikeModel();
 		
 		model1.test();
 		model2.test();

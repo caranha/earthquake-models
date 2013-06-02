@@ -118,14 +118,14 @@ public class DataPoint implements Comparable<DataPoint> {
 	public String dump()
 	{
 		String ret = "";
-		ret = ret + "Location "+longitude+","+latitude+", ";
-		ret = ret + "M"+magnitude+" Depth: "+depth+", ";
-		ret = ret + DateFormat.getInstance().format(time);
+		ret = ret + "Location: "+longitude+","+latitude+", ";
+		ret = ret + "M"+magnitude+" Depth: "+depth;
+		ret = ret + "\nDate: "+ time.toString();
 		
 		if (FM)
 		{
-			ret = ret + " FM1: "+S[0]+","+D[0]+","+R[0];
-			ret = ret + " FM2: "+S[1]+","+D[1]+","+R[1];
+			ret = ret + "\n\nModel 1: S:"+S[0]+", D:"+D[0]+", R:"+R[0];
+			ret = ret + "\nModel 2: S:"+S[1]+", D:"+D[1]+", R:"+R[1];
 		}
 		return ret;
 	}
