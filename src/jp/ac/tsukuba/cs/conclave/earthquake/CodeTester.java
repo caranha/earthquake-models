@@ -10,14 +10,18 @@ public class CodeTester {
 	public static void main(String[] args) {
 
 		
+		
+	}
+
+	public static void testingAzimuth()
+	{
 		double[] p1 = {31.5645, 131.8818};
 		double[] p2 = {33.2268, 132.3592};
 		
 		double distance = GeoUtils.haversineDistance(p1[0],p1[1],p2[0],p2[1]);
-		double bearing = GeoUtils.forwardazimuth(p1[0], p1[1], p2[0], p2[1]);
+		double bearing = GeoUtils.forwardAzimuth(p1[0], p1[1], p2[0], p2[1]);
 		
 		System.out.println("Distance= " + distance + "km, Bearing: "+bearing);
-		
 	}
-
+	
 }

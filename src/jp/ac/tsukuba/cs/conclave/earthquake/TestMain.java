@@ -2,6 +2,7 @@ package jp.ac.tsukuba.cs.conclave.earthquake;
 
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,30 +27,11 @@ public class TestMain {
 		fnet.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
 		
 
-		
-		// Testing FM Tester. Needs data point and time window in days
-		int pointselect = 1;
-		int count = 0;
-		
-		while (pointselect > 0)
-		{
-			count++;
-			if (count >= fnet.data.size())
-				break;
-			if (fnet.data.get(count).magnitude > 7)
-				pointselect--;
-		}
-		if (pointselect > 0)
-		{
-			logger.warning("Could not find the desired event");
-			System.exit(0);
-		}
-		
-		
-	    DataPoint centralPoint = fnet.data.get(count);		
+		// Getting a List of points of desired Magnitude
+		ArrayList<Integer> magPoints = fnet.getEventsByMagnitude(5, 6);
+	    DataPoint centralPoint = fnet.data.get(magPoints.get(4));
 		int timewindow = 10;
 		
-
 		FMTester fmtester = new FMTester();		
 		fmtester.init(centralPoint, total, timewindow);
 

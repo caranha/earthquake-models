@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
@@ -111,4 +112,39 @@ public class DataList {
 			Collections.sort(data);
 		}
 	}
+
+	/** 
+	 * @return Returns the number of events in this DataList
+	 */
+	public int size()
+	{
+		return data.size();
+	}
+	
+	/**
+	 * This function creates a list of indexes in this data set, 
+	 * with earthquake events within the specified magnitudes.
+	 * 
+	 * @param min Events have magnitude equal or higher than this
+	 * @param max Events have magnitude equal or lower than this
+	 * @return ArrayList of Integers with indexes to all events that fit the above conditions
+	 */
+	public ArrayList<Integer> getEventsByMagnitude(double min, double max)
+	{
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+
+		for (int i = 0; i < data.size(); i++)
+		{
+			double tmag = data.get(i).magnitude;
+			if (tmag >= min && tmag <= max)
+				ret.add(i);				
+		}
+		
+		return ret;		
+	}
 }
+
+
+
+
+
