@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMTester;
+import org.joda.time.Duration;
+
+import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMBase;
+import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMStatModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.RI.RIModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
@@ -28,13 +31,23 @@ public class TestMain {
 		
 
 		// Getting a List of points of desired Magnitude
-		ArrayList<Integer> magPoints = fnet.getEventsByMagnitude(5, 6);
-	    DataPoint centralPoint = fnet.data.get(magPoints.get(4));
-		int timewindow = 10;
+		ArrayList<Integer> magPoints = fnet.getEventsByMagnitude(6.5, 6.6);
+	    DataPoint centralPoint = fnet.data.get(magPoints.get(0));
+	    Duration timewindow = new Duration(Duration.standardDays(10));
 		
-		FMTester fmtester = new FMTester();		
-		fmtester.init(centralPoint, total, timewindow);
+		FMBase fmtester = new FMBase();		
+		fmtester.init(centralPoint);
+		fmtester.fillAfterShockList(total, timewindow);
+		DataList aftershocks = fmtester.getAfterShockList();
+		
+		FMStatModel model1 = new FMStatModel(centralPoint, centralPoint.S[0], centralPoint.D[0], centralPoint.R[0]);		
+		FMStatModel model2 = new FMStatModel(centralPoint, centralPoint.S[1], centralPoint.D[1], centralPoint.R[1]);
 
+		model1.loadAftershocks(aftershocks);
+		model2.loadAftershocks(aftershocks);
+		
+		model1.test();
+		model2.test();
 		
 	}
 	

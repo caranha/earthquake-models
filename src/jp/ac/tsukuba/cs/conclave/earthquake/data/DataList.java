@@ -33,6 +33,21 @@ public class DataList {
 		linecount = 0;
 	}
 	
+	/**
+	 * Resets the DataList and clears all data.
+	 */
+	public void clear()
+	{
+		data.clear();
+		linecount = 0;
+		minlong = maxlong = minlat = maxlat = mindepth = maxdepth = minmag = maxmag = 0;
+		mindate = maxdate = null;
+	}
+	
+	/**
+	 * Appends one event to the end of the Datalist. Does not sort the DataList
+	 * @param d
+	 */
 	public void addData(DataPoint d)
 	{
 		data.add(d);

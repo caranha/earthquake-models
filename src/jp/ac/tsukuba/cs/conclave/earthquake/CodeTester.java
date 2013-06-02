@@ -8,11 +8,15 @@ public class CodeTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
-		
-		
 	}
 
+	public static void testingDegreeDistance()
+	{
+		double deg1 = -100;
+		double deg2 = 100;
+		System.out.println(GeoUtils.degreeDistance(deg1, deg2));
+	}
+	
 	public static void testingAzimuth()
 	{
 		double[] p1 = {31.5645, 131.8818};

@@ -97,4 +97,14 @@ public class GeoUtils {
 
 		return Math.asin(Math.sin(d13/RADIUS)*Math.sin(a13-a12)) * RADIUS;		
 	}	
+	
+	public static double degreeDistance(double deg1, double deg2)
+	{
+
+	    double angle = (Math.abs(deg1 - deg2))%360;
+	    if(angle > 180)
+	        angle = 360 - angle;
+	    return angle;
+	}
+	
 }

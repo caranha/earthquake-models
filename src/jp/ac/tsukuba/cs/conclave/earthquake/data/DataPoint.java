@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
 
-public class DataPoint implements Comparable {
+public class DataPoint implements Comparable<DataPoint> {
 
 	private final static Logger logger = Logger.getLogger(DataPoint.class.getName());
 	
@@ -112,6 +112,9 @@ public class DataPoint implements Comparable {
 		}
 	}
 
+	/**
+	 * @return a text string with all the data in this Data Point
+	 */
 	public String dump()
 	{
 		String ret = "";
@@ -128,43 +131,9 @@ public class DataPoint implements Comparable {
 	}
 	
 	@Override
-	public int compareTo(Object arg0) {
-		DataPoint tmp = (DataPoint) arg0;
+	public int compareTo(DataPoint arg0) {
 		
-		return (time.compareTo(tmp.time));		
+		return (time.compareTo(arg0.time));		
 	}
-
-	/**
-	 * Calculates distance in meters from a geopoint, using latitude and longitude.
-	 * 
-	 * Code by Espen Herseth Halvorsen, from StackExchange
-	 * 
-	 * FIXME: maybe this doesn't take into account if the long/lat are negative or not? 
-	 * I'm not sure how this is treated in the original data.
-	 * 
-	 * @param p -- another point to compare to
-	 * @return -- distance in meters
-	 */
-	public double distFrom(DataPoint p) 
-	{
-		double lat1 = this.latitude; 
-		double lng1 = this.longitude;
-		double lat2 = p.latitude;
-		double lng2 = p.longitude;
-		
-		double earthRadius = 3958.75; // radius in miles
-	    double dLat = Math.toRadians(lat2-lat1);
-	    double dLng = Math.toRadians(lng2-lng1);
-	    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-	               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-	               Math.sin(dLng/2) * Math.sin(dLng/2);
-	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	    double dist = earthRadius * c;
-
-	    int meterConversion = 1609;
-
-	    return (double) (dist * meterConversion);
-	    }
-	
 	
 }

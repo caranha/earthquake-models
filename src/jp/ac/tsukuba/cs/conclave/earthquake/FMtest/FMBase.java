@@ -4,17 +4,17 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Months;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
-/***
- * This package recieves a candidate event, which must include FM models.
- * It also receives a 
+
+/**
+ * This base stores the basic information needed to calculate statistical information for 
+ * FM models. In other words, from an event and a time duration, it calculate and stores 
+ * the probable aftershock events. 
  * 
  * @author caranha
  *
@@ -22,29 +22,27 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
 
 
-public class FMTester {
-	private final static Logger logger = Logger.getLogger(FMTester.class.getName());
+public class FMBase {
+	private final static Logger logger = Logger.getLogger(FMBase.class.getName());
 	
 	static int MODEL_N = 2;
 	static int RADIUS_RATE = 2;
 	
-	Duration timelimit; /* Number of days to consider for this tester */	
 	DataPoint origin;
 	DataList aftershocks;
 	int model[][]; // candidate models
 	double radius; // Radius for events
 	
 	
-	public FMTester()
+	public FMBase()
 	{
 		logger.setLevel(Level.FINER);
 		model = new int[2][3]; // two models, three attributes (S,D,R)
 		origin = null;
 		aftershocks = null;
-		timelimit = null;
 	}
 	
-	public boolean init(DataPoint o, DataList origdata, int days)
+	public boolean init(DataPoint o)
 	{
 		if (o.FM == false)
 		{
@@ -54,22 +52,8 @@ public class FMTester {
 		
 		origin = new DataPoint(o);
 		aftershocks = new DataList();
-		timelimit = Duration.standardDays(days);
-		
-		/* Calculating aftershock radius. This radius is taken from 
-		 * eq 9 of Helmstetter et al., JGR, 2005 
-		 * 
-		 * NOTE: This gives very low results:
-		 * Mag 7: 70km
-		 * Mag 6: 30km
-		 * Mag 5: 10km
-		 * Mag 4: 5km
-		 * 
-		 * Feels a bit too small for under 7 earthquakes
-		 */
-		radius = 0.01*Math.pow(10, (0.5*origin.magnitude));
-		radius = RADIUS_RATE*radius;
-		
+		radius = RADIUS_RATE*getAftershockRadius(origin.magnitude);		
+
 		logger.info("Origin Information:\n Magnitude: "+origin.magnitude+"  Selected Radius: "+radius);
 		
 		/* Setting the base models */
@@ -78,14 +62,45 @@ public class FMTester {
 			model[i][0] = origin.S[i];
 			model[i][1] = origin.D[i];
 			model[i][2] = origin.R[i];
-		}
+		}		
 		
+		return true;
+	}
+	
+	/**
+	 * Calculates the aftershock radius based on eq.9 from Helmstetter et al., JGR, 2005.
+	 * Average results with standard parameters are:
+	 * 
+	 * Mag 7: 70km
+	 * Mag 6: 30km
+	 * Mag 5: 10km
+	 * Mag 4: 5km
+	 * 
+	 * @param magnitude
+	 * @return the radius to consider aftershocks in kilometers.
+	 */
+	public static double getAftershockRadius(double magnitude)
+	{
+		return	0.01*Math.pow(10, (0.5*magnitude));
+	}
+	
+	
+	/**
+	 * Fills the "AfterShocks" field based on a list of events and JODA time duration.
+	 * This function appends to the current list of Aftershocks
+	 * 
+	 * @param origdata a DataList with the events that we want to search for AfterShocks
+	 * @param days the number of days
+	 * @return the current number of events in the AfterShocks structure;
+	 */
+	public int fillAfterShockList(DataList origdata, Duration timeLimit)
+	{
 		Iterator<DataPoint> it = origdata.data.iterator();	    
 	    while (it.hasNext())
 		{
 			DataPoint dt = it.next(); /* Zeratul */
 			if (dt.time.isAfter(origin.time) && 
-				dt.time.isBefore(origin.time.plus(timelimit)) &&
+				dt.time.isBefore(origin.time.plus(timeLimit)) &&
 			    GeoUtils.haversineDistance(dt.latitude, dt.longitude, 
 			    						   origin.latitude, origin.longitude) < radius)
 			{
@@ -93,10 +108,16 @@ public class FMTester {
 			}
 		}
 	    logger.info("Added "+aftershocks.data.size()+" events, based on time and strength");
-		
-		return true;
+	    return aftershocks.size();
 	}
 	
+	public void clearAfterShockList()
+	{
+		aftershocks.clear();
+	}
 	
-	
+	public DataList getAfterShockList()
+	{
+		return aftershocks;
+	}
 }
