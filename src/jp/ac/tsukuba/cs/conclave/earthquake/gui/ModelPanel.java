@@ -37,6 +37,7 @@ public class ModelPanel implements ActionListener,ListSelectionListener {
 	// subpanels for grouping
 	JPanel quakeselector;
 	JPanel datadisplay;
+	JPanel imagedisplay;
 
 	// quakeselector data elements;
 	JTextField minmag;
@@ -52,6 +53,9 @@ public class ModelPanel implements ActionListener,ListSelectionListener {
 	JTextArea origininfo;
 	JTextArea modeldata;
 	JList<String> aftershockdata;
+	
+	// Graphical Data
+	EarthQuakeDrawable mappane;
 	
 	
 	public ModelPanel()
@@ -72,15 +76,20 @@ public class ModelPanel implements ActionListener,ListSelectionListener {
 		initTextDisplay();
 		initImageDisplay();
 		
-		
 		pane.add(quakeselector);
 		pane.add(new JSeparator(JSeparator.VERTICAL));
 		pane.add(datadisplay);
 	}
 	
 	private void initImageDisplay() {
-		// TODO Auto-generated method stub
+	
+		imagedisplay = new JPanel();
+		imagedisplay.setLayout(new BoxLayout(imagedisplay,BoxLayout.X_AXIS));
 		
+		mappane = new EarthQuakeDrawable();
+		imagedisplay.add(mappane);
+		
+		datadisplay.add(imagedisplay);
 	}
 
 	private void initTextDisplay() {
@@ -186,9 +195,9 @@ public class ModelPanel implements ActionListener,ListSelectionListener {
 				c.models[i].calcStrikeModel();
 				
 				modelstring = modelstring + "Model "+(i+1)+":\n";
-			    modelstring = modelstring + "Average Distance: "+c.models[i].distanceAvg+" +-"+c.models[i].distanceDev+"\n";
-			    modelstring = modelstring + "Strike Error: "+c.models[i].strikeAvg+" +-"+c.models[i].strikeDev+"\n";
-			    modelstring = modelstring + "Model Error: "+c.models[i].modelAvg+" +-"+c.models[i].modelDev+"\n";
+			    modelstring = modelstring + "Average Distance: "+c.models[i].distanceAvg+" +-"+Math.sqrt(c.models[i].distanceDev)+"\n";
+			    modelstring = modelstring + "Strike Error: "+c.models[i].strikeAvg+" +-"+Math.sqrt(c.models[i].strikeDev)+"\n";
+			    modelstring = modelstring + "Model Error: "+c.models[i].modelAvg+" +-"+Math.sqrt(c.models[i].modelDev)+"\n";
 			    modelstring = modelstring + "\n";
 			}
 			
@@ -217,6 +226,10 @@ public class ModelPanel implements ActionListener,ListSelectionListener {
 		    	aftershocks[i] = tmps;
 		    }
 		    aftershockdata.setListData(aftershocks);
+		    
+		    mappane.addOrigin(c.origin);
+		    mappane.addAfterShocks(aslist);
+		    mappane.repaint();
 		    
 		    
 			
