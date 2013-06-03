@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -50,7 +51,9 @@ public class EarthQuakeDrawable extends JPanel {
         setPreferredSize(new Dimension(width,height));
         
         try {
-            map = ImageIO.read(new File("japan.jpg"));
+        	// map = ImageIO.read(new File("japan.jpg"));
+            map = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("japan.jpg"));
+            // BLACK MAGIC!
         } catch (IOException e) {
         	System.out.println(e.getMessage());
         	System.exit(0);

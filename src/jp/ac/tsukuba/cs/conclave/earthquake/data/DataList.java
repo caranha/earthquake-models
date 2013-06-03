@@ -8,6 +8,7 @@ package jp.ac.tsukuba.cs.conclave.earthquake.data;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -86,6 +87,10 @@ public class DataList {
 	 */
 	public void loadData(String filename, String datatype)
 	{
+		/*
+		 * FIXME: Adding some black magic to load from assets folder. Should probably
+		 * change this so that the data is loaded from assets folder if it can't be found externally
+		 */
 		
 		boolean moredata = !data.isEmpty();
 		BufferedReader reader = null;
@@ -93,7 +98,10 @@ public class DataList {
 		
 		try
 		{	
-			reader = new BufferedReader(new FileReader(new File(filename)));
+			// reader = new BufferedReader(new FileReader(new File(filename))); // read from filesystem
+			reader = new BufferedReader(new InputStreamReader(
+					Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)));
+			// BLACK MAGIC!
 		}
 		catch (Exception e)
 		{
