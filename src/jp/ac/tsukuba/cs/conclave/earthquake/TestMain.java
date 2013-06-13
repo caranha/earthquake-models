@@ -25,9 +25,9 @@ public class TestMain {
 		DataList total = new DataList();
 		DataList fnet = new DataList();
 
-		total.loadData("data/jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
-		total.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
-		fnet.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
+		total.loadData("jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		total.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
 		
 
 		// Getting a List of points of desired Magnitude

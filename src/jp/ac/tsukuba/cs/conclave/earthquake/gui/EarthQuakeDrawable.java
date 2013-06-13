@@ -144,8 +144,6 @@ public class EarthQuakeDrawable extends JPanel {
     		g.setColor(Color.GREEN);
     		g.drawOval(xpos, ypos, 2, 2);
         	
-        	
-        	
         }
         else
         	g.drawImage(map, 0, 0, width, height, 0, 0, map.getWidth(), map.getHeight(), null);

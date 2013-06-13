@@ -79,7 +79,13 @@ public class FMStatModel {
 		if (sizeDist() < 3)
 			return;
 		
-		double[] ret = StatUtils.averageVariance(distanceErrorList);
+		ArrayList<Double> absDistanceList = new ArrayList<Double>();
+		for (int i = 0; i < distanceErrorList.size(); i++)
+		{
+			absDistanceList.add(Math.abs(distanceErrorList.get(i)));
+		}
+		
+		double[] ret = StatUtils.averageVariance(absDistanceList);
 		distanceAvg = ret[0];
 		distanceDev = ret[1];		
 	}
