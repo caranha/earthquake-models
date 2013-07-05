@@ -1,0 +1,25 @@
+* TASKLIST
+** Goal: Add ability to read and display map and fault information
+*** GeoLine Object
+    Contains a "geoline": A fault line, a shoreline, etc. A geoline is
+    composed of multiple points.
+    - [ ] Basic data (point vector)
+    - [ ] Draw method (receives color and drawing context)
+    - [ ] Crosses Box (tests if any point of the Geoline is inside the
+      box.
+    - [ ] Distance from line (calculates the distance between a
+      straight line segment and the geoline object. This is needed to
+      test if a fault is related to an event. (How to do this?)
+
+*** GeoLineCollection Object
+    Contains a group of Geolines. Mostly used for organizing them,
+    multiple printing, etc.
+    - [ ] Reading from a file;
+    - [ ] Printing everything to an image (receives color, context);
+    - [ ] Select a subset of geolines that crosses a rectangle;
+
+** Goal: Streamline hypothesis testing
+*** FaultModel Object
+    This object stores information about one fault model
+    - [ ] Base FM data (Strike, Dip, Rake)
+    - [ ] Plate rectangle
