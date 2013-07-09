@@ -123,18 +123,25 @@ public class DataPoint implements Comparable<DataPoint> {
 	 */
 	public String dump()
 	{
-		String ret = "";
-		ret = ret + "Location: "+longitude+","+latitude+", ";
-		ret = ret + "M"+magnitude+" Depth: "+depth;
-		ret = ret + "\nDate: "+ time.toString(ISODateTimeFormat.basicDateTimeNoMillis());
-		
+		String ret = "[Event]\n ";
+		ret = ret + getEventString();
 		if (FM)
 		{
-			ret = ret + "\n\nModel 1: S:"+S[0]+", D:"+D[0]+", R:"+R[0];
-			ret = ret + "\nModel 2: S:"+S[1]+", D:"+D[1]+", R:"+R[1];
+			ret = ret + ", M1: S"+S[0]+", D"+D[0]+", R"+R[0];
+			ret = ret + ", M2: S"+S[1]+", D"+D[1]+", R"+R[1];
 		}
 		return ret;
 	}
+	
+	public String getEventString()
+	{
+		String ret = "";
+		ret = ret +longitude+","+latitude+", ";
+		ret = ret + "M:"+magnitude+", D:"+depth;
+		ret = ret + ", "+ time.toString(ISODateTimeFormat.basicDateTimeNoMillis());
+		return ret;
+	}
+	
 	
 	@Override
 	public int compareTo(DataPoint arg0) {

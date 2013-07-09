@@ -107,4 +107,36 @@ public class GeoUtils {
 	    return angle;
 	}
 	
+	/**
+	 * Calculates a final point based on an initial point, a direction (in degrees) and a distance
+	 * in kilometers.
+	 * 
+	 * @param lon1 longitude of the starting point
+	 * @param lat1 latitude of the starting point
+	 * @param bearing direction in degrees, 0 is north, increases clockwise
+	 * @param dist distance in kilometers.
+	 * @return
+	 */
+	public static double[] calcPointFromDirectionDistance(double lon1, double lat1, double bearing, double dist)
+	{
+		double[] ret = new double[2];
+		
+		double dir = Math.toRadians(bearing);
+
+		double lo0 = Math.toRadians(lon1);
+		double la0 = Math.toRadians(lat1);
+		
+		
+		ret[1] = Math.asin(Math.sin(la0)*Math.cos(dist/RADIUS) + 
+				 Math.cos(la0)*Math.sin(dist/RADIUS)*Math.cos(dir));
+		
+		ret[0] = lo0 + Math.atan2(Math.sin(dir)*Math.sin(dist/RADIUS)*Math.cos(la0), 
+	                     Math.cos(dist/RADIUS)-Math.sin(la0)*Math.sin(ret[1]));
+		ret[0] = Math.toDegrees(ret[0]);
+		ret[1] = Math.toDegrees(ret[1]);
+		
+		return ret;
+	}
+			
+			
 }
