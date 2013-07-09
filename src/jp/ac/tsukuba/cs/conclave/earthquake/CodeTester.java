@@ -1,14 +1,19 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.MapImage;
 
 public class CodeTester {
 
@@ -18,7 +23,61 @@ public class CodeTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		testingGeoLines();
+		testingMapImage();
+		
+		
+		
+	}
+	
+	public static void testingMapImage()
+	{
+		MapImage map = new MapImage(123.693237,24.246965,800,800,32);		
+		BufferedReader reader = null;
+		GeoLine geolines[];
+		String filename;
+		
+		filename = "/home/caranha/Desktop/Work/Earthquake_bogdan/data/coast_japan.m";
+		try {
+			reader = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		geolines = GeoDataReader.readGeoLines(reader);
+		
+		for (int i = 0; i < geolines.length; i++)
+			map.drawGeoLine(geolines[i], Color.black);
+
+		
+		filename = "/home/caranha/Desktop/Work/Earthquake_bogdan/data/faults_japan.m";
+		try {
+			reader = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		geolines = GeoDataReader.readGeoLines(reader);
+		
+		for (int i = 0; i < geolines.length; i++)
+			map.drawGeoLine(geolines[i], Color.RED);
+		
+		DataList fnet = new DataList();
+		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+			
+		for (int i = 0; i < fnet.size(); i++)
+			if (fnet.data.get(i).D[0] > 45 && fnet.data.get(i).depth < 10)
+			{
+				FaultModel fm = new FaultModel(fnet.data.get(i),0);
+				map.drawFaultModelPlane(fm, Color.green);
+			}
+		for (int i = 0; i < fnet.size(); i++)
+			if (fnet.data.get(i).D[1] > 45 && fnet.data.get(i).depth < 10)
+			{
+				FaultModel fm = new FaultModel(fnet.data.get(i),1);
+				map.drawFaultModelPlane(fm, Color.blue);
+			}
+		
+		map.saveToFile("testmap.png");
 	}
 	
 	public static void testingGeoLines()

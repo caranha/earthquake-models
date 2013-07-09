@@ -39,8 +39,14 @@ public class GeoDataReader {
 				}
 				else // add another point
 				{
-					String[] readline = line.split("  ");
-					tmp.addPoint(new GeoPoint(Double.parseDouble(readline[0]),Double.parseDouble(readline[1])));
+					String[] readline = line.split(" ");
+					double x,y;
+					x = Double.parseDouble(readline[0]);
+					if (readline[1].length() == 0) // FIXME: ugly hack because "faults" and "coast" are different - ideally, I should eat any number of white spaces
+						y = Double.parseDouble(readline[2]);
+					else
+						y = Double.parseDouble(readline[1]);
+					tmp.addPoint(new GeoPoint(x,y));
 				}
 			}
 			reader.close();
