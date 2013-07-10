@@ -104,6 +104,10 @@ public class MapImage {
 		int j = 3;
 		for (int i = 0; i < 4; i++)
 		{
+			if (i == 1)
+				g.setColor(Color.red);
+			else
+				g.setColor(c);
 			int x0,y0,x1,y1;
 			x0 = (int)Math.floor((plane[j][0] - offx)*zoomx);
 			y0 = height - (int)Math.floor((plane[j][1] - offy)*zoomy);
@@ -117,9 +121,23 @@ public class MapImage {
 		map.flush();		
 	}
 	
-	public void drawEvent(DataPoint p, Color c)
+	/**
+	 * Draw an event as a circle in the map
+	 * @param p Event.
+	 * @param c Color to draw
+	 * @param s Size to draw (will be rounded down)
+	 */
+	public void drawEvent(DataPoint p, Color c, float s)
 	{
+		Graphics g = map.createGraphics();	
+		g.setColor(c);
+		int x,y,r;
+		x = (int)Math.floor((p.longitude - offx)*zoomx);
+		y = height - (int)Math.floor((p.latitude - offy)*zoomy);
+		r = (int) Math.floor(s);
 		
+		g.fillOval(x, y, r,r);
+		map.flush();
 	}
 	
 }

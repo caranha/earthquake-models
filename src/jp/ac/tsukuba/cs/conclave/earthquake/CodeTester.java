@@ -58,23 +58,28 @@ public class CodeTester {
 		}
 		geolines = GeoDataReader.readGeoLines(reader);
 		
-		for (int i = 0; i < geolines.length; i++)
-			map.drawGeoLine(geolines[i], Color.RED);
+//		for (int i = 0; i < geolines.length; i++)
+//			map.drawGeoLine(geolines[i], Color.RED);
 		
 		DataList fnet = new DataList();
 		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
 			
 		for (int i = 0; i < fnet.size(); i++)
-			if (fnet.data.get(i).D[0] > 45 && fnet.data.get(i).depth < 10)
+			if (fnet.data.get(i).magnitude > 7)
 			{
 				FaultModel fm = new FaultModel(fnet.data.get(i),0);
 				map.drawFaultModelPlane(fm, Color.green);
 			}
 		for (int i = 0; i < fnet.size(); i++)
-			if (fnet.data.get(i).D[1] > 45 && fnet.data.get(i).depth < 10)
+			if (fnet.data.get(i).magnitude > 7)
 			{
 				FaultModel fm = new FaultModel(fnet.data.get(i),1);
 				map.drawFaultModelPlane(fm, Color.blue);
+			}
+		for (int i = 0; i < fnet.size(); i++)
+			if (fnet.data.get(i).magnitude > 7)
+			{
+				map.drawEvent(fnet.data.get(i), Color.MAGENTA, 4);
 			}
 		
 		map.saveToFile("testmap.png");

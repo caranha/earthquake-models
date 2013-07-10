@@ -77,36 +77,46 @@ public class FaultModel {
 	 */
 	void calculatePlane()
 	{
+		double sdist, ddist, fdist;
 		
-		// calculate distance to surface and max depth
+		// calculate distance to surface
 		// surface distance = depth/tan(D) 
-		double sdist = event.depth/Math.tan(dip); // TODO: throw an exception if D = 0
+		sdist = event.depth/Math.tan(dip); // TODO: throw an exception if D = 0
+		
+		// calculate distance to max depth (20km or event depth
+		if (event.depth < 20)
+			ddist = sdist*(20/event.depth) - sdist; // if depth < 20, calculate dist to depth = 20
+		else
+			ddist = 1; // else, use a minimal depth;
+				
+		// calculate the plane distance along the strike, based on magnitude
+		fdist = GeoUtils.getAftershockRadius(event.magnitude);
 		
 		// calculate top and bottom midpoints. Top is 0, bottom is 1.
 		double[][] midpoint = new double[2][2];
 		
 		midpoint[0] = GeoUtils.calcPointFromDirectionDistance(event.longitude, event.latitude, ((strike-90)+360)%360, sdist);
-		midpoint[1] = GeoUtils.calcPointFromDirectionDistance(event.longitude, event.latitude, ((strike+90)+360)%360, sdist);
+		midpoint[1] = GeoUtils.calcPointFromDirectionDistance(event.longitude, event.latitude, ((strike+90)+360)%360, ddist);
 		
 		
 		// Calculate the four points in the plane:
 		double[] tmp = new double[2];
-		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[0][0], midpoint[0][1], strike, sdist);
+		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[0][0], midpoint[0][1], strike, fdist);
 		plane[0][0] = tmp[0];
 		plane[0][1] = tmp[1];
 		plane[0][2] = 0;
 		
-		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[0][0], midpoint[0][1], (strike+180)%360, sdist);
+		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[0][0], midpoint[0][1], (strike+180)%360, fdist);
 		plane[1][0] = tmp[0];
 		plane[1][1] = tmp[1];
 		plane[1][2] = 0;
 		
-		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[1][0], midpoint[1][1], (strike+180)%360, sdist);
+		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[1][0], midpoint[1][1], (strike+180)%360, fdist);
 		plane[2][0] = tmp[0];
 		plane[2][1] = tmp[1];
 		plane[2][2] = event.depth*2;
 		
-		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[1][0], midpoint[1][1], strike, sdist);
+		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[1][0], midpoint[1][1], strike, fdist);
 		plane[3][0] = tmp[0];
 		plane[3][1] = tmp[1];
 		plane[3][2] = event.depth*2;

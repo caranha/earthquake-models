@@ -138,5 +138,21 @@ public class GeoUtils {
 		return ret;
 	}
 			
-			
+	/**
+	 * Calculates the aftershock radius based on eq.9 from Helmstetter et al., JGR, 2005.
+	 * Average results with standard parameters are:
+	 * 
+	 * Mag 7: 70km
+	 * Mag 6: 30km
+	 * Mag 5: 10km
+	 * Mag 4: 5km
+	 * 
+	 * @param magnitude
+	 * @return the radius to consider aftershocks in kilometers.
+	 */
+	public static double getAftershockRadius(double magnitude)
+	{
+		int RADIUS_RATE = 2;
+		return	RADIUS_RATE*0.01*Math.pow(10, (0.5*magnitude));
+	}
 }
