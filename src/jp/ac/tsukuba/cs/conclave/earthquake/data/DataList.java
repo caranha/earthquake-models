@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 public class DataList {
 	public ArrayList<DataPoint> data;
@@ -164,6 +165,28 @@ public class DataList {
 		}
 		
 		return ret;		
+	}
+	
+	/**
+	 * Creates a sublist with the events that fall in this interval
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public DataList getEventsInInterval(DateTime start, DateTime end)
+	{
+		DataList ret = new DataList();
+		Iterator<DataPoint> it = data.iterator();
+		while(it.hasNext())
+		{
+			DataPoint next = it.next();
+			if (start.isBefore(next.time) && end.isAfter(next.time))
+				ret.addData(new DataPoint(next));
+			
+			if (!end.isAfter(next.time)) // got to end of time, break away
+				break;
+		}
+		return ret;
 	}
 }
 

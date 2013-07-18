@@ -155,4 +155,36 @@ public class GeoUtils {
 		int RADIUS_RATE = 2;
 		return	RADIUS_RATE*0.01*Math.pow(10, (0.5*magnitude));
 	}
+	
+	/** 
+	 * Test point in convex polygon not constrained to CW or CCW
+	 * @param lat
+	 * @param lon
+	 * @param plane
+	 * @return
+	 */
+	public static boolean isPointInPlane(double lat, double lon, double[][] plane)
+	{
+		int j = 3;
+		double startsig = Math.signum(SignedTriangleArea(plane[3][0], plane[3][1], 
+													  plane[0][0], plane[0][1], 
+													  lon, lat));
+		
+		boolean ret = true;
+		
+		for (int i = 1; i < 4; i++)
+		{
+			ret = ret && (startsig == Math.signum(SignedTriangleArea(plane[i-1][0], plane[i-1][1], 
+													  plane[i][0], plane[i][1], 
+													  lon, lat)));
+		}
+		return ret;
+	}
+	
+	private static double SignedTriangleArea(double ax, double ay, double bx, double by, double cx, double cy)
+	{
+		return ((ax*by - ay*bx + ay*cx - ax*cy + bx*cy - cx*by)/2.0);
+	}
+	
+	
 }

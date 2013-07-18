@@ -9,7 +9,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.joda.time.Duration;
+
 import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FaultModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis.Hypothesis;
+import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis.PointInPlane;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
@@ -23,9 +27,33 @@ public class CodeTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		testingMapImage();
+		testingPointInPlane();
 		
 		
+	}
+	
+	public static void testingPointInPlane()
+	{
+		DataList total = new DataList();
+		DataList fnet = new DataList();
+
+		total.loadData("jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		total.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		
+		for (int i = 0; i < fnet.size(); i++)
+			if (fnet.data.get(i).magnitude > 6 && fnet.data.get(i).depth < 35)
+			{
+				FaultModel fm1 = new FaultModel(fnet.data.get(i),0);
+				FaultModel fm2 = new FaultModel(fnet.data.get(i),1);
+
+
+				Hypothesis h = new PointInPlane();
+				System.out.println("--"+fnet.data.get(i).magnitude+" "+fnet.data.get(i).time.getYear());
+				System.out.println(h.getStringAnalysis(fm1, Duration.standardDays(2), total));
+				System.out.println(h.getStringAnalysis(fm2, Duration.standardDays(2), total));
+				//break;
+			}
 		
 	}
 	
@@ -35,6 +63,10 @@ public class CodeTester {
 		BufferedReader reader = null;
 		GeoLine geolines[];
 		String filename;
+		
+		DataList total = new DataList();
+		total.loadData("jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		total.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
 		
 		filename = "/home/caranha/Desktop/Work/Earthquake_bogdan/data/coast_japan.m";
 		try {
@@ -65,22 +97,23 @@ public class CodeTester {
 		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
 			
 		for (int i = 0; i < fnet.size(); i++)
-			if (fnet.data.get(i).magnitude > 7)
+			if (fnet.data.get(i).magnitude > 7 && fnet.data.get(i).depth < 35)
 			{
-				FaultModel fm = new FaultModel(fnet.data.get(i),0);
-				map.drawFaultModelPlane(fm, Color.green);
+				FaultModel fm1 = new FaultModel(fnet.data.get(i),0);
+				FaultModel fm2 = new FaultModel(fnet.data.get(i),1);
+				
+//				System.out.println(fm1);
+//				System.out.println(fm2);
+				
+				map.drawFaultModelPlane(fm1, Color.green);
+				map.drawFaultModelPlane(fm2, Color.blue);
+				//break;
 			}
-		for (int i = 0; i < fnet.size(); i++)
-			if (fnet.data.get(i).magnitude > 7)
-			{
-				FaultModel fm = new FaultModel(fnet.data.get(i),1);
-				map.drawFaultModelPlane(fm, Color.blue);
-			}
-		for (int i = 0; i < fnet.size(); i++)
-			if (fnet.data.get(i).magnitude > 7)
-			{
-				map.drawEvent(fnet.data.get(i), Color.MAGENTA, 4);
-			}
+//		for (int i = 0; i < fnet.size(); i++)
+//			if (fnet.data.get(i).magnitude > 7)
+//			{
+//				map.drawEvent(fnet.data.get(i), Color.MAGENTA, 4);
+//			}
 		
 		map.saveToFile("testmap.png");
 	}

@@ -110,12 +110,13 @@ public class DataPoint implements Comparable<DataPoint> {
 		S = new int[2];
 		D = new int[2];
 		R = new int[2];
-		for (int i = 0; i < 2; i++)
-		{
-			S[i] = o.S[i];
-			D[i] = o.D[i];
-			R[i] = o.R[i];
-		}
+		if (o.FM)
+			for (int i = 0; i < 2; i++)
+			{
+				S[i] = o.S[i];
+				D[i] = o.D[i];
+				R[i] = o.R[i];
+			}
 	}
 
 	/**

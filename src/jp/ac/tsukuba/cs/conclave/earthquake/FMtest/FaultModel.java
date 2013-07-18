@@ -3,6 +3,7 @@ package jp.ac.tsukuba.cs.conclave.earthquake.FMtest;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
@@ -81,7 +82,7 @@ public class FaultModel {
 		
 		// calculate distance to surface
 		// surface distance = depth/tan(D) 
-		sdist = event.depth/Math.tan(dip); // TODO: throw an exception if D = 0
+		sdist = event.depth/Math.tan(Math.toRadians(dip)); // TODO: throw an exception if D = 0
 		
 		// calculate distance to max depth (20km or event depth
 		if (event.depth < 20)
@@ -89,6 +90,7 @@ public class FaultModel {
 		else
 			ddist = 1; // else, use a minimal depth;
 				
+		
 		// calculate the plane distance along the strike, based on magnitude
 		fdist = GeoUtils.getAftershockRadius(event.magnitude);
 		
@@ -149,6 +151,15 @@ public class FaultModel {
 		return plane;
 	}
 	
+	public double getLat()
+	{
+		return event.latitude;
+	}
+	public double getLon()
+	{
+		return event.longitude;
+	}
+	
 	/**
 	 * Get a list of points that can be pluged into R or other csv reader
 	 * @param xy 0- get longitude, 1- get latitude
@@ -166,6 +177,19 @@ public class FaultModel {
 			ret+= ","+plane[i][xy];
 		
 		return ret;		
+	}
+	
+	/** 
+	 * @return the time when the event happens
+	 */
+	public DateTime getTime()
+	{
+		return event.time;
+	}
+	
+	public Double getMag()
+	{
+		return event.magnitude;
 	}
 	
 }
