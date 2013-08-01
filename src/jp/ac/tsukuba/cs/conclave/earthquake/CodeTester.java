@@ -11,13 +11,14 @@ import javax.imageio.ImageIO;
 
 import org.joda.time.Duration;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis.Hypothesis;
 import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis.PointInPlane;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.MapImage;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 public class CodeTester {
 

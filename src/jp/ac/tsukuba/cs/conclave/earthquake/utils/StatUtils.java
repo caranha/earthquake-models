@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake;
+package jp.ac.tsukuba.cs.conclave.earthquake.utils;
 
 import java.util.ArrayList;
 

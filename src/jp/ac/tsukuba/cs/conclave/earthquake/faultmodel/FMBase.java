@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.FMtest;
+package jp.ac.tsukuba.cs.conclave.earthquake.faultmodel;
 
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 
 import org.joda.time.Duration;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 
 /**

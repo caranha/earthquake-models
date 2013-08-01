@@ -1,13 +1,8 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.FMtest;
-
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+package jp.ac.tsukuba.cs.conclave.earthquake.faultmodel;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
-
-import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 /**
  * Defines one Fault model that can be analysed.

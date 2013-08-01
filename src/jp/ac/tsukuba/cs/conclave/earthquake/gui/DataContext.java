@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import org.joda.time.Duration;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMBase;
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMStatModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FMBase;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FMStatModel;
 
 /**
  * Static class that holds all the data needed for the GUI to work

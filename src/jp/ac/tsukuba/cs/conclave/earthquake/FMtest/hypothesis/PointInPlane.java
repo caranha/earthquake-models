@@ -2,10 +2,10 @@ package jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis;
 
 import java.util.Iterator;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;

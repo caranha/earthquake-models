@@ -1,12 +1,12 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.FMtest;
+package jp.ac.tsukuba.cs.conclave.earthquake.faultmodel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
-import jp.ac.tsukuba.cs.conclave.earthquake.StatUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.StatUtils;
 
 
 /**

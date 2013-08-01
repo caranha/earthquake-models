@@ -9,10 +9,10 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 
 /**
  * This object handles the drawing of a map, and all its related info.

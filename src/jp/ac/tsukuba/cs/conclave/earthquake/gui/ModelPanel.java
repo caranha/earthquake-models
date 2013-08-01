@@ -20,11 +20,11 @@ import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.GeoUtils;
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMBase;
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FMStatModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FMBase;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FMStatModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 import org.joda.time.Duration;
 import org.joda.time.format.ISODateTimeFormat;

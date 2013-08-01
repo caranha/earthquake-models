@@ -1,8 +1,8 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
