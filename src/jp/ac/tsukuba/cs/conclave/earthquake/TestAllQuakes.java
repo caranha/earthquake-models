@@ -1,12 +1,10 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
-import java.util.Iterator;
-
 import org.joda.time.Days;
-import org.joda.time.ReadableInstant;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 /***
@@ -28,13 +26,16 @@ public class TestAllQuakes {
 	static double minAfterShockMag = 2; // Minimum magnitude for selecting an aftershock
 	static 	String[] datafiles = {"jma_cat_2000_2012_Mth2.5_formatted.dat","jma",
 		"catalog_fnet_1997_20130429_f3.txt","fnet"}; // file, type, file, type
-	static Days minAfterShockTime = Days.ONE;
+	
+	static Days afterShockTimeSize = Days.ONE; // size of the Period for aftershock testing
+	static int afterShockTimeQuanta = 3; // number of Periods for aftershock testing
 	
 	public static void main(String[] args) {
 
 		DataList data = new DataList();
-		DataList QuakesOfInterest = new DataList();
-		DataList AfterShocks = new DataList();
+		DataList[] AfterShocks = new DataList[afterShockTimeQuanta];
+		for (int i = 0; i < afterShockTimeQuanta; i++)
+			AfterShocks[i] = new DataList();
 		
 		for (int i = 0; i < datafiles.length; i+=2) // reading data
 		{
@@ -48,37 +49,74 @@ public class TestAllQuakes {
 			if (curr.FM == true && curr.magnitude >= minMag) // Filtering: FM Quake, Magnitude
 			{
 				// Getting Aftershocks;
-				AfterShocks.clear();
+				for (int ii = 0; ii < afterShockTimeQuanta; ii++)
+					AfterShocks[ii].clear();
+
 				int j = i;
 				
 				// testing the time period to get aftershocks
-				while (j < data.size() && data.data.get(j).time.isBefore(curr.time.plus(minAfterShockTime)))
+				// TODO: Maybe make aftershock lists based on total aftershocks, not necessarily time?
+				while (j < data.size() && data.data.get(j).time.isBefore(curr.time.plus(afterShockTimeSize.multipliedBy(afterShockTimeQuanta))))
 				{
 					DataPoint after = data.data.get(j);
 					if (after.magnitude >= minAfterShockMag && 
 							GeoUtils.getAftershockRadius(curr.magnitude) >= GeoUtils.haversineDistance(curr.latitude, curr.longitude, after.latitude, after.longitude))	
 					{
-						AfterShocks.addData(new DataPoint(after));
+						for (int ii = 0; ii < afterShockTimeQuanta; ii++)
+							if (after.time.isBefore(curr.time.plus(afterShockTimeSize.multipliedBy(ii+1))))
+								AfterShocks[ii].addData(new DataPoint(after));
 					}
 					j++;
 				}
 				
-				if (AfterShocks.size() >= minAftershock) 
+				if (AfterShocks[0].size() >= minAftershock) 
 				{
 					// This earthquake has the minimum required number of aftershocks. Now we test it.
-					// For each quake in the files test:
-					// If it is an FM quake
-					// If it is above the minimum magnitude
-					// Make a list of aftershocks for 1, 2, 3 days (taking into account minimum aftershocks)
-					// If the 1 day list is above the minimum size, 
+					total ++; 
+					// Printing basic data
+					log("# Earthquake "+total+" #");
+					log("  "+curr.time.toString("YYYY-MM-dd HH:MM")+"  Mag: "+curr.magnitude+" Depth: "+curr.depth+
+							" Lat:"+curr.latitude+" Lon:"+curr.longitude);
+					String afscand = "";
+					for (int ii = 0; ii < afterShockTimeQuanta; ii++)
+						afscand+=AfterShocks[ii].size()+" ";
 					
-					total ++;
+					log("  Total Aftershock Candidates: "+afscand);
+					log("\t\tModel 1\t\tModel 2\t\tResults");
+					log("\t\t"+"S"+curr.S[0]+" D"+curr.D[0]+" R"+curr.R[0]+"\t"+
+							"S"+curr.S[1]+" D"+curr.D[1]+" R"+curr.R[1]);
+					// Creating FMs
+					FaultModel f1 = new FaultModel(curr,0);
+					FaultModel f2 = new FaultModel(curr,1);
+					// Point-in-plane testing
+					DataList sub1 = f1.pointsInPlane(AfterShocks[0]);
+					DataList sub2 = f2.pointsInPlane(AfterShocks[0]);
+					double ratio1 = (double)sub1.size()/(double)AfterShocks[0].size();
+					double ratio2 = (double)sub2.size()/(double)AfterShocks[0].size();
+
+					// Calculating which model won: model wins if difference > 20%
+					int result;
+					if (Math.abs(ratio1 - ratio2) < 0.2)
+						result = 0;
+					else 
+						result = (ratio1>ratio2?1:2);
+
+					log("  Pts in Plane\t"+String.format("%.2f", ratio1)+
+								"\t\t"+String.format("%.2f", ratio2)+"\t\t"+result);
+					
 				}
 			}
 		}
-		
-		System.out.println(total);
+		log("\n\n"+total);
 
 	}
 
+	static void log(String s)
+	{
+		System.out.println(s);
+	}
+	
+	
+	
+	
 }

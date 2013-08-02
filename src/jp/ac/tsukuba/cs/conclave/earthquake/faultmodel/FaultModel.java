@@ -1,6 +1,10 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.faultmodel;
 
+import java.util.Iterator;
+
 import org.joda.time.DateTime;
+
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
@@ -186,5 +190,37 @@ public class FaultModel {
 	{
 		return event.magnitude;
 	}
+	
+	/** 
+	 * Calculates if an event is located in the plane defined by this Fault Model
+	 * 
+	 * @param p event to be checked
+	 * @return true is the event is located inside the plane, false if not;
+	 */
+	public boolean isEventInPlane(DataPoint p)
+	{
+		return GeoUtils.isPointInPlane(p.latitude, p.longitude, plane);
+	}
+	
+	/**
+	 * Creates a new list of events that are located inside the plane, from the 
+	 * original pp list.
+	 * 
+	 * @param pp Original list of events
+	 * @return a new list of events where every event is inside the plane
+	 */
+	public DataList pointsInPlane(DataList pp)
+	{
+		DataList ret = new DataList();
+		Iterator<DataPoint> it = pp.data.iterator();
+		while(it.hasNext())
+		{
+			DataPoint curr = it.next();
+			if (isEventInPlane(curr))
+				ret.addData(new DataPoint(curr));
+		}		
+		return ret;
+	}
+	
 	
 }
