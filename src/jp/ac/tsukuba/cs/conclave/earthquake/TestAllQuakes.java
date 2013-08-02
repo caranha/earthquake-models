@@ -34,6 +34,9 @@ public class TestAllQuakes {
 
 		DataList data = new DataList();
 		DataList[] AfterShocks = new DataList[afterShockTimeQuanta];
+		
+		double[][] ratios = new double[afterShockTimeQuanta][2];
+		
 		for (int i = 0; i < afterShockTimeQuanta; i++)
 			AfterShocks[i] = new DataList();
 		
@@ -89,20 +92,35 @@ public class TestAllQuakes {
 					FaultModel f1 = new FaultModel(curr,0);
 					FaultModel f2 = new FaultModel(curr,1);
 					// Point-in-plane testing
-					DataList sub1 = f1.pointsInPlane(AfterShocks[0]);
-					DataList sub2 = f2.pointsInPlane(AfterShocks[0]);
-					double ratio1 = (double)sub1.size()/(double)AfterShocks[0].size();
-					double ratio2 = (double)sub2.size()/(double)AfterShocks[0].size();
-
-					// Calculating which model won: model wins if difference > 20%
-					int result;
-					if (Math.abs(ratio1 - ratio2) < 0.2)
-						result = 0;
-					else 
-						result = (ratio1>ratio2?1:2);
-
-					log("  Pts in Plane\t"+String.format("%.2f", ratio1)+
-								"\t\t"+String.format("%.2f", ratio2)+"\t\t"+result);
+					
+					int[] result = new int[afterShockTimeQuanta];
+					for (int ii = 0; ii < afterShockTimeQuanta; ii++)
+					{
+						DataList sub1 = f1.pointsInPlane(AfterShocks[ii]);
+						DataList sub2 = f2.pointsInPlane(AfterShocks[ii]);
+						ratios[ii][0] = (double)sub1.size()/(double)AfterShocks[ii].size();
+						ratios[ii][1] = (double)sub2.size()/(double)AfterShocks[ii].size();
+						
+						// Calculating which model won: model wins if difference > 20%
+						if (Math.abs(ratios[ii][0] - ratios[ii][1]) < 0.2)
+							result[ii] = 0;
+						else 
+							result[ii] = (ratios[ii][0] > ratios[ii][1]?1:2);
+					}
+					
+					String reslog = "  Pts in Plane\t";
+					for (int ii = 0; ii < afterShockTimeQuanta;ii++)
+						reslog+=String.format("%.2f", ratios[ii][0])+"/";
+					reslog+="\t";
+					
+					for (int ii = 0; ii < afterShockTimeQuanta;ii++)
+						reslog+=String.format("%.2f", ratios[ii][1])+"/";
+					reslog+="\t";
+					
+					for (int ii = 0; ii < afterShockTimeQuanta;ii++)
+						reslog+=result[ii]+"/";
+					
+					log(reslog);
 					
 				}
 			}

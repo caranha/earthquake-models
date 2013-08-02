@@ -3,8 +3,8 @@
 - [X] Selects a subgroup of valid earthquakes
   Valid earthquakes have Magnitude > X, and aftershocks with mag > Z after 1 day > Y
 
-- [ ] Calcular a hypothesis do plano para cada time period
-- [ ] Imprimir o resultado para cada time period
+- [X] Calcular a hypothesis do plano para cada time period
+- [X] Imprimir o resultado para cada time period
 - [ ] Calcular totais para (1 venceu, 2 venceu, inconclusivo)
 - [ ] Imprimir resultados para arquivos diferentes
 
