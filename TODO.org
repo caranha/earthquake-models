@@ -1,6 +1,6 @@
 * TASKLIST
 ** Test All quakes program:
-- [ ] Selects a subgroup of valid earthquakes
+- [X] Selects a subgroup of valid earthquakes
   Valid earthquakes have Magnitude > X, and aftershocks with mag > Z after 1 day > Y
 *** Calculate hypothesis for each valid earthquake
     - [ ] Calculate hypothesis for each fault and for days 1, 2, 3.
@@ -33,6 +33,7 @@
 
 ** Refactoring:
 - [ ] Fault model information in event is represented by two FaultModel objects
+
 ** Map and Fault information
 *** GeoLine Object
     Contains a "geoline": A fault line, a shoreline, etc. A geoline is
