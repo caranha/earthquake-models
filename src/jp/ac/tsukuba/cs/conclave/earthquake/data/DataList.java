@@ -18,6 +18,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 public class DataList {
+	
+	// FIXME: ArrayList data needs to be made private
 	public ArrayList<DataPoint> data;
 	private final static Logger logger = Logger.getLogger(DataList.class.getName());
 
@@ -79,7 +81,7 @@ public class DataList {
 
 	
 	/**
-	 * Loads data from a catalog file.
+	 * Loads data from a cif (curr.FM == true && curr.magnitude >= minMag) atalog file.
 	 * Data type can be:
 	 * "JMA" - long, lat, Y,M,D, Mag, Depth, H, min, sec
 	 * "Fnet" - Y,M,D,H,min,sec lat,long, Depth, M, S1, S2, D1, D2, R1, R2
@@ -187,6 +189,15 @@ public class DataList {
 				break;
 		}
 		return ret;
+	}
+	
+	/** 
+	 * Getter for the internal iterator
+	 * @return
+	 */
+	public Iterator<DataPoint> iterator()
+	{
+		return data.iterator();
 	}
 }
 

@@ -1,25 +1,43 @@
-* TASKLIST
-** Test All quakes program:
+* Test All quakes program:
+  This program:
+  1- reads a number of files with earthquakes, either in the JMA or FNET formats
+  2- choose candidate earthquake for analysis, based on parameters (depth, strength, etc)
+  3- for each choosen earthquake, execute the available model tests:
+     Point in Place, Distance from Plane, Distance from fault
+  4- For each model test, Choose:
+     - The test starts inconclusive, then chooses one model
+     - The test starts with one model, then turns inconclusive
+     - The test is inconclusive all around
+     - The test is contradictory (starts with one model, and changes to another)
+  5- Totalize these values:
+     - Number of types 1 and 2 for each model
+     - Earthquakes where: N models agree on the earthquake type
+
+** Main goals
+   - [ ] Calculate totals for "Inconclusive", "N" won, Contradictory
+   - [ ] Print different results to different files
+
+** Improvement goals
+   - [ ] Ability to run "Test All Quakes" with time quanta of different size
+   - [ ] Ability to run "Test All Quakes" with different number of quanta
+   - [ ] Ability to run "Test All Quakes" on different data files
+
+** Plane-Distance testing
+   - [ ] Calculate the distance between one point and the quake plane
+   - [ ] Model judgement based on mean squared distance (error)
+   - [ ] Is distance based on "in plane" distances for that model? or for both models?
+
+** Fault distance testing
+   - [ ] Calculate whether a fault is inside or outside the fault plane
+   - [ ] Compare faults inside the fault plane with the strike direction
+
+** Done
 - [X] Selects a subgroup of valid earthquakes
   Valid earthquakes have Magnitude > X, and aftershocks with mag > Z after 1 day > Y
-
 - [X] Calcular a hypothesis do plano para cada time period
 - [X] Imprimir o resultado para cada time period
-- [ ] Calcular totais para (1 venceu, 2 venceu, inconclusivo)
-- [ ] Imprimir resultados para arquivos diferentes
 
-- [ ] Implementar os outros testes.
-
-
-*** Calculate hypothesis for each valid earthquake
-    - [ ] Calculate hypothesis for each fault and for days 1, 2, 3.
-    - [ ] Print raw info and "win/lose" info to a "earthquake file"
-    - [ ] Point-in-plane Hypothesis
-    - [ ] Distance-from-fault depth hypothesis
-    - [ ] Distance-from-known-fault hypothesis
-- [ ] Determine how many earthquakes can be uniquely identified by each hypothesis
-
-** New GUI:
+* New GUI:
 - [ ] Create GUI outline
 
 *** Japanese Map
@@ -63,3 +81,4 @@
     - [ ] Select a subset of geolines that crosses a rectangle;
 
 
+    

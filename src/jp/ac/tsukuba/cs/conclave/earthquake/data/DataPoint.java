@@ -1,6 +1,5 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.data;
 
-import java.text.DateFormat;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
@@ -8,7 +7,7 @@ import org.joda.time.format.ISODateTimeFormat;
 
 public class DataPoint implements Comparable<DataPoint> {
 
-	private final static Logger logger = Logger.getLogger(DataPoint.class.getName());
+	private static Logger logger; 
 	
 	public double longitude;
 	public double latitude;
@@ -40,6 +39,8 @@ public class DataPoint implements Comparable<DataPoint> {
 	
 	DataPoint(String s, String t)
 	{
+		initlogger();
+		
 		// Removing the initial space;
 		int i;
 		int type;
@@ -101,6 +102,8 @@ public class DataPoint implements Comparable<DataPoint> {
 	 * @param o
 	 */
 	public DataPoint(DataPoint o) {
+		initlogger();
+		
 		longitude = o.longitude;
 		latitude = o.latitude;
 		magnitude = o.magnitude;
@@ -119,6 +122,14 @@ public class DataPoint implements Comparable<DataPoint> {
 			}
 	}
 
+	private void initlogger()
+	{
+		if (logger == null)
+			logger = Logger.getLogger(DataPoint.class.getName());
+	}
+
+	
+	
 	/**
 	 * @return a text string with all the data in this Data Point
 	 */
@@ -148,6 +159,35 @@ public class DataPoint implements Comparable<DataPoint> {
 	public int compareTo(DataPoint arg0) {
 		
 		return (time.compareTo(arg0.time));		
+	}
+	
+	/**
+	 * This function tests two Data points to see if they refer to the same event.
+	 * Two DataPoints are the same event if they have exactly the same time, magnitude, location and depth
+	 * @param arg0
+	 * @return
+	 */
+	public boolean isEqualTo(DataPoint arg0)
+	{
+		if (!this.time.equals(arg0.time))
+			return false;			
+		if (this.longitude != arg0.longitude)
+			return false;
+		if (this.latitude != arg0.latitude)
+			return false;
+		if (this.magnitude != arg0.magnitude)
+			return false;
+		
+		return true;
+	}
+
+	/** 
+	 * Returns true if this event contains information about fault models;
+	 * @return
+	 */
+	public boolean hasFaultModel()
+	{
+		return FM;
 	}
 	
 }

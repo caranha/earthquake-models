@@ -2,17 +2,9 @@ package jp.ac.tsukuba.cs.conclave.earthquake;
 
 import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-import org.joda.time.Duration;
-
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis.Hypothesis;
-import jp.ac.tsukuba.cs.conclave.earthquake.FMtest.hypothesis.PointInPlane;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
@@ -28,33 +20,7 @@ public class CodeTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		testingPointInPlane();
 		
-		
-	}
-	
-	public static void testingPointInPlane()
-	{
-		DataList total = new DataList();
-		DataList fnet = new DataList();
-
-		total.loadData("jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
-		total.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
-		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
-		
-		for (int i = 0; i < fnet.size(); i++)
-			if (fnet.data.get(i).magnitude > 6 && fnet.data.get(i).depth < 35)
-			{
-				FaultModel fm1 = new FaultModel(fnet.data.get(i),0);
-				FaultModel fm2 = new FaultModel(fnet.data.get(i),1);
-
-
-				Hypothesis h = new PointInPlane();
-				System.out.println("--"+fnet.data.get(i).magnitude+" "+fnet.data.get(i).time.getYear());
-				System.out.println(h.getStringAnalysis(fm1, Duration.standardDays(2), total));
-				System.out.println(h.getStringAnalysis(fm2, Duration.standardDays(2), total));
-				//break;
-			}
 		
 	}
 	

@@ -1,6 +1,13 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Logger;
+
 import org.joda.time.Days;
+import org.joda.time.Interval;
+import org.joda.time.MutablePeriod;
+import org.joda.time.ReadablePeriod;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
@@ -8,30 +15,63 @@ import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 /***
- * This Class tests all the quakes from a data file at once, against all known hypothesis. 
- * Data for each valid earthquake is saved on a "earthquakes" file, while 
  * 
+ * This class tests all quakes that fit a given filter, using all available model testing algorithms.
+ * It outputs comparison data between all the model testing algorithms.
  * 
  * @author caranha
  *
  */
 public class TestAllQuakes {
 
-	// Parameters: 
-	// TODO: Read these from a parameter file
-	// TODO: Modify the file reader object to automagically detect the type
+	static Logger logger;
+	
+	DataList FilteredQuakes; // Earthquakes that fit the interest filter
+	ArrayList<DataList> FilteredAS; // A list of aftershocks for each Filtered Quake
 
-	static double minMag = 6; // Minimum magnitude for selecting an event
-	static int minAftershock = 10; // Minimum number of aftershocks after a day for selecting an event
-	static double minAfterShockMag = 2; // Minimum magnitude for selecting an aftershock
-	static 	String[] datafiles = {"jma_cat_2000_2012_Mth2.5_formatted.dat","jma",
+	// Filter variables for quakes
+	boolean filterMag = true;
+	double minMag = 6; // Minimum magnitude for selecting an event
+
+	boolean filterDepth = false; 
+	double maxDepth = 40; // Maximum magnitude for selecting an event
+	
+	int minAftershock = 10; // Minimum number of aftershocks after a quanta for selecting an event
+	
+	boolean filterASMag = true;
+	double minASMag = 2; // Minimum magnitude for selecting an aftershock
+	
+	boolean filterASDepth = false;
+	double maxASDepth = 40;
+	
+	ReadablePeriod ASquanta = Days.ONE; // time period for aftershock testing
+	int ASquantaN = 3; // number of periods for aftershock testing
+	
+	
+	
+	
+	
+	String[] datafiles = {"jma_cat_2000_2012_Mth2.5_formatted.dat","jma",
 		"catalog_fnet_1997_20130429_f3.txt","fnet"}; // file, type, file, type
 	
-	static Days afterShockTimeSize = Days.ONE; // size of the Period for aftershock testing
-	static int afterShockTimeQuanta = 3; // number of Periods for aftershock testing
+	Days afterShockTimeSize = Days.ONE; // size of the Period for aftershock testing
+	int afterShockTimeQuanta = 3; // number of Periods for aftershock testing
 	
 	public static void main(String[] args) {
-
+		TestAllQuakes tester = new TestAllQuakes();
+		tester.runTestAllQuakes();
+		
+		DataList data = new DataList();
+		for (int i = 0; i < tester.datafiles.length; i+=2) // reading data
+		{
+			data.loadData(tester.datafiles[i],tester.datafiles[i+1]);
+		}
+		tester.filterQuakes(data);
+		log("*"+tester.getFilteredQuakeSize()+"*");
+	}
+	
+	public void runTestAllQuakes()
+	{
 		DataList data = new DataList();
 		DataList[] AfterShocks = new DataList[afterShockTimeQuanta];
 		
@@ -62,7 +102,7 @@ public class TestAllQuakes {
 				while (j < data.size() && data.data.get(j).time.isBefore(curr.time.plus(afterShockTimeSize.multipliedBy(afterShockTimeQuanta))))
 				{
 					DataPoint after = data.data.get(j);
-					if (after.magnitude >= minAfterShockMag && 
+					if (after.magnitude >= minASMag && 
 							GeoUtils.getAftershockRadius(curr.magnitude) >= GeoUtils.haversineDistance(curr.latitude, curr.longitude, after.latitude, after.longitude))	
 					{
 						for (int ii = 0; ii < afterShockTimeQuanta; ii++)
@@ -134,7 +174,101 @@ public class TestAllQuakes {
 		System.out.println(s);
 	}
 	
+	public TestAllQuakes()
+	{
+		if (TestAllQuakes.logger == null)
+			logger = Logger.getLogger(DataPoint.class.getName());
+		FilteredQuakes = new DataList();
+	}
 	
 	
+	/**
+	 * Creates a list of quakes based on the filter values set for this "Test All Quakes" object.
+	 * Theses list is stored internally and used when testing all objects.
+	 * 
+	 * Also creates total lists of aftershocks for each filtered quake.
+	 * 
+	 * @param l
+	 */
+	void filterQuakes(DataList l)
+	{
+		FilteredQuakes = new DataList(); // list of filtered earthquakes
+		FilteredAS = new ArrayList<DataList>(); // list of aftershocks
+		
+		for (int i = 0; i < l.size(); i++) 
+		{
+			DataPoint curr = l.data.get(i);
+			if ((!curr.hasFaultModel())|| // fault model
+					(filterMag && curr.magnitude < minMag)|| // filter magnitude
+					(filterDepth && curr.depth > maxDepth)) // filter depth
+				continue;
+			
+			DataList ASList = filterASbyPeriod(l, i, curr, ASquanta);
+			// FIXME: you want the period multiplied by the Nperiod here
+			
+			if (ASList.size() >= minAftershock) // passed filters and has minimum number of aftershocks
+			{
+				FilteredAS.add(ASList);
+				FilteredQuakes.addData(curr);
+			}			
+		}		
+	}
 	
+	/**
+	 * Return the number of events that have been filtered, under the current parameters.
+	 * @return
+	 */
+	public int getFilteredQuakeSize()
+	{
+		if (FilteredQuakes != null)
+			return FilteredQuakes.size();
+		
+		logger.warning("Tried to access TestAllQuakes object before it was initialized");
+		return 0;
+	}
+	
+	public void printEventsAndAfterShocks()
+	{
+		for (int i = 0; i < getFilteredQuakeSize(); i++)
+		{
+			log(FilteredQuakes.data.get(i).dump());
+			log(FilteredAS.get(i).size()+"\n");
+		}
+	}
+	
+	/**
+	 * Generates a list of aftershocks for an event, based on the filter attributes of this object.
+	 * This functions requires a ReadablePeriod composed by the Quanta, multiplied by a scalar
+	 * 
+	 * WARNING: this datalist is not supposed to be modified!
+	 * WARNING: multiply the period by the scalar before calling this method.
+	 * 
+	 * WARNING: this searches "data" from the beginning. Try to avoid putting data lists with 
+	 * tens of thousands of events frequently.
+	 * 
+	 * @param data The list with all earthquakes in record
+	 * @param event The event that we are studying
+	 * @param period The time period for which we are searching aftershocks.
+	 * @return
+	 */
+	DataList filterASbyPeriod(DataList data, int dataindex, DataPoint event, ReadablePeriod period)
+	{
+		DataList ret = new DataList();
+		
+		Interval ASperiod = new Interval(event.time,period);
+
+		for (int i = dataindex; (i < data.size() && !ASperiod.isBefore(data.data.get(i).time)); i++)
+		{
+			DataPoint curr = data.data.get(i);
+			if ((filterASMag && curr.magnitude < minASMag)||
+					(filterASDepth && curr.depth > maxASDepth)||
+					(GeoUtils.getAftershockRadius(event.magnitude) < GeoUtils.haversineDistance(event.latitude, event.longitude, curr.latitude, curr.longitude))||
+					(!ASperiod.contains(curr.time)))
+				continue;
+			
+			ret.addData(curr);			
+		}
+		
+		return ret;
+	}
 }
