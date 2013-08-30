@@ -1,12 +1,13 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.joda.time.Days;
+import org.joda.time.Hours;
 import org.joda.time.Interval;
-import org.joda.time.MutablePeriod;
+import org.joda.time.Minutes;
+import org.joda.time.PeriodType;
 import org.joda.time.ReadablePeriod;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
@@ -27,7 +28,7 @@ public class TestAllQuakes {
 	static Logger logger;
 	
 	DataList FilteredQuakes; // Earthquakes that fit the interest filter
-	ArrayList<DataList> FilteredAS; // A list of aftershocks for each Filtered Quake
+	ArrayList<DataList> FilteredAS; // A list of aftershocks for each filtered Quake, at the maximum period
 
 	// Filter variables for quakes
 	boolean filterMag = true;
@@ -45,9 +46,8 @@ public class TestAllQuakes {
 	double maxASDepth = 40;
 	
 	ReadablePeriod ASquanta = Days.ONE; // time period for aftershock testing
-	int ASquantaN = 3; // number of periods for aftershock testing
-	
-	
+	int ASquantaN = 3; // number of periods for aftershock testing	
+	ReadablePeriod[] periods; // the Pre-calculated periods
 	
 	
 	
@@ -67,7 +67,10 @@ public class TestAllQuakes {
 			data.loadData(tester.datafiles[i],tester.datafiles[i+1]);
 		}
 		tester.filterQuakes(data);
-		log("*"+tester.getFilteredQuakeSize()+"*");
+		
+		
+		
+		
 	}
 	
 	public void runTestAllQuakes()
@@ -179,6 +182,28 @@ public class TestAllQuakes {
 		if (TestAllQuakes.logger == null)
 			logger = Logger.getLogger(DataPoint.class.getName());
 		FilteredQuakes = new DataList();
+		
+		calculatePeriods();
+	}
+	
+	/**
+	 * Calculate the internal periods based on the parameter values. Generates
+	 * N periods of size "quanta*N"
+	 */
+	public void calculatePeriods()
+	{
+		periods = new ReadablePeriod[ASquantaN];
+		int type = ASquanta.getPeriodType().hashCode();
+		
+		for(int i = 0; i < ASquantaN; i++)
+		{
+			if (type == PeriodType.minutes().hashCode())
+				periods[i] = ((Minutes) ASquanta).multipliedBy(i+1).toPeriod();
+			if (type == PeriodType.hours().hashCode())
+				periods[i] = ((Hours) ASquanta).multipliedBy(i+1).toPeriod();
+			if (type == PeriodType.days().hashCode())
+				periods[i] = ((Days) ASquanta).multipliedBy(i+1).toPeriod();
+		}		
 	}
 	
 	
@@ -202,11 +227,12 @@ public class TestAllQuakes {
 					(filterMag && curr.magnitude < minMag)|| // filter magnitude
 					(filterDepth && curr.depth > maxDepth)) // filter depth
 				continue;
+
+			DataList ASList = filterASbyPeriod(l, i, curr, periods[periods.length-1]);
 			
-			DataList ASList = filterASbyPeriod(l, i, curr, ASquanta);
-			// FIXME: you want the period multiplied by the Nperiod here
-			
-			if (ASList.size() >= minAftershock) // passed filters and has minimum number of aftershocks
+			// We add an event if it pass all the filters and has the minimum number of aftershocks in the 
+			// entire period
+			if (ASList.size() >= minAftershock) 
 			{
 				FilteredAS.add(ASList);
 				FilteredQuakes.addData(curr);
