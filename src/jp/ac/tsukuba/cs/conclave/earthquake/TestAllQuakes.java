@@ -25,151 +25,116 @@ import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
  */
 public class TestAllQuakes {
 
-	static Logger logger;
+
 	
+	// INTERNAL VARIABLES //
+	static Logger logger;
 	DataList FilteredQuakes; // Earthquakes that fit the interest filter
 	ArrayList<DataList> FilteredAS; // A list of aftershocks for each filtered Quake, at the maximum period
+	ReadablePeriod[] periods; // Pre-calculated periods
 
-	// Filter variables for quakes
+	// FILTER PARAMETERS //
 	boolean filterMag = true;
-	double minMag = 6; // Minimum magnitude for selecting an event
-
+	double minMag = 6; // EVENT: Minimum magnitude
 	boolean filterDepth = false; 
-	double maxDepth = 40; // Maximum magnitude for selecting an event
-	
-	int minAftershock = 10; // Minimum number of aftershocks after a quanta for selecting an event
-	
+	double maxDepth = 40; // EVENT: Maximum magnitude
+	int minAftershock = 30; // EVENT: Minimum number of aftershocks
 	boolean filterASMag = true;
-	double minASMag = 2; // Minimum magnitude for selecting an aftershock
-	
+	double minASMag = 2; // AFTERSHOCK: Minimum magnitude
 	boolean filterASDepth = false;
-	double maxASDepth = 40;
+	double maxASDepth = 40; // AFTERSHOCK: Maximum depth
 	
-	ReadablePeriod ASquanta = Days.ONE; // time period for aftershock testing
-	int ASquantaN = 3; // number of periods for aftershock testing	
-	ReadablePeriod[] periods; // the Pre-calculated periods
+	ReadablePeriod ASquanta = Hours.ONE; // Size of Time Period
+	int ASquantaN = 5; // Number of time Periods	
 	
-	
-	
+	// DATA FILES //
+	// Input data files: filename, type, filename, tipe
 	String[] datafiles = {"jma_cat_2000_2012_Mth2.5_formatted.dat","jma",
 		"catalog_fnet_1997_20130429_f3.txt","fnet"}; // file, type, file, type
-	
-	Days afterShockTimeSize = Days.ONE; // size of the Period for aftershock testing
-	int afterShockTimeQuanta = 3; // number of Periods for aftershock testing
-	
+		
 	public static void main(String[] args) {
 		TestAllQuakes tester = new TestAllQuakes();
-		tester.runTestAllQuakes();
-		
+
+		// LOADING DATA FROM FILES
 		DataList data = new DataList();
 		for (int i = 0; i < tester.datafiles.length; i+=2) // reading data
 		{
 			data.loadData(tester.datafiles[i],tester.datafiles[i+1]);
 		}
+		
+		// FILTERING EARTHQUAKE DATA
 		tester.filterQuakes(data);
 		
+		// RUNNING THE EXPERIMENT
+		tester.runTestAllQuakes();
 		
-		
-		
+		// CLEARING THE DATA
 	}
 	
 	public void runTestAllQuakes()
 	{
-		DataList data = new DataList();
-		DataList[] AfterShocks = new DataList[afterShockTimeQuanta];
-		
-		double[][] ratios = new double[afterShockTimeQuanta][2];
-		
-		for (int i = 0; i < afterShockTimeQuanta; i++)
-			AfterShocks[i] = new DataList();
-		
-		for (int i = 0; i < datafiles.length; i+=2) // reading data
-		{
-			data.loadData(datafiles[i],datafiles[i+1]);
-		}
 
-		int total = 0;
-		for (int i = 0; i < data.size(); i++)
+		for (int i = 0; i < FilteredQuakes.size(); i++) // for each filtered quake
 		{
-			DataPoint curr = data.data.get(i);
-			if (curr.FM == true && curr.magnitude >= minMag) // Filtering: FM Quake, Magnitude
+			DataPoint curr = FilteredQuakes.data.get(i);
+			
+			// Printing Basic earthquake data
+			log("# Earthquake "+i+" #");
+			log("  "+curr.time.toString("YYYY-MM-dd HH:MM")+"  Mag: "+curr.magnitude+" Depth: "+curr.depth+
+					" Lat:"+curr.latitude+" Lon:"+curr.longitude);
+			log("  Model 1: "+"S"+curr.S[0]+" D"+curr.D[0]+" R"+curr.R[0]);
+			log("  Model 2: "+"S"+curr.S[1]+" D"+curr.D[1]+" R"+curr.R[1]);
+			
+			// Point in Plane Testing
+			log("  * Point in plane Testing *");
+			log("  Period #\tTotal/M1/M2/Decision");
+			FaultModel f1 = new FaultModel(curr,0);
+			FaultModel f2 = new FaultModel(curr,1);
+
+			for (int j = 0; j < ASquantaN; j++) // for each Quanta
 			{
-				// Getting Aftershocks;
-				for (int ii = 0; ii < afterShockTimeQuanta; ii++)
-					AfterShocks[ii].clear();
+				// Calculate the Aftershocks in this period
+				Interval time = new Interval(curr.time,periods[j]); // this quanta
+				DataList ASlocal = new DataList();
+				for (int k = 0; k < FilteredAS.get(i).size(); k++)
+					if (time.contains(FilteredAS.get(i).data.get(k).time))
+						ASlocal.addData(FilteredAS.get(i).data.get(k));
+				
+				// Calculate Ratios
+				DataList sub1 = f1.pointsInPlane(ASlocal);
+				DataList sub2 = f2.pointsInPlane(ASlocal);
+				double ratioM1 = (double)sub1.size()/(double)ASlocal.size(); 
+				double ratioM2 = (double)sub2.size()/(double)ASlocal.size(); 
 
-				int j = i;
+				int result;
+				String reslog = "";
 				
-				// testing the time period to get aftershocks
-				// TODO: Maybe make aftershock lists based on total aftershocks, not necessarily time?
-				while (j < data.size() && data.data.get(j).time.isBefore(curr.time.plus(afterShockTimeSize.multipliedBy(afterShockTimeQuanta))))
-				{
-					DataPoint after = data.data.get(j);
-					if (after.magnitude >= minASMag && 
-							GeoUtils.getAftershockRadius(curr.magnitude) >= GeoUtils.haversineDistance(curr.latitude, curr.longitude, after.latitude, after.longitude))	
-					{
-						for (int ii = 0; ii < afterShockTimeQuanta; ii++)
-							if (after.time.isBefore(curr.time.plus(afterShockTimeSize.multipliedBy(ii+1))))
-								AfterShocks[ii].addData(new DataPoint(after));
-					}
-					j++;
-				}
-				
-				if (AfterShocks[0].size() >= minAftershock) 
-				{
-					// This earthquake has the minimum required number of aftershocks. Now we test it.
-					total ++; 
-					// Printing basic data
-					log("# Earthquake "+total+" #");
-					log("  "+curr.time.toString("YYYY-MM-dd HH:MM")+"  Mag: "+curr.magnitude+" Depth: "+curr.depth+
-							" Lat:"+curr.latitude+" Lon:"+curr.longitude);
-					String afscand = "";
-					for (int ii = 0; ii < afterShockTimeQuanta; ii++)
-						afscand+=AfterShocks[ii].size()+" ";
-					
-					log("  Total Aftershock Candidates: "+afscand);
-					log("\t\tModel 1\t\tModel 2\t\tResults");
-					log("\t\t"+"S"+curr.S[0]+" D"+curr.D[0]+" R"+curr.R[0]+"\t"+
-							"S"+curr.S[1]+" D"+curr.D[1]+" R"+curr.R[1]);
-					// Creating FMs
-					FaultModel f1 = new FaultModel(curr,0);
-					FaultModel f2 = new FaultModel(curr,1);
-					// Point-in-plane testing
-					
-					int[] result = new int[afterShockTimeQuanta];
-					for (int ii = 0; ii < afterShockTimeQuanta; ii++)
-					{
-						DataList sub1 = f1.pointsInPlane(AfterShocks[ii]);
-						DataList sub2 = f2.pointsInPlane(AfterShocks[ii]);
-						ratios[ii][0] = (double)sub1.size()/(double)AfterShocks[ii].size();
-						ratios[ii][1] = (double)sub2.size()/(double)AfterShocks[ii].size();
-						
-						// Calculating which model won: model wins if difference > 20%
-						if (Math.abs(ratios[ii][0] - ratios[ii][1]) < 0.2)
-							result[ii] = 0;
-						else 
-							result[ii] = (ratios[ii][0] > ratios[ii][1]?1:2);
-					}
-					
-					String reslog = "  Pts in Plane\t";
-					for (int ii = 0; ii < afterShockTimeQuanta;ii++)
-						reslog+=String.format("%.2f", ratios[ii][0])+"/";
-					reslog+="\t";
-					
-					for (int ii = 0; ii < afterShockTimeQuanta;ii++)
-						reslog+=String.format("%.2f", ratios[ii][1])+"/";
-					reslog+="\t";
-					
-					for (int ii = 0; ii < afterShockTimeQuanta;ii++)
-						reslog+=result[ii]+"/";
-					
-					log(reslog);
-					
-				}
+				// Calculating which model won: model wins if difference > 20%
+				if ((Math.abs(ratioM1 - ratioM2)) < 0.2)
+					result = 0;
+				else 
+					result = (ratioM1 > ratioM2?1:2);
+
+				reslog = "  P# "+j+":\t\t"+ASlocal.size()+"/"+
+						String.format("%.2f",ratioM1)+"/"+
+						String.format("%.2f",ratioM2)+"/"+
+						result;
+				log(reslog);
+
+
+				// DISTANCE FROM PLANE TESTING
+				// DISTANCE FROM FAULT TESTING
+
 			}
+			
+			
+			
 		}
-		log("\n\n"+total);
+		
 
+
+
+		
 	}
 
 	static void log(String s)
