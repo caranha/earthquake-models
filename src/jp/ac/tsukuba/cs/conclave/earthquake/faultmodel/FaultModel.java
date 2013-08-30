@@ -27,6 +27,8 @@ public class FaultModel {
 
 	// contains the four points forming the fault plane. These are 
 	// calculated from the earthquake origin and the depth/strike/dip
+	// ATTENTION! Plane[i][0] is LONGITUDE!
+	// ATTENTION! Plane[i][1] is LATITUDE!
 	double plane[][];
 	
 	/** 
@@ -115,12 +117,12 @@ public class FaultModel {
 		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[1][0], midpoint[1][1], (strike+180)%360, fdist);
 		plane[2][0] = tmp[0];
 		plane[2][1] = tmp[1];
-		plane[2][2] = event.depth*2;
+		plane[2][2] = event.depth*2; // TODO: Depth is not necessarily double depth!
 		
 		tmp = GeoUtils.calcPointFromDirectionDistance(midpoint[1][0], midpoint[1][1], strike, fdist);
 		plane[3][0] = tmp[0];
 		plane[3][1] = tmp[1];
-		plane[3][2] = event.depth*2;
+		plane[3][2] = event.depth*2; // TODO: Depth is not necessarily double depth!
 		
 	}
 	
@@ -222,5 +224,31 @@ public class FaultModel {
 		return ret;
 	}
 	
+	
+	/**
+	 * Calculates the distance between the point p, and the fault defined by this fault model.
+	 * Returns -1 if the point is on the left side of the fault (above the surface)
+	 * 
+	 * This calculations is made as 
+	 * FD = cos(D)*((tan(D)*sdist)-AD)
+	 * 
+	 * sdist is the surface distance between the point and the fault line at surface
+	 * AD is the depth of the point
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public double calcFaultDistance(DataPoint p)
+	{
+		// 1- Calculate the crosstrack distance. If negative, return -1;
+		double crosstrack = GeoUtils.crossTrackDistance(plane[1][1], plane[1][0], strike, p.latitude, p.longitude);		
+		if (crosstrack < 0)
+			return -1; // point on the wrong side of the fault
+		
+		// 2- If Ctrosstrack distance is not negative, calculate DF
+		double DF = Math.cos((Math.tan(dip)*crosstrack)-p.depth);
+		
+		return DF; //Beyond Quality!		
+	}
 	
 }

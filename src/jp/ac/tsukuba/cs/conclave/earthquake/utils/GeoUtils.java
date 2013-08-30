@@ -74,7 +74,7 @@ public class GeoUtils {
 	
 	/**
 	 * Calculates the distance between point 2 and the great circle defined by Point 1 and the Azimuth.
-	 * The signal of the distance indicats on which side of the great circle the third point lies.
+	 * The signal of the distance indicates on which side of the great circle the third point lies.
 	 * 
 	 * @param lat1 Latitude for Point 1
 	 * @param lon1 Longitude for Point 1
@@ -96,7 +96,10 @@ public class GeoUtils {
 		double d13 = haversineDistance(lat1,lon1,lat2,lon2);
 
 		return Math.asin(Math.sin(d13/RADIUS)*Math.sin(a13-a12)) * RADIUS;		
-	}	
+	}
+	
+	
+	
 	
 	public static double degreeDistance(double deg1, double deg2)
 	{

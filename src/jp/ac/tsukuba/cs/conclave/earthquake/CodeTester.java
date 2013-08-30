@@ -21,7 +21,57 @@ public class CodeTester {
 	 */
 	public static void main(String[] args) {
 		
+		pointInPlane();	
+		//testingMapImage();
 		
+	}
+	
+	public static void pointInPlane()
+	{
+		//MapImage map = new MapImage(123.693237,24.246965,800,800,32);		
+		MapImage map = new MapImage(118.693237,19.246965,800,800,24);		
+		BufferedReader reader = null;
+		GeoLine geolines[];
+		String filename;
+		
+		
+		DataList total = new DataList();
+		total.loadData("jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		total.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		
+		filename = "/home/caranha/Desktop/Work/Earthquake_bogdan/data/coast_japan.m";
+		try {
+			reader = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		geolines = GeoDataReader.readGeoLines(reader);
+		
+		for (int i = 0; i < geolines.length; i++)
+			map.drawGeoLine(geolines[i], Color.black);
+
+		DataList fnet = new DataList();
+		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		FaultModel fm = null;	
+		
+		for (int i = 0; i < fnet.size(); i++)
+			if ((fnet.data.get(i).magnitude) >= 7)
+			{
+				fm = new FaultModel(fnet.data.get(i),1);
+				
+			}
+		map.drawFaultModelPlane(fm, Color.green);
+		
+		DataList PiP = fm.pointsInPlane(total);
+		for(int i = 0; i < PiP.size(); i++)
+		{
+			map.drawEvent(PiP.data.get(i), Color.BLUE, 5);
+		}
+		
+		System.out.println(PiP.size());
+		
+		map.saveToFile("testmap.png");
 	}
 	
 	public static void testingMapImage()

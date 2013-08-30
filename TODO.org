@@ -15,17 +15,18 @@
 
 ** Main goals
    - [ ] Calculate totals for "Inconclusive", "N" won, Contradictory
+   - [ ] Store results temporarily in internal variables
    - [ ] Print different results to different files
 
 ** Improvement goals
-   - [ ] Ability to run "Test All Quakes" with time quanta of different size
-   - [ ] Ability to run "Test All Quakes" with different number of quanta
-   - [ ] Ability to run "Test All Quakes" on different data files
+   - [X] Ability to run "Test All Quakes" with time quanta of different size
+   - [X] Ability to run "Test All Quakes" with different number of quanta
+   - [X] Ability to run "Test All Quakes" on different data files
 
 ** Plane-Distance testing
-   - [ ] Calculate the distance between one point and the quake plane
+   - [X] Calculate the distance between one point and the quake plane
    - [ ] Model judgement based on mean squared distance (error)
-   - [ ] Is distance based on "in plane" distances for that model? or for both models?
+   - [X] Is distance based on "in plane" distances for that model? or for both models?
 
 ** Fault distance testing
    - [ ] Calculate whether a fault is inside or outside the fault plane

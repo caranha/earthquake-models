@@ -14,6 +14,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.StatUtils;
 
 /***
  * 
@@ -27,10 +28,12 @@ public class TestAllQuakes {
 
 
 	
-	// INTERNAL VARIABLES //
+	// INTERNAL VARIABLES //	
 	static Logger logger;
-	DataList FilteredQuakes; // Earthquakes that fit the interest filter
-	ArrayList<DataList> FilteredAS; // A list of aftershocks for each filtered Quake, at the maximum period
+	
+	DataList maindata; // Link to the main Earthquake data
+	DataList filteredQuakes; // Earthquakes that fit the interest filter
+	ArrayList<DataList> filteredAS; // A list of aftershocks for each filtered Quake, at the maximum period
 	ReadablePeriod[] periods; // Pre-calculated periods
 
 	// FILTER PARAMETERS //
@@ -48,35 +51,32 @@ public class TestAllQuakes {
 	int ASquantaN = 5; // Number of time Periods	
 	
 	// DATA FILES //
-	// Input data files: filename, type, filename, tipe
-	String[] datafiles = {"jma_cat_2000_2012_Mth2.5_formatted.dat","jma",
-		"catalog_fnet_1997_20130429_f3.txt","fnet"}; // file, type, file, type
-		
+	// Default data files: filename, type, filename, type
+	String[][] datafiles = {{"jma_cat_2000_2012_Mth2.5_formatted.dat","jma"},
+			{"catalog_fnet_1997_20130429_f3.txt","fnet"}}; 
+	
+	
 	public static void main(String[] args) {
 		TestAllQuakes tester = new TestAllQuakes();
-
-		// LOADING DATA FROM FILES
-		DataList data = new DataList();
-		for (int i = 0; i < tester.datafiles.length; i+=2) // reading data
-		{
-			data.loadData(tester.datafiles[i],tester.datafiles[i+1]);
-		}
+		tester.fileLoader(tester.datafiles);
 		
 		// FILTERING EARTHQUAKE DATA
-		tester.filterQuakes(data);
+		tester.filterQuakes(tester.maindata); // TODO: make maindata private
 		
 		// RUNNING THE EXPERIMENT
 		tester.runTestAllQuakes();
 		
 		// CLEARING THE DATA
 	}
+
+	
 	
 	public void runTestAllQuakes()
 	{
 
-		for (int i = 0; i < FilteredQuakes.size(); i++) // for each filtered quake
+		for (int i = 0; i < filteredQuakes.size(); i++) // for each filtered quake
 		{
-			DataPoint curr = FilteredQuakes.data.get(i);
+			DataPoint curr = filteredQuakes.data.get(i);
 			
 			// Printing Basic earthquake data
 			log("# Earthquake "+i+" #");
@@ -96,13 +96,14 @@ public class TestAllQuakes {
 				// Calculate the Aftershocks in this period
 				Interval time = new Interval(curr.time,periods[j]); // this quanta
 				DataList ASlocal = new DataList();
-				for (int k = 0; k < FilteredAS.get(i).size(); k++)
-					if (time.contains(FilteredAS.get(i).data.get(k).time))
-						ASlocal.addData(FilteredAS.get(i).data.get(k));
-				
+				for (int k = 0; k < filteredAS.get(i).size(); k++)
+					if (time.contains(filteredAS.get(i).data.get(k).time))
+						ASlocal.addData(filteredAS.get(i).data.get(k));
+	
+				// POINT IN PLANE
 				// Calculate Ratios
-				DataList sub1 = f1.pointsInPlane(ASlocal);
-				DataList sub2 = f2.pointsInPlane(ASlocal);
+				DataList sub1 = f1.pointsInPlane(ASlocal); // points in plane 1
+				DataList sub2 = f2.pointsInPlane(ASlocal); // points in plane 2
 				double ratioM1 = (double)sub1.size()/(double)ASlocal.size(); 
 				double ratioM2 = (double)sub2.size()/(double)ASlocal.size(); 
 
@@ -115,28 +116,83 @@ public class TestAllQuakes {
 				else 
 					result = (ratioM1 > ratioM2?1:2);
 
-				reslog = "  P# "+j+":\t\t"+ASlocal.size()+"/"+
-						String.format("%.2f",ratioM1)+"/"+
-						String.format("%.2f",ratioM2)+"/"+
-						result;
-				log(reslog);
-
 
 				// DISTANCE FROM PLANE TESTING
-				// DISTANCE FROM FAULT TESTING
+				ArrayList<Double> t1 = new ArrayList<Double>();
+				ArrayList<Double> t2 = new ArrayList<Double>();
+				
+				for (int jj = 0; jj < sub1.size(); jj++)
+				{
+					double dist = f1.calcFaultDistance(sub1.data.get(jj));
+					if (dist != -1)
+						t1.add(Math.abs(dist));
+				}
+				
+				for (int jj = 0; jj < sub2.size(); jj++)
+				{
+					double dist = f2.calcFaultDistance(sub2.data.get(jj));
+					if (dist != -1)
+						t2.add(Math.abs(dist));
+				}
+
+				// FAULT DISTANCE TESTING
+				
+				// Printing Point in Plane Result
+				reslog = "  P# "+j+":\t\t"+ASlocal.size()+"/"+
+						String.format("%.2f",ratioM1)+"/"+
+						String.format("%.2f",ratioM2)+"/"+ 
+						result;
+				// Printing Plane distance result
+				double[] tots;
+				
+				if (t1.size() > 0)
+				{
+					tots = StatUtils.averageVariance(t1);
+					reslog += "  --  "+t1.size()+":"+String.format("%.3f",tots[0])+"+-"+String.format("%.3f",Math.sqrt(tots[1]));
+				}
+				else
+					reslog += "  --  0:--";
+				
+				if (t2.size() > 0)
+				{
+					tots = StatUtils.averageVariance(t2);
+					reslog += "  "+t2.size()+":"+String.format("%.3f",tots[0])+"+-"+String.format("%.3f",Math.sqrt(tots[1]));
+				}
+				else
+					reslog += "  0:--";
+				
+				log(reslog);
 
 			}
-			
-			
-			
 		}
-		
-
-
-
-		
 	}
 
+	
+	/**
+	 * Loads the main data for this testing using filenames and file types
+	 * Filenames must be full-pathed filenames, while filetypes can be "jma" or "fnet"
+	 * @param files
+	 */
+	public void fileLoader(String[][] files)
+	{
+		maindata = new DataList();
+		for (int i = 0; i < files.length; i++) // reading data
+		{
+			maindata.loadData(files[i][0], files[i][1]);
+		}
+	}
+	
+	/** 
+	 * Loads the main data for this testing object using an existing DataList Object
+	 * @param d
+	 */
+	public void dataLoader(DataList d)
+	{
+		maindata = d;
+	}
+	
+	
+	
 	static void log(String s)
 	{
 		System.out.println(s);
@@ -146,7 +202,7 @@ public class TestAllQuakes {
 	{
 		if (TestAllQuakes.logger == null)
 			logger = Logger.getLogger(DataPoint.class.getName());
-		FilteredQuakes = new DataList();
+		filteredQuakes = new DataList();
 		
 		calculatePeriods();
 	}
@@ -182,8 +238,8 @@ public class TestAllQuakes {
 	 */
 	void filterQuakes(DataList l)
 	{
-		FilteredQuakes = new DataList(); // list of filtered earthquakes
-		FilteredAS = new ArrayList<DataList>(); // list of aftershocks
+		filteredQuakes = new DataList(); // list of filtered earthquakes
+		filteredAS = new ArrayList<DataList>(); // list of aftershocks
 		
 		for (int i = 0; i < l.size(); i++) 
 		{
@@ -199,8 +255,8 @@ public class TestAllQuakes {
 			// entire period
 			if (ASList.size() >= minAftershock) 
 			{
-				FilteredAS.add(ASList);
-				FilteredQuakes.addData(curr);
+				filteredAS.add(ASList);
+				filteredQuakes.addData(curr);
 			}			
 		}		
 	}
@@ -211,8 +267,8 @@ public class TestAllQuakes {
 	 */
 	public int getFilteredQuakeSize()
 	{
-		if (FilteredQuakes != null)
-			return FilteredQuakes.size();
+		if (filteredQuakes != null)
+			return filteredQuakes.size();
 		
 		logger.warning("Tried to access TestAllQuakes object before it was initialized");
 		return 0;
@@ -222,8 +278,8 @@ public class TestAllQuakes {
 	{
 		for (int i = 0; i < getFilteredQuakeSize(); i++)
 		{
-			log(FilteredQuakes.data.get(i).dump());
-			log(FilteredAS.get(i).size()+"\n");
+			log(filteredQuakes.data.get(i).dump());
+			log(filteredAS.get(i).size()+"\n");
 		}
 	}
 	
