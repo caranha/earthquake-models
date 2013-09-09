@@ -101,9 +101,9 @@ public class DataList {
 		
 		try
 		{	
-			// reader = new BufferedReader(new FileReader(new File(filename))); // read from filesystem
-			reader = new BufferedReader(new InputStreamReader(
-					Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)));
+			reader = new BufferedReader(new FileReader(new File(filename))); // read from filesystem
+			//reader = new BufferedReader(new InputStreamReader(
+			//		Thread.currentThread().getContextClassLoader().getResourceAsStream(filename)));
 			// BLACK MAGIC!
 		}
 		catch (Exception e)

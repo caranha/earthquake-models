@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
@@ -11,6 +12,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.MapImage;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
+import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 public class CodeTester {
 
@@ -20,10 +22,20 @@ public class CodeTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-		pointInPlane();	
-		//testingMapImage();
-		
+		testParameters();
+	}
+	
+	public static void testParameters()
+	{
+		Parameter p = new Parameter();
+		p.addParameter("tEst", "Tester");
+		try {
+			p.loadTextFile("/home/caranha/tmp/codetest/parameter.par");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(p);
 	}
 	
 	public static void pointInPlane()

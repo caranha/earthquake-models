@@ -1,5 +1,6 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -7,14 +8,18 @@ import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Interval;
 import org.joda.time.Minutes;
+import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.joda.time.ReadablePeriod;
+import org.joda.time.format.PeriodFormat;
+import org.joda.time.format.PeriodFormatter;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.StatUtils;
+import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /***
  * 
@@ -30,6 +35,8 @@ public class TestAllQuakes {
 	
 	// INTERNAL VARIABLES //	
 	static Logger logger;
+	Parameter p;
+	Boolean initialized = false;
 	
 	DataList maindata; // Link to the main Earthquake data
 	DataList filteredQuakes; // Earthquakes that fit the interest filter
@@ -37,27 +44,36 @@ public class TestAllQuakes {
 	ReadablePeriod[] periods; // Pre-calculated periods
 
 	// FILTER PARAMETERS //
-	boolean filterMag = true;
-	double minMag = 6; // EVENT: Minimum magnitude
-	boolean filterDepth = false; 
-	double maxDepth = 40; // EVENT: Maximum magnitude
-	int minAftershock = 30; // EVENT: Minimum number of aftershocks
-	boolean filterASMag = true;
-	double minASMag = 2; // AFTERSHOCK: Minimum magnitude
-	boolean filterASDepth = false;
-	double maxASDepth = 40; // AFTERSHOCK: Maximum depth
+	boolean filterMag;
+	double minMag; // EVENT: Minimum magnitude
+	boolean filterDepth; 
+	double maxDepth; // EVENT: Maximum magnitude
+	int minAftershock; // EVENT: Minimum number of aftershocks
+	boolean filterASMag;
+	double minASMag; // AFTERSHOCK: Minimum magnitude
+	boolean filterASDepth;
+	double maxASDepth; // AFTERSHOCK: Maximum depth
 	
-	ReadablePeriod ASquanta = Hours.ONE; // Size of Time Period
-	int ASquantaN = 5; // Number of time Periods	
+	Period ASquanta; // Size of Time Period
+	int ASquantaN; // Number of time Periods	
 	
 	// DATA FILES //
 	// Default data files: filename, type, filename, type
-	String[][] datafiles = {{"jma_cat_2000_2012_Mth2.5_formatted.dat","jma"},
-			{"catalog_fnet_1997_20130429_f3.txt","fnet"}}; 
+	String[][] datafiles; 
 	
 	
 	public static void main(String[] args) {
+
+		String paramfile;
+		if (args.length > 0) // has parameter file
+			paramfile = args[0];
+		else
+			// FIXME: read this from internal asset folder OR load default parameters
+			paramfile = "/home/caranha/workspace/EarthquakeModels/assets/parameter.par";
+		
+		
 		TestAllQuakes tester = new TestAllQuakes();
+		tester.initParameters(paramfile);
 		tester.fileLoader(tester.datafiles);
 		
 		// FILTERING EARTHQUAKE DATA
@@ -70,10 +86,19 @@ public class TestAllQuakes {
 	}
 
 	
-	
+	public TestAllQuakes()
+	{
+		if (TestAllQuakes.logger == null)
+			logger = Logger.getLogger(DataPoint.class.getName());
+		filteredQuakes = new DataList();
+		
+		initialized = false;
+	}
+
+
 	public void runTestAllQuakes()
 	{
-
+	
 		for (int i = 0; i < filteredQuakes.size(); i++) // for each filtered quake
 		{
 			DataPoint curr = filteredQuakes.data.get(i);
@@ -90,7 +115,7 @@ public class TestAllQuakes {
 			log("  Period #\tTotal/M1/M2/Decision");
 			FaultModel f1 = new FaultModel(curr,0);
 			FaultModel f2 = new FaultModel(curr,1);
-
+	
 			for (int j = 0; j < ASquantaN; j++) // for each Quanta
 			{
 				// Calculate the Aftershocks in this period
@@ -106,7 +131,7 @@ public class TestAllQuakes {
 				DataList sub2 = f2.pointsInPlane(ASlocal); // points in plane 2
 				double ratioM1 = (double)sub1.size()/(double)ASlocal.size(); 
 				double ratioM2 = (double)sub2.size()/(double)ASlocal.size(); 
-
+	
 				int result;
 				String reslog = "";
 				
@@ -115,8 +140,8 @@ public class TestAllQuakes {
 					result = 0;
 				else 
 					result = (ratioM1 > ratioM2?1:2);
-
-
+	
+	
 				// DISTANCE FROM PLANE TESTING
 				ArrayList<Double> t1 = new ArrayList<Double>();
 				ArrayList<Double> t2 = new ArrayList<Double>();
@@ -134,7 +159,7 @@ public class TestAllQuakes {
 					if (dist != -1)
 						t2.add(Math.abs(dist));
 				}
-
+	
 				// FAULT DISTANCE TESTING
 				
 				// Printing Point in Plane Result
@@ -162,11 +187,81 @@ public class TestAllQuakes {
 					reslog += "  0:--";
 				
 				log(reslog);
-
+	
 			}
 		}
 	}
 
+
+	/** 
+	 * Load any parameters available in a parameter file
+	 * @param filename
+	 */
+	public void initParameters(String filename)
+	{
+		if (p == null)
+			p = new Parameter();
+		
+		// Loading parameter value file
+		if (filename != null)
+		{
+			try {
+				p.loadTextFile(filename);
+			} catch (IOException e) {
+				logger.severe("Error loading parameter file, clearing parameters: "+filename);
+				logger.severe(e.getMessage());
+				System.exit(1);
+			}
+		}
+		
+		this.initParameters();
+	}
+	
+	
+	/**
+	 * Initialize the value of the internal parameters, using default values if necessary
+	 */
+	public void initParameters()
+	{
+		if (p == null)
+			p = new Parameter();
+		
+		// Loading default parameter values
+		
+		filterMag = Boolean.parseBoolean(p.getParameter("filter magnitude", "true"));
+		minMag = Double.parseDouble(p.getParameter("minimum magnitude", "6"));
+		filterDepth = Boolean.parseBoolean(p.getParameter("filter depth", "false"));
+		maxDepth = Double.parseDouble(p.getParameter("maximum depth","40"));
+		minAftershock = Integer.parseInt(p.getParameter("minimum aftershock number", "30"));
+		filterASMag = Boolean.parseBoolean(p.getParameter("filter aftershock magnitude", "true"));
+		minASMag = Double.parseDouble(p.getParameter("minimum aftershock magnitude", "2"));
+		filterASDepth = Boolean.parseBoolean(p.getParameter("filter aftershock depth", "false"));
+		maxASDepth = Double.parseDouble(p.getParameter("maximum aftershock depth", "40"));
+		ASquantaN = Integer.parseInt(p.getParameter("number of time periods", "3"));
+		
+		try
+		{
+			ASquanta = Period.parse(p.getParameter("base time period", "1 day"), PeriodFormat.getDefault());
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error while loading time period: "+e.getMessage());
+			System.err.println("Defaulting to One Hour");
+			ASquanta = Period.hours(1);
+		}
+		
+		int nfiles = Integer.parseInt(p.getParameter("number of data files", "2"));
+		datafiles = new String[nfiles][2];
+		
+		for (int i = 0; i < nfiles; i++)
+		{
+			datafiles[i][0] = p.getParameter("filename"+(i+1), "none");
+			datafiles[i][1] = p.getParameter("filetype"+(i+1), "none");
+		}	
+		
+		calculatePeriods();
+		initialized = true;
+	}
 	
 	/**
 	 * Loads the main data for this testing using filenames and file types
@@ -178,7 +273,8 @@ public class TestAllQuakes {
 		maindata = new DataList();
 		for (int i = 0; i < files.length; i++) // reading data
 		{
-			maindata.loadData(files[i][0], files[i][1]);
+			if (files[i][0] != "none")
+				maindata.loadData(files[i][0], files[i][1]);
 		}
 	}
 	
@@ -193,20 +289,6 @@ public class TestAllQuakes {
 	
 	
 	
-	static void log(String s)
-	{
-		System.out.println(s);
-	}
-	
-	public TestAllQuakes()
-	{
-		if (TestAllQuakes.logger == null)
-			logger = Logger.getLogger(DataPoint.class.getName());
-		filteredQuakes = new DataList();
-		
-		calculatePeriods();
-	}
-	
 	/**
 	 * Calculate the internal periods based on the parameter values. Generates
 	 * N periods of size "quanta*N"
@@ -214,16 +296,10 @@ public class TestAllQuakes {
 	public void calculatePeriods()
 	{
 		periods = new ReadablePeriod[ASquantaN];
-		int type = ASquanta.getPeriodType().hashCode();
 		
 		for(int i = 0; i < ASquantaN; i++)
 		{
-			if (type == PeriodType.minutes().hashCode())
-				periods[i] = ((Minutes) ASquanta).multipliedBy(i+1).toPeriod();
-			if (type == PeriodType.hours().hashCode())
-				periods[i] = ((Hours) ASquanta).multipliedBy(i+1).toPeriod();
-			if (type == PeriodType.days().hashCode())
-				periods[i] = ((Days) ASquanta).multipliedBy(i+1).toPeriod();
+			periods[i] = ASquanta.multipliedBy(i+1);
 		}		
 	}
 	
@@ -274,15 +350,6 @@ public class TestAllQuakes {
 		return 0;
 	}
 	
-	public void printEventsAndAfterShocks()
-	{
-		for (int i = 0; i < getFilteredQuakeSize(); i++)
-		{
-			log(filteredQuakes.data.get(i).dump());
-			log(filteredAS.get(i).size()+"\n");
-		}
-	}
-	
 	/**
 	 * Generates a list of aftershocks for an event, based on the filter attributes of this object.
 	 * This functions requires a ReadablePeriod composed by the Quanta, multiplied by a scalar
@@ -303,7 +370,7 @@ public class TestAllQuakes {
 		DataList ret = new DataList();
 		
 		Interval ASperiod = new Interval(event.time,period);
-
+	
 		for (int i = dataindex; (i < data.size() && !ASperiod.isBefore(data.data.get(i).time)); i++)
 		{
 			DataPoint curr = data.data.get(i);
@@ -317,5 +384,20 @@ public class TestAllQuakes {
 		}
 		
 		return ret;
+	}
+
+
+	public void printEventsAndAfterShocks()
+	{
+		for (int i = 0; i < getFilteredQuakeSize(); i++)
+		{
+			log(filteredQuakes.data.get(i).dump());
+			log(filteredAS.get(i).size()+"\n");
+		}
+	}
+	
+	static void log(String s)
+	{
+		System.out.println(s);
 	}
 }

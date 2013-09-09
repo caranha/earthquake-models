@@ -1,0 +1,27 @@
+filter magnitude = true
+minimum magnitude = 6
+filter depth = true
+maximum depth = 40
+
+minimum aftershock number = 30
+filter aftershock magnitude = true
+minimum aftershock magnitude = 2
+filter aftershock depth = false
+maximum aftershock depth = 40
+
+base time period = 1 day
+number of time periods = 5
+
+number of data files = 2
+filename1 = /home/caranha/workspace/EarthquakeModels/assets/jma_cat_2000_2012_Mth2.5_formatted.dat
+filetype1 = jma
+filename2 = /home/caranha/workspace/EarthquakeModels/assets/catalog_fnet_1997_20130429_f3.txt
+filetype2 = fnet
+
+
+
+
+
+
+
+

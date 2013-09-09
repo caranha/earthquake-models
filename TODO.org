@@ -13,6 +13,15 @@
      - Number of types 1 and 2 for each model
      - Earthquakes where: N models agree on the earthquake type
 
+** Extras:
+   - [X] Creates a parameter object for loading parameters
+   - [X] Use parameter objects to load parameters
+   - [ ] Make "Datalist" try to load the file from the filesystem
+     first, and if it does not find it there, try the internal asset folder
+     - Same for loading default parameter values
+   - [ ] Remove the "parameter variables" and replace them with parameter calls 
+     with default values in TestAllQuakes.
+
 ** Main goals
    - [ ] Calculate totals for "Inconclusive", "N" won, Contradictory
    - [ ] Store results temporarily in internal variables
@@ -33,10 +42,11 @@
    - [ ] Compare faults inside the fault plane with the strike direction
 
 ** Done
-- [X] Selects a subgroup of valid earthquakes
-  Valid earthquakes have Magnitude > X, and aftershocks with mag > Z after 1 day > Y
-- [X] Calcular a hypothesis do plano para cada time period
-- [X] Imprimir o resultado para cada time period
+   - [X] Selects a subgroup of valid earthquakes
+   Valid earthquakes have Magnitude > X, and aftershocks with mag > Z
+   after 1 day > Y
+   - [X] Calcular a hypothesis do plano para cada time period
+   - [X] Imprimir o resultado para cada time period
 
 * New GUI:
 - [ ] Create GUI outline
