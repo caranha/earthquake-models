@@ -10,7 +10,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.MapImage;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapImage;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
@@ -22,7 +22,8 @@ public class CodeTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		testParameters();
+		//testParameters();
+		pointInPlane();
 	}
 	
 	public static void testParameters()
@@ -40,16 +41,16 @@ public class CodeTester {
 	
 	public static void pointInPlane()
 	{
-		//MapImage map = new MapImage(123.693237,24.246965,800,800,32);		
-		MapImage map = new MapImage(118.693237,19.246965,800,800,24);		
+		//MapImage map = new MapImage(118.693237,19.246965,800,800,24);
+		MapImage map = new MapImage(800,800,118.693237,19.246965,150,55);	
 		BufferedReader reader = null;
 		GeoLine geolines[];
 		String filename;
 		
 		
 		DataList total = new DataList();
-		total.loadData("jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
-		total.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		total.loadData("data/jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		total.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
 		
 		filename = "/home/caranha/Desktop/Work/Earthquake_bogdan/data/coast_japan.m";
 		try {
@@ -64,7 +65,7 @@ public class CodeTester {
 			map.drawGeoLine(geolines[i], Color.black);
 
 		DataList fnet = new DataList();
-		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
+		fnet.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
 		FaultModel fm = null;	
 		
 		for (int i = 0; i < fnet.size(); i++)
@@ -88,7 +89,8 @@ public class CodeTester {
 	
 	public static void testingMapImage()
 	{
-		MapImage map = new MapImage(123.693237,24.246965,800,800,32);		
+		//MapImage map = new MapImage(123.693237,24.246965,800,800,32);		
+		MapImage map = new MapImage(800,800,123.693237,24.246965,125,26);
 		BufferedReader reader = null;
 		GeoLine geolines[];
 		String filename;

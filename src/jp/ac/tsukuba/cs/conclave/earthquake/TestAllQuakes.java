@@ -106,7 +106,7 @@ public class TestAllQuakes {
 			// Printing Basic earthquake data
 			log("# Earthquake "+i+" #");
 			log("  "+curr.time.toString("YYYY-MM-dd HH:MM")+"  Mag: "+curr.magnitude+" Depth: "+curr.depth+
-					" Lat:"+curr.latitude+" Lon:"+curr.longitude);
+					" Lat:"+curr.latitude+" Lon:"+curr.longitude+"  Radius: "+GeoUtils.getAftershockRadius(curr.magnitude));
 			log("  Model 1: "+"S"+curr.S[0]+" D"+curr.D[0]+" R"+curr.R[0]);
 			log("  Model 2: "+"S"+curr.S[1]+" D"+curr.D[1]+" R"+curr.R[1]);
 			

@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.gui;
+package jp.ac.tsukuba.cs.conclave.earthquake.gui.map;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,28 +24,51 @@ import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
  */
 public class MapImage {
 
-	public BufferedImage map;
+	BufferedImage map;
 	
-	double offx; // longitude offset
-	double offy; // latitude offset
+	// Latitude and longitude offsets;
+	double startx;
+	double starty;
+	double endx;
+	double endy;
+
+	// Size of the map in pixels;
 	int width;
 	int height;
 	
-	double zoomx; // Magnification factor, usually bigger than 1
-	double zoomy; // Magnification factor for the y axis
 	
-	public MapImage(double offx, double offy, int w, int h, double zoom)
+	/**
+	 * 
+	 * @param w (Screen Size) width of the map
+	 * @param h (Screen Size) height of the map
+	 * @param startx longitude at the SW corner of the map
+	 * @param starty latitude at the SW corner of the map
+	 * @param endx longitude at the NE corner of the map
+	 * @param endy latitude at the NE corner of the map
+	 */
+	public MapImage(int w, int h, double startx, double starty, double endx, double endy)
 	{
-		zoomx = zoomy = zoom;
-		this.offx = offx;
-		this.offy = offy;
+		this.startx = startx;
+		this.starty = starty;
+		this.endx = endx;
+		this.endy = endy;
+		
 		this.width = w;
 		this.height = h;
 		
 		map = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
 		this.clear();
 	}
-	
+
+	/**
+	 * Returns a BufferedImage for drawing;
+	 * @return
+	 */
+	public BufferedImage getImage()
+	{
+		return map;
+	}
+		
 	/**
 	 * Clear the map for redrawing
 	 */
@@ -58,6 +81,11 @@ public class MapImage {
 		map.flush();
 	}
 	
+	/**
+	 * Saves the image held at this moment to a filename;
+	 * TODO: This is probably not the responsability of this class.
+	 * @param filename
+	 */
 	public void saveToFile(String filename)
 	{
 		File f = new File(filename);
@@ -68,6 +96,30 @@ public class MapImage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	/**
+	 * Calculates the image position for a given longitude;
+	 * @param lon
+	 * @return
+	 */
+	private int calculateScreenPosLongitude(double lon)
+	{
+		double ret = ((lon-startx)/(endx - startx))*width;		
+		return (int)Math.floor(ret);
+	}
+	
+	/**
+	 * Calculates the image position for a given latitude;
+	 * This position is already inverted on the Y axis;
+	 * @param lat
+	 * @return
+	 */
+	private int calculateScreenPosLatitude(double lat)
+	{
+		double ret = ((lat-starty)/(endy - starty))*height;		
+		return height - (int)Math.floor(ret);
 	}
 	
 	public void drawGeoLine(GeoLine l, Color c)
@@ -82,11 +134,11 @@ public class MapImage {
 		{
 			int x0,y0,x1,y1;
 			cur = it.next();
-			x0 = (int)Math.floor((prev.lon - offx)*zoomx);
-			y0 = height - (int)Math.floor((prev.lat - offy)*zoomy);
-			x1 = (int)Math.floor((cur.lon - offx)*zoomx);
-			y1 = height - (int)Math.floor((cur.lat - offy)*zoomy);
-						
+			x0 = calculateScreenPosLongitude(prev.lon);
+			y0 = calculateScreenPosLatitude(prev.lat);
+			x1 = calculateScreenPosLongitude(cur.lon);
+			y1 = calculateScreenPosLatitude(cur.lat);
+			
 			g.drawLine(x0,y0,x1,y1);
 		}
 		
@@ -109,11 +161,11 @@ public class MapImage {
 			else
 				g.setColor(c);
 			int x0,y0,x1,y1;
-			x0 = (int)Math.floor((plane[j][0] - offx)*zoomx);
-			y0 = height - (int)Math.floor((plane[j][1] - offy)*zoomy);
-			x1 = (int)Math.floor((plane[i][0] - offx)*zoomx);
-			y1 = height - (int)Math.floor((plane[i][1] - offy)*zoomy);
-			
+			x0 = calculateScreenPosLongitude(plane[j][0]);
+			y0 = calculateScreenPosLatitude(plane[j][1]);
+			x1 = calculateScreenPosLongitude(plane[i][0]);
+			y1 = calculateScreenPosLatitude(plane[i][1]);
+						
 			g.drawLine(x0,y0,x1,y1);
 			j = i;
 		}
@@ -132,8 +184,9 @@ public class MapImage {
 		Graphics g = map.createGraphics();	
 		g.setColor(c);
 		int x,y,r;
-		x = (int)Math.floor((p.longitude - offx)*zoomx);
-		y = height - (int)Math.floor((p.latitude - offy)*zoomy);
+		
+		x = calculateScreenPosLongitude(p.longitude);
+		y = calculateScreenPosLatitude(p.latitude);
 		r = (int) Math.floor(s);
 		
 		g.fillOval(x, y, r,r);
