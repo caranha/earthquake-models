@@ -60,6 +60,16 @@ public class MapImage {
 		this.clear();
 	}
 
+	public int getHeight()
+	{
+		return height;
+	}
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	
 	/**
 	 * Returns a BufferedImage for drawing;
 	 * @return
