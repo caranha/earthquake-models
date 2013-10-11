@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.gui.map;
+package jp.ac.tsukuba.cs.conclave.earthquake.image;
 
 import java.awt.Color;
 import java.util.ArrayList;

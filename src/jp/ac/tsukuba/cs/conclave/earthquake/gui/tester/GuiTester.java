@@ -1,32 +1,34 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.gui.tester;
 
 
-import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapPanel;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapViewerPanel;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawGeography;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 
 public class GuiTester {
 
 	
 	public static void main(String[] args) {
 
-		loadJapanMap();
+		DrawGeography drawjapanmap = new DrawGeography();
+		drawjapanmap.setMap(loadJapanMap());
 		
+		MapController m = new MapController(MapImage.JapaneseMapFactory());
+		m.addDrawCommand(drawjapanmap);
 		
         JFrame frame = new JFrame("Earthquake GUI Tester");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        MapViewerPanel p1 = new MapViewerPanel();       
+        MapPanel p1 = new MapPanel(m);       
 
         frame.add(p1);
         frame.pack();	

@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.gui.map;
+package jp.ac.tsukuba.cs.conclave.earthquake.image;
 
 /**
  * This abstract class describes something that will be drawn on the map.

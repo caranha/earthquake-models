@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.gui.map;
+package jp.ac.tsukuba.cs.conclave.earthquake.image;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -27,10 +27,10 @@ public class MapImage {
 	BufferedImage map;
 	
 	// Latitude and longitude offsets;
-	double startx;
-	double starty;
-	double endx;
-	double endy;
+	double startlon;
+	double startlat;
+	double endlon;
+	double endlat;
 
 	// Size of the map in pixels;
 	int width;
@@ -39,19 +39,23 @@ public class MapImage {
 	
 	/**
 	 * 
+	 * Creates an image that holds a map. 
+	 * The start and end latitudes and longitudes should not be changed - zooming in and out happens 
+	 * at GUI level, not at map drawing level.
+	 * 
 	 * @param w (Screen Size) width of the map
 	 * @param h (Screen Size) height of the map
-	 * @param startx longitude at the SW corner of the map
-	 * @param starty latitude at the SW corner of the map
-	 * @param endx longitude at the NE corner of the map
-	 * @param endy latitude at the NE corner of the map
+	 * @param startlon longitude at the SW corner of the map
+	 * @param startlat latitude at the SW corner of the map
+	 * @param endlon longitude at the NE corner of the map
+	 * @param endlat latitude at the NE corner of the map
 	 */
-	public MapImage(int w, int h, double startx, double starty, double endx, double endy)
+	public MapImage(int w, int h, double startlon, double startlat, double endlon, double endlat)
 	{
-		this.startx = startx;
-		this.starty = starty;
-		this.endx = endx;
-		this.endy = endy;
+		this.startlon = startlon;
+		this.startlat = startlat;
+		this.endlon = endlon;
+		this.endlat = endlat;
 		
 		this.width = w;
 		this.height = h;
@@ -116,7 +120,7 @@ public class MapImage {
 	 */
 	private int calculateScreenPosLongitude(double lon)
 	{
-		double ret = ((lon-startx)/(endx - startx))*width;		
+		double ret = ((lon-startlon)/(endlon - startlon))*width;		
 		return (int)Math.floor(ret);
 	}
 	
@@ -128,7 +132,7 @@ public class MapImage {
 	 */
 	private int calculateScreenPosLatitude(double lat)
 	{
-		double ret = ((lat-starty)/(endy - starty))*height;		
+		double ret = ((lat-startlat)/(endlat - startlat))*height;		
 		return height - (int)Math.floor(ret);
 	}
 	
@@ -203,4 +207,12 @@ public class MapImage {
 		map.flush();
 	}
 	
+	/**
+	 * Creates a MapImage with the correct latitude and longitude for a japanese map
+	 * @return
+	 */
+	static public MapImage JapaneseMapFactory()
+	{
+		return new MapImage(800,800,125,24,150,47);
+	}
 }

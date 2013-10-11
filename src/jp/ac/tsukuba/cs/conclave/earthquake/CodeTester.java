@@ -10,7 +10,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FaultModel;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapImage;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
