@@ -26,6 +26,10 @@ public class MapPanel extends JPanel implements ActionListener{
 	// Attributes
 	MapController map;
 	
+	// Subpanels
+	MapDisplayPanel mapdisplaypanel;
+	MapNavigator mapnavigatorpanel;
+	
 	/**
 	 * 
 	 */
@@ -35,14 +39,16 @@ public class MapPanel extends JPanel implements ActionListener{
 	{
 		super();
 		map = m;
+		mapdisplaypanel = new MapDisplayPanel(200,200,m.getImage());
+		mapnavigatorpanel = new MapNavigator(buttonBarWidth,200,this);
 		
 		// Setting the layout of the panel;
 		this.setMinimumSize(new Dimension(buttonBarWidth+200,200));
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		// Temporary, replace with button panel
-		this.add(Box.createRigidArea(new Dimension(buttonBarWidth,200))); 
+		this.add(mapnavigatorpanel); 
 		this.add(new JSeparator(SwingConstants.VERTICAL));
-		this.add(new MapDisplayPanel(200,200,m.getImage()));		
+		this.add(mapdisplaypanel);		
 	}
 	
 	
@@ -60,8 +66,22 @@ public class MapPanel extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		//FIXME: needs to update the map graphics
 		
+		if (e.getActionCommand() == "+")
+		{
+			mapdisplaypanel.multiplyZoom(1.1);
+			return;
+		}
+		
+		if (e.getActionCommand() == "-")
+		{
+			mapdisplaypanel.multiplyZoom(0.9);
+			return;
+		}
+		
+		
+		System.out.println(e.getActionCommand());		
 	}
 
 }
