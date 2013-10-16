@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.gui;
+package jp.ac.tsukuba.cs.conclave.earthquake.gui.old;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

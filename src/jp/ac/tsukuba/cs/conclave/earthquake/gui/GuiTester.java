@@ -1,4 +1,4 @@
-package jp.ac.tsukuba.cs.conclave.earthquake.gui.tester;
+package jp.ac.tsukuba.cs.conclave.earthquake.gui;
 
 
 import java.io.BufferedReader;
@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
@@ -26,15 +28,26 @@ public class GuiTester {
 		MapController m = new MapController(MapImage.JapaneseMapFactory());
 		m.addDrawCommand(drawjapanmap);
 		
-        JFrame frame = new JFrame("Earthquake GUI Tester");
+		
+		// Setting up the frame environment
+		JFrame frame = new JFrame("Earthquake GUI Tester");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MapPanel p1 = new MapPanel(m);       
+        frame.setSize(800, 600);
+        frame.setVisible(true);
 
-        frame.add(p1);
-        frame.pack();	
+        
+        JDesktopPane mainwindow = new JDesktopPane();
+		frame.setContentPane(mainwindow);
+		
+		JInternalFrame map = new JInternalFrame("Map");
+        MapPanel p1 = new MapPanel(m);       
+        map.add(p1);
+        map.pack();	
+        map.setVisible(true);
+        mainwindow.add(map);
+
 
         //Display the window.
-        frame.setVisible(true);
 	}
 	
 	static ArrayList<GeoLine> loadJapanMap()
