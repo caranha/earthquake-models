@@ -80,6 +80,29 @@ public class MapPanel extends JPanel implements ActionListener{
 			return;
 		}
 		
+		if (e.getActionCommand() == "down")
+		{
+			mapdisplaypanel.moveMap(0, +1);
+			return;
+		}
+		
+		if (e.getActionCommand() == "up")
+		{
+			mapdisplaypanel.moveMap(0, -1);
+			return;
+		}
+		
+		if (e.getActionCommand() == "left")
+		{
+			mapdisplaypanel.moveMap(-1,0);
+			return;
+		}
+		
+		if (e.getActionCommand() == "right")
+		{
+			mapdisplaypanel.moveMap(1, 0);
+			return;
+		}
 		
 		System.out.println(e.getActionCommand());		
 	}

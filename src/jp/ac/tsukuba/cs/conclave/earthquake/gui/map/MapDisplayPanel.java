@@ -21,7 +21,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 public class MapDisplayPanel extends JPanel {
 
 	private static final long serialVersionUID = -5205387903071024831L;
-
+	
 	MapImage image;
 	
 	int displayposX = 0;
@@ -63,23 +63,34 @@ public class MapDisplayPanel extends JPanel {
     public void multiplyZoom(double mult)
     {
     	zoom *= mult;
+    	fixZoomLocation();
     }
         
+    public void moveMap(int dirx, int diry)
+    {
+    	displayposX += Math.signum(dirx)*(image.getWidth()/(20*zoom));
+    	displayposY += Math.signum(diry)*(image.getWidth()/(20*zoom));
+    	fixZoomLocation();
+    }
+    
     public void setZoom(double z)
     {
     	zoom = z;
+    	fixZoomLocation();
     }
     
     public void setLocation(int offx, int offy)
     {
     	displayposX = offx;
     	displayposY = offy;
+    	fixZoomLocation();
     }
     
     public void resetZoomLocation()
     {
     	displayposX = displayposY = 0;
     	zoom = 1;
+    	repaint();
     }
 
     /** 
@@ -99,5 +110,6 @@ public class MapDisplayPanel extends JPanel {
     		displayposX = (int)Math.round(image.getWidth() - image.getWidth()/zoom);
     	if (displayposY + image.getHeight()/zoom > image.getHeight())
     		displayposY = (int)Math.round(image.getHeight() - image.getHeight()/zoom);
+    	repaint();
     }
 }
