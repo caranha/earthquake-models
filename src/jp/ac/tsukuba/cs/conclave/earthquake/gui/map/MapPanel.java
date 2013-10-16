@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -18,10 +19,12 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
  * @author caranha
  *
  */
-public class MapPanel extends JPanel implements ActionListener{
+public class MapPanel extends JInternalFrame implements ActionListener{
 
 	// CONSTANTS
-	final static int buttonBarWidth = 150;
+	final static int buttonBarWidth = 100;
+	final static int mapDisplayWidth = 400;
+	final static int mapDisplayHeight = 400;
 	
 	// Attributes
 	MapController map;
@@ -37,18 +40,21 @@ public class MapPanel extends JPanel implements ActionListener{
 	
 	public MapPanel(MapController m)
 	{
-		super();
+		super("Map", false, false, false, true);
 		map = m;
-		mapdisplaypanel = new MapDisplayPanel(200,200,m.getImage());
-		mapnavigatorpanel = new MapNavigator(buttonBarWidth,200,this);
+		mapdisplaypanel = new MapDisplayPanel(mapDisplayWidth,mapDisplayHeight,m.getImage());
+		mapnavigatorpanel = new MapNavigator(buttonBarWidth,mapDisplayHeight,this);
 		
-		// Setting the layout of the panel;
-		this.setMinimumSize(new Dimension(buttonBarWidth+200,200));
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		// Temporary, replace with button panel
-		this.add(mapnavigatorpanel); 
-		this.add(new JSeparator(SwingConstants.VERTICAL));
-		this.add(mapdisplaypanel);		
+		// Setting the layout of the InternalPane;
+		JPanel aux = new JPanel();
+		aux.setSize(new Dimension(buttonBarWidth+mapDisplayWidth,mapDisplayHeight));
+		aux.setLayout(new BoxLayout(aux, BoxLayout.X_AXIS));
+		aux.add(mapnavigatorpanel); 
+		aux.add(new JSeparator(SwingConstants.VERTICAL));
+		aux.add(mapdisplaypanel);
+		
+		add(aux);
+		pack();
 	}
 	
 	

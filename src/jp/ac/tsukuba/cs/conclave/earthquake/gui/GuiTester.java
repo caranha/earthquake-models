@@ -10,8 +10,10 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist.DataListFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapPanel;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawGeography;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
@@ -20,34 +22,54 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 public class GuiTester {
 
 	
+	// Model Attributes -- things that I should have only one of:
+	static MapController m; // Creates and Controls a map
+	static DataList data;
+	
+	
+	
 	public static void main(String[] args) {
-
+		
+		// Loading Initial Data (Probably want to encapsulate this)
 		DrawGeography drawjapanmap = new DrawGeography();
 		drawjapanmap.setMap(loadJapanMap());
 		
-		MapController m = new MapController(MapImage.JapaneseMapFactory());
+		data = loadAllEarthquakes();
+		
+		
+		// Initializing global variables (Probably want to encapsulate this too)
+		m = new MapController(MapImage.JapaneseMapFactory());
 		m.addDrawCommand(drawjapanmap);
 		
 		
-		// Setting up the frame environment
+		
+		
+		// Setting up the Swing Environment:
+		
+		// Main frame and Desktop Pane
 		JFrame frame = new JFrame("Earthquake GUI Tester");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setVisible(true);
 
-        
         JDesktopPane mainwindow = new JDesktopPane();
 		frame.setContentPane(mainwindow);
 		
-		JInternalFrame map = new JInternalFrame("Map");
-        MapPanel p1 = new MapPanel(m);       
-        map.add(p1);
-        map.pack();	
+		// Map Internal Plane
+		JInternalFrame map = new MapPanel(m);       
         map.setVisible(true);
+        
+        // Earthquake list Plane
+        JInternalFrame list = new DataListFrame(data);
+        list.setVisible(true);
+        
+        // 
+        
+        
+        // Adding everything to the Desktop Pane
         mainwindow.add(map);
+        mainwindow.add(list);
 
-
-        //Display the window.
 	}
 	
 	static ArrayList<GeoLine> loadJapanMap()
@@ -67,6 +89,14 @@ public class GuiTester {
 			ret.add(geolines[i]);
 		
 		return ret;
+	}
+	
+	static DataList loadAllEarthquakes()
+	{
+		DataList aux = new DataList();
+		aux.loadData("data/jma_cat_2000_2012_Mth2.5_formatted.dat","jma");
+		aux.loadData("data/catalog_fnet_1997_20130429_f3.txt","fnet");
+		return aux;
 	}
 	
 }
