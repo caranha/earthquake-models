@@ -1,18 +1,23 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
 
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -37,6 +42,9 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 	 */
 	private static final long serialVersionUID = -2499175237283592904L;
 
+	static final int width = 200;
+	static final int height = 600;
+	
 	// InternalData
 	ArrayList<EarthquakeFocusListener> focusListeners;
 	DataList originalData;
@@ -48,7 +56,8 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 	JButton displayButton;
 	JButton focusButton;
 	
-	JPanel focusDisplay;
+	
+	JTextArea focusDisplay;
 	JList<String> filterList;
 	
 	
@@ -57,15 +66,20 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		super("Event List", false, false, false, true);
 		originalData = d;
 		filteredData = d;
-		focusEarthquake = null;
-		
+		focusEarthquake = null;	
+		focusListeners = new ArrayList<EarthquakeFocusListener>();
 		
 		// Setting the layout of the InternalPane;
 		JPanel aux = new JPanel();
-		aux.setSize(new Dimension(200,600));
+		//aux.setSize(new Dimension(width,height));
 		aux.setLayout(new BoxLayout(aux, BoxLayout.Y_AXIS));
 		aux.add(initButtons());
+		aux.add(Box.createRigidArea(new Dimension(0,5)));
+		aux.add(initTextArea());
+		aux.add(Box.createRigidArea(new Dimension(0,5)));
 		aux.add(initFilterList());
+		aux.add(focusButton);
+
 		
 				
 		add(aux);
@@ -81,6 +95,10 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		displayButton.addActionListener(this);
 		ret.add(resetButton);
 		ret.add(displayButton);
+
+		focusButton = new JButton("Change Focus");
+		focusButton.addActionListener(this);
+		focusButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		return ret;
 	}
@@ -90,7 +108,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		filterList = new JList<String>();
 		filterList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		filterList.setLayoutOrientation(JList.VERTICAL);
-		//filterList.setVisibleRowCount(10);
+		filterList.setVisibleRowCount(15);
 		
 		
 		filterList.setListData(getFilteredListString(filteredData));
@@ -98,12 +116,25 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		return ret;
 	}
 	
+	private JTextArea initTextArea()
+	{
+		focusDisplay = new JTextArea();
+		focusDisplay.setText("");
+		focusDisplay.setEditable(false);
+		focusDisplay.setLineWrap(true);
+		
+		focusDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		return focusDisplay;
+	}
+	
+	
 	/**
 	 * Gets a String[] of the basic info from all the filtered
 	 * @param d
 	 * @return
 	 */
-	String[] getFilteredListString(DataList d)
+	public String[] getFilteredListString(DataList d)
 	{
 		if (d == null)
 			return new String[0];
@@ -114,29 +145,80 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		
 		while (it.hasNext())
 		{
-			String aux = "";
-			
-			DataPoint DPaux = it.next();
-			
-			aux = DPaux.time.toString(ISODateTimeFormat.date()) + " | ";
-			aux+= DPaux.time.toString(ISODateTimeFormat.hourMinuteSecond()) + " | ";
-			aux+= "M"+DPaux.magnitude;
-			
-			ret[i] = aux;
+			ret[i] = getEarthquakeShortString(it.next());
 			i++;
 		}
 		return ret;
 	}
 	
+	private String getEarthquakeShortString(DataPoint d)
+	{
+		String aux = "";
+		
+		aux = d.time.toString(ISODateTimeFormat.date()) + " | ";
+		aux+= d.time.toString(ISODateTimeFormat.hourMinuteSecond()) + " | ";
+		aux+= "M"+d.magnitude;
+		
+		return aux;
+	}
+	
+	public DataList getFilteredDataList()
+	{
+		return filteredData;
+	}
+	
+	
+	
+	public void addFocusListener(EarthquakeFocusListener l)
+	{
+		focusListeners.add(l);
+	}
+	
+	
+	private void resetList()
+	{
+		filteredData = originalData;
+		filterList.clearSelection();
+	}
+	
+	
+	private void changeFocus()
+	{
+		if (!filterList.isSelectionEmpty())
+		{
+			focusEarthquake = filteredData.data.get(filterList.getSelectedIndex());
+			focusDisplay.setText(getEarthquakeShortString(focusEarthquake));
+			
+			for (EarthquakeFocusListener aux: focusListeners)
+			{
+				aux.focusChanged(focusEarthquake);
+			}
+		}
+	}
+
+	
+	public void addListSelectionListener(ListSelectionListener l)
+	{
+		filterList.addListSelectionListener(l);
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getActionCommand() == "Reset List")
 		{
-			filteredData = originalData;
+			resetList();
+			return;
+		}
+		if (arg0.getActionCommand() == "Change Focus")
+		{
+			changeFocus();
 			return;
 		}
 		
+		System.out.println(arg0.getActionCommand());
+		
 	}
 
+	
+	
 }

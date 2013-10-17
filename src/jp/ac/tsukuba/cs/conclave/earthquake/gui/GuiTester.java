@@ -62,6 +62,7 @@ public class GuiTester {
         // Earthquake list Plane
         JInternalFrame list = new DataListFrame(data);
         list.setVisible(true);
+        list.setLocation(520, 0);
         
         // 
         
