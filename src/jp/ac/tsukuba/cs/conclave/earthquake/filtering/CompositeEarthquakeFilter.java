@@ -24,7 +24,7 @@ public class CompositeEarthquakeFilter {
 	
 	public boolean isEmpty()
 	{
-		return (filters.size() > 0);
+		return (filters.size() == 0);
 	}
 	
 	

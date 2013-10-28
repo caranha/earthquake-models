@@ -35,10 +35,9 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 	CompositeEarthquakeFilter currentFilter;
 	DataPoint focusEarthquake;
 	
-	JTextField minMag;
-	JTextField maxMag;
-	JTextField minDepth;
-	JTextField maxDepth;
+	FilterComponent magFilter;
+	FilterComponent depthFilter;
+	
 	JTextField minDate;
 	JTextField maxDate;
 	JCheckBox hasFaultMechanism;
@@ -92,24 +91,11 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 		JPanel ret = new JPanel();
 		ret.setLayout(new BoxLayout(ret, BoxLayout.Y_AXIS));
 		
-
-		// Magnitude
-		aux = new JPanel();
-		aux.add(new JLabel("Magnitude   Min:"));
-		aux.add(minMag = new JTextField(4));
-		aux.add(new JLabel(" Max:"));
-		aux.add(maxMag = new JTextField(4));
+		magFilter = new MagnitudeFilterComponent();
+		depthFilter = new DepthFilterComponent();
 		
-		ret.add(aux);
-
-		
-		// Depth
-		aux = new JPanel();
-		aux.add(new JLabel("Depth   Min:"));
-		aux.add(minDepth = new JTextField(4));
-		aux.add(new JLabel(" Max:"));
-		aux.add(maxDepth = new JTextField(4));
-		ret.add(aux);
+		ret.add(magFilter.getPanel());
+		ret.add(depthFilter.getPanel());
 		
 		// Date
 		aux = new JPanel();
@@ -171,10 +157,9 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 	
 	private void resetFields()
 	{
-		minMag.setText("");
-		maxMag.setText("");
-		minDepth.setText("");
-		maxDepth.setText("");
+		magFilter.reset();
+		depthFilter.reset();
+				
 		minDate.setText("");
 		maxDate.setText("");
 		hasFaultMechanism.setSelected(false);
@@ -188,30 +173,35 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 	private CompositeEarthquakeFilter validateFilter()
 	{
 		CompositeEarthquakeFilter ret = new CompositeEarthquakeFilter();
-		
-		// Simple Magnitude
-		if (!minMag.getText().isEmpty() || !maxMag.getText().isEmpty())
+
+		// SimpleMagnitude;
+		if (!magFilter.isEmpty())
 		{
-			MagnitudeFilter aux = new MagnitudeFilter();
-			float max = 0, min = 0;
-			try
+			if (!magFilter.isCorrect())
 			{
-			aux.setmin(Float.parseFloat(minMag.getText()));
-			aux.setmax(Float.parseFloat(maxMag.getText()));
-			}
-			catch (Exception e)
-			{
-				JOptionPane.showMessageDialog(this, "Input Error on Magnitude Filter");
+				JOptionPane.showMessageDialog(this, magFilter.getErrorString());
 				return null;
 			}
-			aux.setmax(max);
-			aux.setmin(min);
-			ret.addFilter(aux);
-			
+			ret.addFilter(magFilter.getFilter());
+		}		
+		
+		if (!depthFilter.isEmpty())
+		{
+			if (!depthFilter.isCorrect())
+			{
+				JOptionPane.showMessageDialog(this, depthFilter.getErrorString());
+				return null;
+			}
+			ret.addFilter(depthFilter.getFilter());
 		}
 		
 		
-		return ret;
+		
+		
+		if (ret.isEmpty())
+			return null;
+		else
+			return ret;
 	}
 	
 	@Override
@@ -226,7 +216,7 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 		if (arg0.getActionCommand() == "Filter Events")
 		{
 			CompositeEarthquakeFilter aux = validateFilter();
-			if (aux != null && !aux.isEmpty())
+			if (aux != null)
 			{
 				currentFilter = aux;
 				updateFilter();				
@@ -234,10 +224,6 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 			return;
 		}
 		
-		// Reset Button - clears the filter
-		// Filter Button - creates the filter and sends it to listeners
-		// TODO Auto-generated method stub
-
 		System.out.println(arg0.getActionCommand());
 	}
 
