@@ -1,3 +1,36 @@
+* New GUI
+** List Pane
+   - [ ] Can send Earthquake to Focus Pane
+   - [ ] Show short info of highlighted Earthquake
+   - [ ] Does not know who has Focus (remove focus quake)
+   - [ ] Create Display element with all currently listed quakes
+
+** Filtering Pane
+   - [ ] Filtering by Date
+   - [ ] Filtering by Aftershocks (number, radius, fault plane, time)
+   - [ ] Filtering by Focus Earthquake (aftershocks of this quake, time, fault plane, radius)
+
+** Map Display Pane
+   - [ ] Each display element should have a color and a name
+   - [ ] Color and name should be changeable
+   - [ ] Each display element should be toggleable (visible/invisible)
+   - [ ] Each display element should be destroyable
+
+** Focus Pane
+   - [ ] Show detailed info about a quake
+   - [ ] Can send quake to "bookmarks" pane
+   - [ ] Can create "radius", "pane" element
+   - [ ] Can be cleared
+
+** Fault Plane Data
+   - [ ] Create "japan map"/"fault map"
+
+** Bookmark Pane
+   - [ ] Receive new elements from "Focus Pane"
+   - [ ] Can delete individual elements
+   - [ ] Can send one of the elements to Focus Pane
+   - [ ] Shows brief information about highlighted quake
+
 * Test All quakes program:
   This program:
   1- reads a number of files with earthquakes, either in the JMA or FNET formats
@@ -48,48 +81,3 @@
    - [X] Calcular a hypothesis do plano para cada time period
    - [X] Imprimir o resultado para cada time period
 
-* New GUI:
-- [ ] Create GUI outline
-
-*** Japanese Map
-    - [ ] Show/Hide Faults
-    - [ ] Zoom/Move around
-*** Filter earthquakes 
-    - [ ] Magnitude
-    - [ ] Depth
-    - [ ] Fault Model
-*** Earthquake-Of-Interest List
-    - [ ] Add/Remove
-    - [ ] Display Location (toggle)
-    - [ ] Display Plane
-    - [ ] Display Aftershocks
-
-*** Hypothesis
-    - [ ] Filter earthquakes by hypothesis (differentiated by hypothesis)
-    - [ ] For one earthquake, show hypothesis info
-    - [ ] Show hypothesis info on map: Nearest fault, points in plane, etc.
-
-** Refactoring:
-- [ ] Fault model information in event is represented by two FaultModel objects
-
-** Map and Fault information
-*** GeoLine Object
-    Contains a "geoline": A fault line, a shoreline, etc. A geoline is
-    composed of multiple points.
-    - [X] Basic data (point vector)
-    - [X] Draw method (receives color and drawing context)
-    - [ ] Crosses Box (tests if any point of the Geoline is inside the
-      box.
-    - [ ] Distance from line (calculates the distance between a
-      straight line segment and the geoline object. This is needed to
-      test if a fault is related to an event. (How to do this?)
-
-*** GeoLineCollection Object
-    Contains a group of Geolines. Mostly used for organizing them,
-    multiple printing, etc.
-    - [X] Reading from a file;
-    - [X] Printing everything to an image (receives color, context);
-    - [ ] Select a subset of geolines that crosses a rectangle;
-
-
-    
