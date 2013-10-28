@@ -14,6 +14,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist.DataListFrame;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering.FilteringFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapPanel;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawGeography;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
@@ -49,27 +50,33 @@ public class GuiTester {
 		// Main frame and Desktop Pane
 		JFrame frame = new JFrame("Earthquake GUI Tester");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(1200, 600);
         frame.setVisible(true);
 
         JDesktopPane mainwindow = new JDesktopPane();
 		frame.setContentPane(mainwindow);
 		
-		// Map Internal Plane
+		// Map Internal Pane
 		JInternalFrame map = new MapPanel(m);       
         map.setVisible(true);
         
-        // Earthquake list Plane
-        JInternalFrame list = new DataListFrame(data);
+        // Earthquake list Pane
+        DataListFrame list = new DataListFrame(data);
         list.setVisible(true);
         list.setLocation(520, 0);
         
-        // 
+        // Filtering list Pane
+        FilteringFrame filter = new FilteringFrame();
+        filter.addFilterListener(list);
         
+        
+        filter.setVisible(true);
+        filter.setLocation(760,0);
         
         // Adding everything to the Desktop Pane
         mainwindow.add(map);
         mainwindow.add(list);
+        mainwindow.add(filter);
 
 	}
 	

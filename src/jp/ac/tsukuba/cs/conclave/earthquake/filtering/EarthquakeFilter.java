@@ -21,4 +21,6 @@ public interface EarthquakeFilter {
 	 */
 	public boolean testData(DataPoint p, DataList l);
 	
+	public EarthquakeFilter testNOP();
+	
 }

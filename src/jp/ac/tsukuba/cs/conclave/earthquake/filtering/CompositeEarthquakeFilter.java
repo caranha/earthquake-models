@@ -18,7 +18,13 @@ public class CompositeEarthquakeFilter {
 	
 	public void addFilter(EarthquakeFilter f)
 	{
-		filters.add(f);
+		if (f != null)
+			filters.add(f);
+	}
+	
+	public boolean isEmpty()
+	{
+		return (filters.size() > 0);
 	}
 	
 	
@@ -35,7 +41,7 @@ public class CompositeEarthquakeFilter {
 	{
 		DataList ret = new DataList();
 		
-		Iterator<DataPoint> it = ret.iterator();
+		Iterator<DataPoint> it = d.iterator();
 
 		while (it.hasNext())
 		{

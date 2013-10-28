@@ -14,7 +14,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
@@ -23,6 +22,8 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering.FilterListener;
 
 
 /**
@@ -35,7 +36,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
  * @author caranha
  *
  */
-public class DataListFrame extends JInternalFrame implements ActionListener {
+public class DataListFrame extends JInternalFrame implements ActionListener, FilterListener {
 
 	/**
 	 * 
@@ -127,6 +128,8 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		
 		return focusDisplay;
 	}
+
+
 	
 	
 	/**
@@ -178,7 +181,19 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 	private void resetList()
 	{
 		filteredData = originalData;
+		updateList();
+	}
+
+	private void filterData(CompositeEarthquakeFilter filter) {
+		filteredData = filter.filter(filteredData);
+		updateList();
+	}
+
+	private void updateList()
+	{
 		filterList.clearSelection();
+		filterList.setListData(getFilteredListString(filteredData));
+		System.out.println(filteredData.size());
 	}
 	
 	
@@ -218,6 +233,15 @@ public class DataListFrame extends JInternalFrame implements ActionListener {
 		System.out.println(arg0.getActionCommand());
 		
 	}
+
+	/**
+	 * Received a filter from abroad, create a new data list based on this filter.
+	 * 
+	 */
+	public void filterChanged(CompositeEarthquakeFilter filter) {
+		filterData(filter);
+	}
+
 
 	
 	

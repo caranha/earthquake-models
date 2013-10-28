@@ -40,10 +40,20 @@ public class MagnitudeFilter implements EarthquakeFilter {
 	public boolean testData(DataPoint p, DataList l) {
 		if (minimum > 0 && p.magnitude < minimum)
 			return false;
+
 		if (maximum > 0 && p.magnitude > maximum)
 			return false;
 		
 		return true;
+		
+	}
+
+	@Override
+	public EarthquakeFilter testNOP() {
+		if (minimum == 0 && maximum == 0)
+			return null;
+		else
+			return this;
 	}
 
 }

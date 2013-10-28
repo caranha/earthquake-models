@@ -39,4 +39,12 @@ public class DepthFilter implements EarthquakeFilter {
 		return true;
 	}
 
+	@Override
+	public EarthquakeFilter testNOP() {
+		if (maximum == 0 && minimum == 0)
+			return null;
+		else
+			return this;					
+	}
+
 }

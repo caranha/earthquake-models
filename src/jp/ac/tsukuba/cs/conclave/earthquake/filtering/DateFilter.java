@@ -46,4 +46,12 @@ public class DateFilter implements EarthquakeFilter {
 		return true;
 	}
 
+	@Override
+	public EarthquakeFilter testNOP() {
+		
+		if (minimum == null && maximum == null)
+			return null;
+		else 
+			return this;
+	}
 }
