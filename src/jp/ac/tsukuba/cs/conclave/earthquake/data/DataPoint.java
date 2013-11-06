@@ -135,7 +135,7 @@ public class DataPoint implements Comparable<DataPoint> {
 	 */
 	public String dump()
 	{
-		String ret = "[Event]\n ";
+		String ret = "[Event] ";
 		ret = ret + getEventString();
 		if (FM)
 		{
@@ -152,6 +152,12 @@ public class DataPoint implements Comparable<DataPoint> {
 		ret = ret + "M:"+magnitude+", D:"+depth;
 		ret = ret + ", "+ time.toString(ISODateTimeFormat.basicDateTimeNoMillis());
 		return ret;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.dump();
 	}
 	
 	

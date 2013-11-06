@@ -60,8 +60,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 	JButton displayButton;
 	JButton focusButton;
 	
-	
-	JTextArea focusDisplay;
+	JTextArea listSizeDisplay;
 	JList<String> filterList;
 	
 	
@@ -122,14 +121,14 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 	
 	private JTextArea initTextArea()
 	{
-		focusDisplay = new JTextArea();
-		focusDisplay.setText("");
-		focusDisplay.setEditable(false);
-		focusDisplay.setLineWrap(true);
+		listSizeDisplay = new JTextArea();
+		listSizeDisplay.setText(Integer.toString(filteredData.size()));
+		listSizeDisplay.setEditable(false);
+		listSizeDisplay.setLineWrap(true);
 		
-		focusDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
+		listSizeDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		return focusDisplay;
+		return listSizeDisplay;
 	}
 
 
@@ -167,6 +166,8 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 		
 		return aux;
 	}
+
+	
 	
 	public DataList getFilteredDataList()
 	{
@@ -179,6 +180,17 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 	{
 		focusListeners.add(l);
 	}
+	private void updateFocusListeners()
+	{
+		for (EarthquakeFocusListener aux: focusListeners)
+		{
+			aux.focusChanged(focusEarthquake);
+		}
+		
+		// TODO: Remove-me DEBUG
+		System.out.println("DEBUG: "+focusEarthquake);
+	}
+	
 	
 	
 	private void resetList()
@@ -192,28 +204,16 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 		updateList();
 	}
 
+	/**
+	 * Update the filtered event list
+	 */
 	private void updateList()
 	{
 		filterList.clearSelection();
 		filterList.setListData(getFilteredListString(filteredData));
-		System.out.println(filteredData.size());
+		listSizeDisplay.setText(Integer.toString(filteredData.size()));
+		System.out.println("Updated Filtered List: "+filteredData.size());
 	}
-	
-	
-	private void changeFocus()
-	{
-		if (!filterList.isSelectionEmpty())
-		{
-			focusEarthquake = filteredData.data.get(filterList.getSelectedIndex());
-			focusDisplay.setText(getEarthquakeShortString(focusEarthquake));
-			
-			for (EarthquakeFocusListener aux: focusListeners)
-			{
-				aux.focusChanged(focusEarthquake);
-			}
-		}
-	}
-
 	
 	public void addListSelectionListener(ListSelectionListener l)
 	{
@@ -229,7 +229,17 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 		}
 		if (arg0.getActionCommand() == "Change Focus")
 		{
-			changeFocus();
+			int aux = filterList.getSelectedIndex();
+			if (aux != -1)
+			{
+				focusEarthquake = filteredData.data.get(aux);
+			}
+			else
+			{
+				focusEarthquake = null;
+			}
+			
+			updateFocusListeners();
 			return;
 		}
 		if (arg0.getActionCommand() == "Display All")

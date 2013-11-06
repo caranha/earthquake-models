@@ -13,6 +13,7 @@ public abstract class MapDrawCommand implements Comparable<MapDrawCommand> {
 	int depth = 0;	
 	Color mainColor = Color.BLACK; // Main color to be used when drawing this event;
 	Color subColor = Color.GREEN; // Sub color to be used when drawing this event;
+	String name = "";
 	
 	/**
 	 * 
@@ -52,5 +53,20 @@ public abstract class MapDrawCommand implements Comparable<MapDrawCommand> {
 	public Color getSubColor()
 	{
 		return subColor;
+	}
+	
+	public void setName(String n)
+	{
+		name = n;
+	}
+	public String getName()
+	{
+		return name;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name;
 	}
 }

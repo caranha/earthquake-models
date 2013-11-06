@@ -2,7 +2,8 @@
 ** List Pane
    - [ ] Can send Earthquake to Focus Pane
    - [ ] Show short info of highlighted Earthquake
-   - [ ] Does not know who has Focus (remove focus quake)
+   - [X] Does not know who has Focus (remove focus quake)
+   - [X] Show number of current earthquakes
    - [X] Create Display element with all currently listed quakes
 
 ** Filtering Pane
@@ -36,6 +37,9 @@
    - [ ] Create Singleton for the model (Map Controller)
    - [ ] Make map view the model and redraw on updates
 
+** Issues
+   - [X] Earthquakes in "draw earthquake" are ugly
+   - [ ] Map does not update automatically when adding earthquakes
 
 * Test All quakes program:
   This program:

@@ -33,7 +33,9 @@ public class DrawEarthquake extends MapDrawCommand {
 	@Override
 	public void draw(MapImage img) 
 	{
-		int size = (int) Math.floor((img.getWidth()/100)*event.magnitude);		
+		int size = (int) Math.floor((img.getWidth()/400)*event.magnitude);
+		if (size == 0)
+			size = 1;
 		img.drawEvent(event, mainColor, size);
 	}
 

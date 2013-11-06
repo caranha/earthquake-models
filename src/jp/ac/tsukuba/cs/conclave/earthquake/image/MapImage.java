@@ -203,7 +203,7 @@ public class MapImage {
 		y = calculateScreenPosLatitude(p.latitude);
 		r = (int) Math.floor(s);
 		
-		g.fillOval(x, y, r,r);
+		g.drawOval(x, y, r,r);
 		map.flush();
 	}
 	
