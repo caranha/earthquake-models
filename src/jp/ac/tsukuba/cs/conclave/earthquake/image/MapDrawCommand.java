@@ -1,5 +1,7 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.image;
 
+import java.awt.Color;
+
 /**
  * This abstract class describes something that will be drawn on the map.
  * 
@@ -9,6 +11,8 @@ package jp.ac.tsukuba.cs.conclave.earthquake.image;
 public abstract class MapDrawCommand implements Comparable<MapDrawCommand> {
 
 	int depth = 0;	
+	Color mainColor = Color.BLACK; // Main color to be used when drawing this event;
+	Color subColor = Color.GREEN; // Sub color to be used when drawing this event;
 	
 	/**
 	 * 
@@ -29,5 +33,24 @@ public abstract class MapDrawCommand implements Comparable<MapDrawCommand> {
 	public int compareTo(MapDrawCommand o)
 	{
 		return (this.getDepth() - o.getDepth());
-	}		
+	}
+	
+	public void setMainColor(Color c)
+	{
+		mainColor = c;
+	}
+	public Color getMainColor()
+	{
+		return mainColor;
+	}
+	
+	
+	public void setSubColor(Color c)
+	{
+		subColor = c;
+	}
+	public Color getSubColor()
+	{
+		return subColor;
+	}
 }

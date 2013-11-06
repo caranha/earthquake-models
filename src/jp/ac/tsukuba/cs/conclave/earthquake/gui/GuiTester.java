@@ -24,7 +24,8 @@ public class GuiTester {
 
 	
 	// Model Attributes -- things that I should have only one of:
-	static MapController m; // Creates and Controls a map
+	// TODO: create a singleton (model?) for these guys
+	public static MapController m; // Creates and Controls a map
 	static DataList data;
 	
 	

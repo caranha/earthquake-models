@@ -18,8 +18,6 @@ public class DrawGeography extends MapDrawCommand {
 
 	ArrayList<GeoLine> currentmap;
 	
-	Color mapcolor = Color.black;
-	
 	public DrawGeography()
 	{
 		currentmap = new ArrayList<GeoLine>();
@@ -48,21 +46,6 @@ public class DrawGeography extends MapDrawCommand {
 	}
 	
 	/**
-	 * Changes the map Color
-	 * @param c
-	 */
-	public void setMapColor(Color c)
-	{
-		mapcolor = c;
-	}
-	
-	public Color getMapColor()
-	{
-		return mapcolor;
-	}
-	
-	
-	/**
 	 * 	
 	 */
 	@Override
@@ -70,7 +53,7 @@ public class DrawGeography extends MapDrawCommand {
 		Iterator<GeoLine> it = currentmap.iterator();
 		while (it.hasNext())
 		{
-			img.drawGeoLine(it.next(), mapcolor);
+			img.drawGeoLine(it.next(), mainColor);
 		}
 	}
 

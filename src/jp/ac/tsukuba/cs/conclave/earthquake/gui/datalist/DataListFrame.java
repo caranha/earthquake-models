@@ -1,5 +1,6 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -23,7 +24,9 @@ import org.joda.time.format.ISODateTimeFormat;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.GuiTester;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering.FilterListener;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawEarthquakeList;
 
 
 /**
@@ -229,8 +232,15 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 			changeFocus();
 			return;
 		}
+		if (arg0.getActionCommand() == "Display All")
+		{
+			DrawEarthquakeList aux = new DrawEarthquakeList(filteredData.iterator());
+			aux.setMainColor(Color.RED);
+			GuiTester.m.addDrawCommand(aux);
+			return;
+		}
 		
-		System.out.println(arg0.getActionCommand());
+		System.err.println("Unhandled ActionEvent: "+arg0.getActionCommand());
 		
 	}
 

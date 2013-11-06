@@ -3,7 +3,7 @@
    - [ ] Can send Earthquake to Focus Pane
    - [ ] Show short info of highlighted Earthquake
    - [ ] Does not know who has Focus (remove focus quake)
-   - [ ] Create Display element with all currently listed quakes
+   - [X] Create Display element with all currently listed quakes
 
 ** Filtering Pane
    - [ ] Filtering by Date
@@ -30,6 +30,12 @@
    - [ ] Can delete individual elements
    - [ ] Can send one of the elements to Focus Pane
    - [ ] Shows brief information about highlighted quake
+
+
+** Structure
+   - [ ] Create Singleton for the model (Map Controller)
+   - [ ] Make map view the model and redraw on updates
+
 
 * Test All quakes program:
   This program:
