@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import javax.swing.JPanel;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.EarthquakeDisplayModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 
 /**
@@ -21,26 +22,26 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 public class MapDisplayPanel extends JPanel {
 
 	private static final long serialVersionUID = -5205387903071024831L;
-	
-	MapImage image;
+
+	EarthquakeDisplayModel model;
 	
 	int displayposX = 0;
 	int displayposY = 0;
 	double zoom=1;
 
-	public MapDisplayPanel(int w, int h, MapImage map)
+	public MapDisplayPanel(int w, int h, EarthquakeDisplayModel m)
 	{
 		super();
 
 		this.setPreferredSize(new Dimension(w,h));
-		image = map;		
+		model = m;		
 	}
 	
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
+        MapImage image = model.getMapImage();
         
         g.drawRect(0, 0, this.getWidth(), this.getHeight());        
         if (image != null)
@@ -68,6 +69,8 @@ public class MapDisplayPanel extends JPanel {
         
     public void moveMap(int dirx, int diry)
     {
+    	MapImage image = model.getMapImage();
+    	
     	displayposX += Math.signum(dirx)*(image.getWidth()/(20*zoom));
     	displayposY += Math.signum(diry)*(image.getWidth()/(20*zoom));
     	fixZoomLocation();
@@ -90,7 +93,6 @@ public class MapDisplayPanel extends JPanel {
     {
     	displayposX = displayposY = 0;
     	zoom = 1;
-    	repaint();
     }
 
     /** 
@@ -98,6 +100,8 @@ public class MapDisplayPanel extends JPanel {
      */
     public void fixZoomLocation()
     {
+    	MapImage image = model.getMapImage();
+    	
     	if (zoom < 1)
     		zoom = 1;
     	
@@ -110,6 +114,5 @@ public class MapDisplayPanel extends JPanel {
     		displayposX = (int)Math.round(image.getWidth() - image.getWidth()/zoom);
     	if (displayposY + image.getHeight()/zoom > image.getHeight())
     		displayposY = (int)Math.round(image.getHeight() - image.getHeight()/zoom);
-    	repaint();
     }
 }

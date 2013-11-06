@@ -3,7 +3,6 @@ package jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,12 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
-import jp.ac.tsukuba.cs.conclave.earthquake.filtering.MagnitudeFilter;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist.EarthquakeFocusListener;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.EarthquakeDisplayModel;
 
-public class FilteringFrame extends JInternalFrame implements ActionListener, EarthquakeFocusListener {
+public class FilteringFrame extends JInternalFrame implements ActionListener {
 	/**
 	 * 
 	 */
@@ -30,10 +27,9 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 	static final int width = 300;
 	static final int height = 600;
 
-	ArrayList<FilterListener> listeners;
+	EarthquakeDisplayModel model;
 	
 	CompositeEarthquakeFilter currentFilter;
-	DataPoint focusEarthquake;
 	
 	FilterComponent magFilter;
 	FilterComponent depthFilter;
@@ -42,13 +38,12 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 	JTextField maxDate;
 	JCheckBox hasFaultMechanism;
 	
-	public FilteringFrame()
+	public FilteringFrame(EarthquakeDisplayModel m)
 	{
 		super("Event Filter", false, false, false, true);
+		model = m;
 		
-		listeners = new ArrayList<FilterListener>();
 		currentFilter = null;
-		focusEarthquake = null;
 		
 		// Setting the layout of the InternalPane;
 		JPanel aux = new JPanel();
@@ -135,25 +130,12 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 	}
 	
 	
-	/**
-	 * Adds a new listener that will be updated when the "Filter Results" button is clicked
-	 * @param l
-	 */
-	public void addFilterListener(FilterListener l)
-	{
-		listeners.add(l);
-	}
 	
 	void updateFilter()
 	{
 		if (currentFilter != null)
-		for (FilterListener aux: listeners)
-		{
-			aux.filterChanged(currentFilter);
-		}
+			model.filterData(currentFilter);
 	}
-	
-	
 	
 	private void resetFields()
 	{
@@ -195,9 +177,6 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 			ret.addFilter(depthFilter.getFilter());
 		}
 		
-		
-		
-		
 		if (ret.isEmpty())
 			return null;
 		else
@@ -225,15 +204,6 @@ public class FilteringFrame extends JInternalFrame implements ActionListener, Ea
 		}
 		
 		System.out.println(arg0.getActionCommand());
-	}
-
-	@Override
-	public void focusChanged(DataPoint d) {
-		focusEarthquake = d;
-				
-		// The focus earthquake changed, so I need to change the forms
-		// regarding filtering for aftershocks
-		// TODO: Change text in forms regarding Focus Earthquake
 	}
 
 }

@@ -3,6 +3,8 @@ package jp.ac.tsukuba.cs.conclave.earthquake.gui.map;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -11,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.EarthquakeDisplayModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
 
 /**
@@ -19,15 +22,12 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
  * @author caranha
  *
  */
-public class MapPanel extends JInternalFrame implements ActionListener{
+public class MapPanel extends JInternalFrame implements ActionListener, Observer{
 
 	// CONSTANTS
 	final static int buttonBarWidth = 100;
 	final static int mapDisplayWidth = 400;
 	final static int mapDisplayHeight = 400;
-	
-	// Attributes
-	MapController map;
 	
 	// Subpanels
 	MapDisplayPanel mapdisplaypanel;
@@ -38,11 +38,12 @@ public class MapPanel extends JInternalFrame implements ActionListener{
 	 */
 	private static final long serialVersionUID = -3396137586798855249L;
 	
-	public MapPanel(MapController m)
+	public MapPanel(EarthquakeDisplayModel model)
 	{
 		super("Map", false, false, false, true);
-		map = m;
-		mapdisplaypanel = new MapDisplayPanel(mapDisplayWidth,mapDisplayHeight,m.getImage());
+		model.addObserver(this);
+		
+		mapdisplaypanel = new MapDisplayPanel(mapDisplayWidth,mapDisplayHeight,model);
 		mapnavigatorpanel = new MapNavigator(buttonBarWidth,mapDisplayHeight,this);
 		
 		// Setting the layout of the InternalPane;
@@ -57,60 +58,59 @@ public class MapPanel extends JInternalFrame implements ActionListener{
 		pack();
 	}
 	
-	
-	
-	public void setMapController(MapController m)
-	{
-		map = m;
-	}
-	public MapController getMapController()
-	{
-		return map;
-	}
-
-
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//FIXME: needs to update the map graphics
 		
 		if (e.getActionCommand() == "+")
 		{
 			mapdisplaypanel.multiplyZoom(1.1);
+			mapdisplaypanel.repaint();
 			return;
 		}
 		
 		if (e.getActionCommand() == "-")
 		{
 			mapdisplaypanel.multiplyZoom(0.9);
+			mapdisplaypanel.repaint();
 			return;
 		}
 		
 		if (e.getActionCommand() == "down")
 		{
 			mapdisplaypanel.moveMap(0, +1);
+			mapdisplaypanel.repaint();
 			return;
 		}
 		
 		if (e.getActionCommand() == "up")
 		{
 			mapdisplaypanel.moveMap(0, -1);
+			mapdisplaypanel.repaint();
 			return;
 		}
 		
 		if (e.getActionCommand() == "left")
 		{
 			mapdisplaypanel.moveMap(-1,0);
+			mapdisplaypanel.repaint();
 			return;
 		}
 		
 		if (e.getActionCommand() == "right")
 		{
 			mapdisplaypanel.moveMap(1, 0);
+			mapdisplaypanel.repaint();
 			return;
 		}
 		
 		System.out.println(e.getActionCommand());		
+	}
+
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+		mapdisplaypanel.repaint();
 	}
 
 }

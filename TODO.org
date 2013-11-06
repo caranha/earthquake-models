@@ -1,7 +1,7 @@
 * New GUI
 ** List Pane
    - [ ] Can send Earthquake to Focus Pane
-   - [ ] Show short info of highlighted Earthquake
+   - [X] Show short info of highlighted Earthquake
    - [X] Does not know who has Focus (remove focus quake)
    - [X] Show number of current earthquakes
    - [X] Create Display element with all currently listed quakes
@@ -12,7 +12,7 @@
    - [ ] Filtering by Focus Earthquake (aftershocks of this quake, time, fault plane, radius)
 
 ** Map Display Pane
-   - [ ] Each display element should have a color and a name
+   - [X] Each display element should have a color and a name
    - [ ] Color and name should be changeable
    - [ ] Each display element should be toggleable (visible/invisible)
    - [ ] Each display element should be destroyable
@@ -34,12 +34,12 @@
 
 
 ** Structure
-   - [ ] Create Singleton for the model (Map Controller)
-   - [ ] Make map view the model and redraw on updates
+   - [X] Create Singleton for the model (Map Controller)
+   - [X] Make map view the model and redraw on updates
 
 ** Issues
    - [X] Earthquakes in "draw earthquake" are ugly
-   - [ ] Map does not update automatically when adding earthquakes
+   - [X] Map does not update automatically when adding earthquakes
 
 * Test All quakes program:
   This program:

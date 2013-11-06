@@ -23,29 +23,20 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 public class GuiTester {
 
 	
-	// Model Attributes -- things that I should have only one of:
-	// TODO: create a singleton (model?) for these guys
-	public static MapController m; // Creates and Controls a map
-	static DataList data;
-	
-	
+	public static EarthquakeDisplayModel model;	
 	
 	public static void main(String[] args) {
 		
 		// Loading Initial Data (Probably want to encapsulate this)
 		DrawGeography drawjapanmap = new DrawGeography();
 		drawjapanmap.setMap(loadJapanMap());
+
+		MapController mapa = new MapController(MapImage.JapaneseMapFactory());
+		mapa.addDrawCommand(drawjapanmap);
+
+		model = new EarthquakeDisplayModel(loadAllEarthquakes(),mapa);
 		
-		data = loadAllEarthquakes();
-		
-		
-		// Initializing global variables (Probably want to encapsulate this too)
-		m = new MapController(MapImage.JapaneseMapFactory());
-		m.addDrawCommand(drawjapanmap);
-		
-		
-		
-		
+
 		// Setting up the Swing Environment:
 		
 		// Main frame and Desktop Pane
@@ -58,18 +49,16 @@ public class GuiTester {
 		frame.setContentPane(mainwindow);
 		
 		// Map Internal Pane
-		JInternalFrame map = new MapPanel(m);       
+		JInternalFrame map = new MapPanel(model);       
         map.setVisible(true);
         
         // Earthquake list Pane
-        DataListFrame list = new DataListFrame(data);
+        DataListFrame list = new DataListFrame(model);
         list.setVisible(true);
         list.setLocation(520, 0);
         
         // Filtering list Pane
-        FilteringFrame filter = new FilteringFrame();
-        filter.addFilterListener(list);
-        
+        FilteringFrame filter = new FilteringFrame(model);
         
         filter.setVisible(true);
         filter.setLocation(760,0);

@@ -5,27 +5,26 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionListener;
 
 import org.joda.time.format.ISODateTimeFormat;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
-import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.GuiTester;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering.FilterListener;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.EarthquakeDisplayModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawEarthquakeList;
 
 
@@ -39,7 +38,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawEarthquakeList;
  * @author caranha
  *
  */
-public class DataListFrame extends JInternalFrame implements ActionListener, FilterListener {
+public class DataListFrame extends JInternalFrame implements ActionListener,Observer {
 
 	/**
 	 * 
@@ -48,13 +47,9 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 
 	static final int width = 200;
 	static final int height = 600;
-	
-	// InternalData
-	ArrayList<EarthquakeFocusListener> focusListeners;
-	DataList originalData;
-	DataList filteredData;
-	DataPoint focusEarthquake;
 
+	EarthquakeDisplayModel model;
+	
 	// Display Elements
 	JButton resetButton;
 	JButton displayButton;
@@ -64,13 +59,11 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 	JList<String> filterList;
 	
 	
-	public DataListFrame(DataList d)
+	public DataListFrame(EarthquakeDisplayModel m)
 	{
 		super("Event List", false, false, false, true);
-		originalData = d;
-		filteredData = d;
-		focusEarthquake = null;	
-		focusListeners = new ArrayList<EarthquakeFocusListener>();
+		model = m;
+		model.addObserver(this);
 		
 		// Setting the layout of the InternalPane;
 		JPanel aux = new JPanel();
@@ -83,8 +76,6 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 		aux.add(initFilterList());
 		aux.add(focusButton);
 
-		
-				
 		add(aux);
 		pack();
 	}
@@ -114,7 +105,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 		filterList.setVisibleRowCount(15);
 		
 		
-		filterList.setListData(getFilteredListString(filteredData));
+		filterList.setListData(getFilteredListString(model.getFilteredData()));
 		JScrollPane ret = new JScrollPane(filterList);		
 		return ret;
 	}
@@ -122,7 +113,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 	private JTextArea initTextArea()
 	{
 		listSizeDisplay = new JTextArea();
-		listSizeDisplay.setText(Integer.toString(filteredData.size()));
+		listSizeDisplay.setText(Integer.toString(model.getFilteredData().size()));
 		listSizeDisplay.setEditable(false);
 		listSizeDisplay.setLineWrap(true);
 		
@@ -132,7 +123,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 	}
 
 
-	
+	// TODO: Remove the next two functions from here, and replace them somewhere else
 	
 	/**
 	 * Gets a String[] of the basic info from all the filtered
@@ -169,97 +160,49 @@ public class DataListFrame extends JInternalFrame implements ActionListener, Fil
 
 	
 	
-	public DataList getFilteredDataList()
-	{
-		return filteredData;
-	}
-	
-	
-	
-	public void addFocusListener(EarthquakeFocusListener l)
-	{
-		focusListeners.add(l);
-	}
-	private void updateFocusListeners()
-	{
-		for (EarthquakeFocusListener aux: focusListeners)
-		{
-			aux.focusChanged(focusEarthquake);
-		}
-		
-		// TODO: Remove-me DEBUG
-		System.out.println("DEBUG: "+focusEarthquake);
-	}
-	
-	
-	
-	private void resetList()
-	{
-		filteredData = originalData;
-		updateList();
-	}
-
-	private void filterData(CompositeEarthquakeFilter filter) {
-		filteredData = filter.filter(filteredData);
-		updateList();
-	}
-
-	/**
-	 * Update the filtered event list
-	 */
-	private void updateList()
-	{
-		filterList.clearSelection();
-		filterList.setListData(getFilteredListString(filteredData));
-		listSizeDisplay.setText(Integer.toString(filteredData.size()));
-		System.out.println("Updated Filtered List: "+filteredData.size());
-	}
-	
-	public void addListSelectionListener(ListSelectionListener l)
-	{
-		filterList.addListSelectionListener(l);
-	}
-	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getActionCommand() == "Reset List")
 		{
-			resetList();
+			model.resetFilteredList();
 			return;
 		}
 		if (arg0.getActionCommand() == "Change Focus")
 		{
+			
 			int aux = filterList.getSelectedIndex();
 			if (aux != -1)
 			{
-				focusEarthquake = filteredData.data.get(aux);
+				// Fixme change DataList to allow indexed access
+				model.setFocusEarthquake(model.getFilteredData().data.get(aux));
 			}
 			else
 			{
-				focusEarthquake = null;
+				JOptionPane.showMessageDialog(this, "Select an Earthquake First");
 			}
-			
-			updateFocusListeners();
 			return;
 		}
 		if (arg0.getActionCommand() == "Display All")
 		{
-			DrawEarthquakeList aux = new DrawEarthquakeList(filteredData.iterator());
+			DrawEarthquakeList aux = new DrawEarthquakeList(model.getFilteredData().iterator());
 			aux.setMainColor(Color.RED);
-			GuiTester.m.addDrawCommand(aux);
+			model.addDrawCommand(aux);
 			return;
 		}
 		
 		System.err.println("Unhandled ActionEvent: "+arg0.getActionCommand());
-		
 	}
 
-	/**
-	 * Received a filter from abroad, create a new data list based on this filter.
-	 * 
-	 */
-	public void filterChanged(CompositeEarthquakeFilter filter) {
-		filterData(filter);
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		System.out.println(o+" "+arg);
+		
+		if (arg != null && (String)arg == "Filtered List")
+		
+		filterList.clearSelection();
+		filterList.setListData(getFilteredListString(model.getFilteredData()));
+		listSizeDisplay.setText(Integer.toString(model.getFilteredData().size()));
 	}
 
 
