@@ -1,43 +1,44 @@
 * New GUI
-** List Pane
-   - [ ] Can send Earthquake to Focus Pane
-   - [X] Show short info of highlighted Earthquake
-   - [X] Does not know who has Focus (remove focus quake)
-   - [X] Show number of current earthquakes
-   - [X] Create Display element with all currently listed quakes
-
-** Filtering Pane
+** TODO Filtering Pane
    - [ ] Filtering by Date
    - [ ] Filtering by Aftershocks (number, radius, fault plane, time)
    - [ ] Filtering by Focus Earthquake (aftershocks of this quake, time, fault plane, radius)
 
-** Map Display Pane
+** TODO Map Display Pane
    - [X] Each display element should have a color and a name
    - [ ] Color and name should be changeable
    - [ ] Each display element should be toggleable (visible/invisible)
    - [ ] Each display element should be destroyable
 
-** Focus Pane
-   - [ ] Show detailed info about a quake
+** TODO Focus Pane
    - [ ] Can send quake to "bookmarks" pane
-   - [ ] Can create "radius", "pane" element
+   - [ ] Can create "radius" draw element (how do I find out the pixel size?)
    - [ ] Can be cleared
+   - [X] Show detailed info about a quake
+   - [X] Can create "radius", "pane" element
 
-** Fault Plane Data
+** TODO Fault Plane Data
    - [ ] Create "japan map"/"fault map"
 
-** Bookmark Pane
+** TODO Bookmark Pane
    - [ ] Receive new elements from "Focus Pane"
    - [ ] Can delete individual elements
    - [ ] Can send one of the elements to Focus Pane
    - [ ] Shows brief information about highlighted quake
 
 
-** Structure
+** DONE List Pane
+   - [X] Can send Earthquake to Focus Pane
+   - [X] Show short info of highlighted Earthquake
+   - [X] Does not know who has Focus (remove focus quake)
+   - [X] Show number of current earthquakes
+   - [X] Create Display element with all currently listed quakes
+
+** DONE Structure
    - [X] Create Singleton for the model (Map Controller)
    - [X] Make map view the model and redraw on updates
 
-** Issues
+** DONE Issues
    - [X] Earthquakes in "draw earthquake" are ugly
    - [X] Map does not update automatically when adding earthquakes
 

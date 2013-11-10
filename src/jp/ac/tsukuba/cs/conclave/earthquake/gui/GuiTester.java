@@ -15,6 +15,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoDataReader;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist.DataListFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering.FilteringFrame;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.focus.EarthquakeFocusFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapPanel;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawGeography;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
@@ -59,14 +60,19 @@ public class GuiTester {
         
         // Filtering list Pane
         FilteringFrame filter = new FilteringFrame(model);
-        
         filter.setVisible(true);
         filter.setLocation(760,0);
+        
+        // Earthquake focus frame
+        EarthquakeFocusFrame focus = new EarthquakeFocusFrame(model);
+        focus.setVisible(true);
+        focus.setLocation(760,220);
         
         // Adding everything to the Desktop Pane
         mainwindow.add(map);
         mainwindow.add(list);
         mainwindow.add(filter);
+        mainwindow.add(focus);
 
 	}
 	

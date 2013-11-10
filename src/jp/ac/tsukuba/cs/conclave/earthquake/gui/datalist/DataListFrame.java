@@ -194,10 +194,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener,Obse
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		
-		System.out.println(o+" "+arg);
-		
+	public void update(Observable o, Object arg) {		
 		if (arg != null && (String)arg == "Filtered List")
 		
 		filterList.clearSelection();

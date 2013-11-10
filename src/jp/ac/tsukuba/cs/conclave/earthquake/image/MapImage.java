@@ -160,10 +160,10 @@ public class MapImage {
 		map.flush();
 	}
 	
-	public void drawFaultModelPlane(FaultModel fm, Color c)
+	public void drawFaultModelPlane(FaultModel fm, Color c1, Color c2)
 	{
 		Graphics g = map.createGraphics();	
-		g.setColor(c);
+		g.setColor(c1);
 		
 		
 		double plane[][] = fm.getPlane();
@@ -171,9 +171,9 @@ public class MapImage {
 		for (int i = 0; i < 4; i++)
 		{
 			if (i == 1)
-				g.setColor(Color.red);
+				g.setColor(c2);
 			else
-				g.setColor(c);
+				g.setColor(c1);
 			int x0,y0,x1,y1;
 			x0 = calculateScreenPosLongitude(plane[j][0]);
 			y0 = calculateScreenPosLatitude(plane[j][1]);

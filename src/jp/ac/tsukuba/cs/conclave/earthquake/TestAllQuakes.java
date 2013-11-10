@@ -4,15 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import org.joda.time.Days;
-import org.joda.time.Hours;
 import org.joda.time.Interval;
-import org.joda.time.Minutes;
 import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.joda.time.ReadablePeriod;
 import org.joda.time.format.PeriodFormat;
-import org.joda.time.format.PeriodFormatter;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
@@ -113,8 +108,8 @@ public class TestAllQuakes {
 			// Point in Plane Testing
 			log("  * Point in plane Testing *");
 			log("  Period #\tTotal/M1/M2/Decision");
-			FaultModel f1 = new FaultModel(curr,0);
-			FaultModel f2 = new FaultModel(curr,1);
+			FaultModel f1 = new FaultModel(curr,0,GeoUtils.getAftershockRadius(curr.magnitude));
+			FaultModel f2 = new FaultModel(curr,1,GeoUtils.getAftershockRadius(curr.magnitude));
 	
 			for (int j = 0; j < ASquantaN; j++) // for each Quanta
 			{

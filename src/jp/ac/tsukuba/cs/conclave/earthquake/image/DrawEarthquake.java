@@ -14,7 +14,7 @@ public class DrawEarthquake extends MapDrawCommand {
 	public DrawEarthquake(DataPoint e)
 	{
 		event = e;
-		depth = 1;
+		depth = 5;
 	}
 	
 	public void setEarthquake(DataPoint e)

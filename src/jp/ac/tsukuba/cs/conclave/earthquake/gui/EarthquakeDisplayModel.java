@@ -8,6 +8,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapDrawCommand;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.GeoUtils;
 
 public class EarthquakeDisplayModel extends Observable {
 
@@ -79,10 +80,34 @@ public class EarthquakeDisplayModel extends Observable {
 		setChanged();
 		notifyObservers("Filtered List");
 	}
+	
+	/**
+	 * Changes the earthquake in focus by the model. 
+	 * Also re-calculates the aftershock distance
+	 * 
+	 * @param p
+	 */
 	public void setFocusEarthquake(DataPoint p) {
 		focusEarthquake = p;
 		setChanged();
 		notifyObservers("Focus Earthquake");
+		
+		if (p == null)
+		{
+			setAfterShockDistance(0.0);
+		}
+		else
+		{
+			setAfterShockDistance(GeoUtils.getAftershockRadius(p.magnitude));
+		}
+
+	}
+	
+	public void setAfterShockDistance(double d)
+	{
+		aftershockdistance = d;
+		setChanged();
+		notifyObservers("Aftershock Distance");
 	}
 
 	public void addDrawCommand(MapDrawCommand aux) {

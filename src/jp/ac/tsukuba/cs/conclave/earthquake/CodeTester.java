@@ -71,10 +71,10 @@ public class CodeTester {
 		for (int i = 0; i < fnet.size(); i++)
 			if ((fnet.data.get(i).magnitude) >= 7)
 			{
-				fm = new FaultModel(fnet.data.get(i),1);
+				fm = new FaultModel(fnet.data.get(i),1, fnet.data.get(i).magnitude);
 				
 			}
-		map.drawFaultModelPlane(fm, Color.green);
+		map.drawFaultModelPlane(fm, Color.green, Color.red);
 		
 		DataList PiP = fm.pointsInPlane(total);
 		for(int i = 0; i < PiP.size(); i++)
@@ -130,14 +130,16 @@ public class CodeTester {
 		for (int i = 0; i < fnet.size(); i++)
 			if (fnet.data.get(i).magnitude > 7 && fnet.data.get(i).depth < 35)
 			{
-				FaultModel fm1 = new FaultModel(fnet.data.get(i),0);
-				FaultModel fm2 = new FaultModel(fnet.data.get(i),1);
+				double dist = GeoUtils.getAftershockRadius(fnet.data.get(i).magnitude);
+				
+				FaultModel fm1 = new FaultModel(fnet.data.get(i),0,dist);
+				FaultModel fm2 = new FaultModel(fnet.data.get(i),1,dist);
 				
 //				System.out.println(fm1);
 //				System.out.println(fm2);
 				
-				map.drawFaultModelPlane(fm1, Color.green);
-				map.drawFaultModelPlane(fm2, Color.blue);
+				map.drawFaultModelPlane(fm1, Color.green, Color.red);
+				map.drawFaultModelPlane(fm2, Color.blue, Color.red);
 				//break;
 			}
 //		for (int i = 0; i < fnet.size(); i++)
@@ -177,7 +179,7 @@ public class CodeTester {
 	{
 		DataList fnet = new DataList();
 		fnet.loadData("catalog_fnet_1997_20130429_f3.txt","fnet");
-		FaultModel fm = new FaultModel(fnet.data.get(0),1);
+		FaultModel fm = new FaultModel(fnet.data.get(0),1,GeoUtils.getAftershockRadius(fnet.data.get(0).magnitude));
 
 		System.out.println(fm);
 				
