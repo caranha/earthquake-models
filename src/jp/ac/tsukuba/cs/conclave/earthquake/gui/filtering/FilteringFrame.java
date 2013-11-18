@@ -33,6 +33,7 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 	
 	FilterComponent magFilter;
 	FilterComponent depthFilter;
+	FilterComponent modelFilter;
 	
 	JTextField minDate;
 	JTextField maxDate;
@@ -88,6 +89,7 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 		
 		magFilter = new MagnitudeFilterComponent();
 		depthFilter = new DepthFilterComponent();
+		modelFilter = new ModelFilterComponent();
 		
 		ret.add(magFilter.getPanel());
 		ret.add(depthFilter.getPanel());
@@ -107,11 +109,11 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 		aux.add(maxDate);
 		ret.add(aux);
 		
+		
+		
 		// has Focal Mechanism
-		aux = new JPanel();
-		hasFaultMechanism = new JCheckBox("Only events with FM Data", false);
-		aux.add(hasFaultMechanism);
-		ret.add(aux);
+		ret.add(modelFilter.getPanel());
+		
 		ret.add(new JSeparator(JSeparator.HORIZONTAL));
 		
 		return ret;
@@ -141,10 +143,10 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 	{
 		magFilter.reset();
 		depthFilter.reset();
+		modelFilter.reset();
 				
 		minDate.setText("");
 		maxDate.setText("");
-		hasFaultMechanism.setSelected(false);
 	}
 	
 	/**
@@ -175,6 +177,16 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 				return null;
 			}
 			ret.addFilter(depthFilter.getFilter());
+		}
+		
+		if (!modelFilter.isEmpty())
+		{
+			if (!modelFilter.isCorrect())
+			{
+				JOptionPane.showMessageDialog(this, modelFilter.getErrorString());
+				return null;
+			}
+			ret.addFilter(modelFilter.getFilter());
 		}
 		
 		if (ret.isEmpty())

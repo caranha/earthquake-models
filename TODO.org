@@ -2,7 +2,7 @@
 ** TODO Filtering Pane
    - [ ] Filtering by Date
    - [ ] Filtering by Aftershocks (number, radius, fault plane, time)
-   - [ ] Filtering by Focus Earthquake (aftershocks of this quake, time, fault plane, radius)
+   - [X] Filtering by Focus Earthquake (aftershocks of this quake, time, fault plane, radius)
 
 ** TODO Map Display Pane
    - [X] Each display element should have a color and a name

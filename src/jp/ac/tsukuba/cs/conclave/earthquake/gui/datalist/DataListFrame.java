@@ -113,7 +113,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener,Obse
 	private JTextArea initTextArea()
 	{
 		listSizeDisplay = new JTextArea();
-		listSizeDisplay.setText(Integer.toString(model.getFilteredData().size()));
+		listSizeDisplay.setText("Events Listed: "+Integer.toString(model.getFilteredData().size()));
 		listSizeDisplay.setEditable(false);
 		listSizeDisplay.setLineWrap(true);
 		
@@ -199,7 +199,7 @@ public class DataListFrame extends JInternalFrame implements ActionListener,Obse
 		
 		filterList.clearSelection();
 		filterList.setListData(getFilteredListString(model.getFilteredData()));
-		listSizeDisplay.setText(Integer.toString(model.getFilteredData().size()));
+		listSizeDisplay.setText("Events Listed: "+Integer.toString(model.getFilteredData().size()));
 	}
 
 
