@@ -7,13 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.EarthquakeDisplayModel;
@@ -34,10 +31,8 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 	FilterComponent magFilter;
 	FilterComponent depthFilter;
 	FilterComponent modelFilter;
+	FilterComponent dateFilter;
 	
-	JTextField minDate;
-	JTextField maxDate;
-	JCheckBox hasFaultMechanism;
 	
 	public FilteringFrame(EarthquakeDisplayModel m)
 	{
@@ -83,35 +78,17 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 	 */
 	private JPanel initSimpleFilters()
 	{
-		JPanel aux;
 		JPanel ret = new JPanel();
 		ret.setLayout(new BoxLayout(ret, BoxLayout.Y_AXIS));
 		
 		magFilter = new MagnitudeFilterComponent();
 		depthFilter = new DepthFilterComponent();
 		modelFilter = new ModelFilterComponent();
+		dateFilter = new DateFilterComponent();
 		
 		ret.add(magFilter.getPanel());
 		ret.add(depthFilter.getPanel());
-		
-		// Date
-		aux = new JPanel();
-		aux.add(new JLabel("Date (YYYY-MM-DD [HH:[MM:[SS]]])"));
-		ret.add(aux);
-		
-		aux = new JPanel();
-		
-		minDate = new JTextField(12);
-		maxDate = new JTextField(12);
-		aux.add(new JLabel("Start: "));
-		aux.add(minDate);
-		aux.add(new JLabel(" End: "));
-		aux.add(maxDate);
-		ret.add(aux);
-		
-		
-		
-		// has Focal Mechanism
+		ret.add(dateFilter.getPanel());
 		ret.add(modelFilter.getPanel());
 		
 		ret.add(new JSeparator(JSeparator.HORIZONTAL));
@@ -144,9 +121,7 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 		magFilter.reset();
 		depthFilter.reset();
 		modelFilter.reset();
-				
-		minDate.setText("");
-		maxDate.setText("");
+		dateFilter.reset();
 	}
 	
 	/**
@@ -177,6 +152,16 @@ public class FilteringFrame extends JInternalFrame implements ActionListener {
 				return null;
 			}
 			ret.addFilter(depthFilter.getFilter());
+		}
+		
+		if (!dateFilter.isEmpty())
+		{
+			if (!dateFilter.isCorrect())
+			{
+				JOptionPane.showMessageDialog(this, dateFilter.getErrorString());
+				return null;
+			}
+			ret.addFilter(dateFilter.getFilter());
 		}
 		
 		if (!modelFilter.isEmpty())

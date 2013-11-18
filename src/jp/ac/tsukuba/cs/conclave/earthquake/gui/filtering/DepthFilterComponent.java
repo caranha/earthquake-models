@@ -29,7 +29,7 @@ public class DepthFilterComponent extends JPanel implements FilterComponent {
 		this.add(new JLabel("Depth   Min:"));
 		this.add(minValue = new JTextField(4));
 		this.add(new JLabel(" Max:"));
-		this.add(minValue = new JTextField(4));
+		this.add(maxValue = new JTextField(4));
 		
 	}
 	
@@ -69,7 +69,7 @@ public class DepthFilterComponent extends JPanel implements FilterComponent {
 	public void reset() {
 		minValue.setText("");
 		minvalue = 0;
-		minValue.setText("");
+		maxValue.setText("");
 		maxvalue = 0;
 	}
 
@@ -82,7 +82,7 @@ public class DepthFilterComponent extends JPanel implements FilterComponent {
 	@Override
 	public boolean isEmpty() {
 		return (emptyString(minValue.getText()) && 
-				emptyString(minValue.getText()));
+				emptyString(maxValue.getText()));
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class DepthFilterComponent extends JPanel implements FilterComponent {
 		if (!emptyString(minValue.getText()))
 		{
 			try {
-				maxvalue = Float.parseFloat(minValue.getText());
+				maxvalue = Float.parseFloat(maxValue.getText());
 			} catch (Exception e)
 			{
 				errormsg = "Error in maximum Depth: "+e.getMessage();

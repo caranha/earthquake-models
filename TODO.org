@@ -1,14 +1,16 @@
 * New GUI
-** TODO Filtering Pane
-   - [ ] Filtering by Date
+** Complex Filtering Pane
+
+** TODO Simple Filtering Pane
    - [ ] Filtering by Aftershocks (number, radius, fault plane, time)
+   - [X] Filtering by Date
    - [X] Filtering by Focus Earthquake (aftershocks of this quake, time, fault plane, radius)
 
 ** TODO Map Display Pane
-   - [X] Each display element should have a color and a name
    - [ ] Color and name should be changeable
    - [ ] Each display element should be toggleable (visible/invisible)
    - [ ] Each display element should be destroyable
+   - [X] Each display element should have a color and a name
 
 ** TODO Focus Pane
    - [ ] Can send quake to "bookmarks" pane
@@ -26,6 +28,9 @@
    - [ ] Can send one of the elements to Focus Pane
    - [ ] Shows brief information about highlighted quake
 
+** Issues - 2
+   - [ ] Model starts empty (no quakes, and has option to load earthquake data files)
+   - [ ] System is able to detect JMA or FNET files (or map files)
 
 ** DONE List Pane
    - [X] Can send Earthquake to Focus Pane

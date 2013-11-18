@@ -39,6 +39,10 @@ public class CompositeEarthquakeFilter {
 	 */
 	public DataList filter(DataList d)	
 	{
+		/*
+		 * TODO: Add the possibility of "List Date filters" that are 
+		 * more efficient than unitary date filters.
+		 */
 		DataList ret = new DataList();
 		
 		Iterator<DataPoint> it = d.iterator();
