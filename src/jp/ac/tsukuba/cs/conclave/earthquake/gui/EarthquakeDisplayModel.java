@@ -53,10 +53,15 @@ public class EarthquakeDisplayModel extends Observable {
 		return bookmarkData;
 	}
 
+	// TODO: remove this, provide controlling methods
 	public MapController getMapController()
 	{
 		return m;
 	}
+	
+	
+	
+	
 	public MapImage getMapImage()
 	{
 		return m.getImage();
@@ -112,6 +117,20 @@ public class EarthquakeDisplayModel extends Observable {
 
 	public void addDrawCommand(MapDrawCommand aux) {
 		m.addDrawCommand(aux);
+		setChanged();
+		notifyObservers("Map Controller");
+	}
+
+	public void removeDrawCommand(MapDrawCommand aux)
+	{
+		m.removeDrawCommand(aux);
+		setChanged();
+		notifyObservers("Map Controller");
+	}
+	
+	public void updateDrawCommand()
+	{
+		m.redrawMap();
 		setChanged();
 		notifyObservers("Map Controller");
 	}

@@ -10,7 +10,8 @@ import java.awt.Color;
  */
 public abstract class MapDrawCommand implements Comparable<MapDrawCommand> {
 
-	int depth = 0;	
+	int depth = 0;
+	boolean drawable = true;
 	Color mainColor = Color.BLACK; // Main color to be used when drawing this event;
 	Color subColor = Color.GREEN; // Sub color to be used when drawing this event;
 	String name = "";
@@ -63,10 +64,21 @@ public abstract class MapDrawCommand implements Comparable<MapDrawCommand> {
 	{
 		return name;
 	}
+
+	public boolean isDrawable()
+	{
+		return drawable;
+	}
+	
+	public void setDrawable(boolean d)
+	{
+		drawable = d;
+	}
 	
 	@Override
 	public String toString()
 	{
 		return name;
 	}
+	
 }

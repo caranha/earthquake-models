@@ -1,6 +1,7 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.gui;
 
 
+import java.beans.PropertyVetoException;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,7 +17,8 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.GeoLine;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.datalist.DataListFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.filtering.FilteringFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.focus.EarthquakeFocusFrame;
-import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapPanel;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.DrawElementFrame;
+import jp.ac.tsukuba.cs.conclave.earthquake.gui.map.MapFrame;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.DrawGeography;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapController;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
@@ -31,6 +33,7 @@ public class GuiTester {
 		// Loading Initial Data (Probably want to encapsulate this)
 		DrawGeography drawjapanmap = new DrawGeography();
 		drawjapanmap.setMap(loadJapanMap());
+		drawjapanmap.setName("Japan Map");
 
 		MapController mapa = new MapController(MapImage.JapaneseMapFactory());
 		mapa.addDrawCommand(drawjapanmap);
@@ -50,7 +53,7 @@ public class GuiTester {
 		frame.setContentPane(mainwindow);
 		
 		// Map Internal Pane
-		JInternalFrame map = new MapPanel(model);       
+		JInternalFrame map = new MapFrame(model);       
         map.setVisible(true);
         
         // Earthquake list Pane
@@ -68,23 +71,41 @@ public class GuiTester {
         focus.setVisible(true);
         focus.setLocation(760,220);
         
+        // Draw Element Controller Frame
+        DrawElementFrame drawer = new DrawElementFrame(model);
+        drawer.setVisible(true);
+        drawer.setLocation(760,0);
+        
+        
+        
         // Adding everything to the Desktop Pane
         mainwindow.add(map);
         mainwindow.add(list);
         mainwindow.add(filter);
         mainwindow.add(focus);
+        mainwindow.add(drawer);
 
+        try {
+			drawer.setIcon(true);
+			filter.setIcon(true);
+			focus.setIcon(true);
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        
 	}
 	
 	static ArrayList<GeoLine> loadJapanMap()
 	{
 		BufferedReader reader = null;
-		String filename = "/home/caranha/Desktop/Work/Earthquake_bogdan/data/coast_japan.m";
+		String filename = "data/coast_japan.m";
 		try {
 			reader = new BufferedReader(new FileReader(filename));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Failed to load: "+filename);
+			System.err.println(e.getMessage());
 		}
 		GeoLine[] geolines = GeoDataReader.readGeoLines(reader);
 		ArrayList<GeoLine> ret = new ArrayList<GeoLine>();

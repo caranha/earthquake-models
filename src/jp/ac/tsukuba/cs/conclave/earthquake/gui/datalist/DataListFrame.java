@@ -196,10 +196,11 @@ public class DataListFrame extends JInternalFrame implements ActionListener,Obse
 	@Override
 	public void update(Observable o, Object arg) {		
 		if (arg != null && (String)arg == "Filtered List")
-		
-		filterList.clearSelection();
-		filterList.setListData(getFilteredListString(model.getFilteredData()));
-		listSizeDisplay.setText("Events Listed: "+Integer.toString(model.getFilteredData().size()));
+		{
+			filterList.clearSelection();
+			filterList.setListData(getFilteredListString(model.getFilteredData()));
+			listSizeDisplay.setText("Events Listed: "+Integer.toString(model.getFilteredData().size()));
+		}
 	}
 
 
