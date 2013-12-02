@@ -2,10 +2,6 @@ package jp.ac.tsukuba.cs.conclave.earthquake.gui.map;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-
 import javax.swing.JPanel;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.gui.EarthquakeDisplayModel;
