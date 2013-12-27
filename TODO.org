@@ -1,4 +1,17 @@
-* New GUI
+
+* CSEP Evolutionary Model Program
+- [ ] Prediction model: Defines bins and number of predicted
+  earthquake in each bin
+- [ ] Models must report their defining qualities (spatial, temporal,
+  bin dimensions, etc)
+- [ ] Models must report loglikelyhood when compared with a set of
+  data (ignoring extraneous data)
+- [ ] Implement Multi-dimensional Models
+
+
+
+
+* Earthquake Browsing GUI
 ** TODO Complex Filtering Pane
 ** TODO Simple Filtering Pane
    - [ ] Filtering by Aftershocks (number, radius, fault plane, time)
@@ -49,53 +62,4 @@
 
 
 
-* Test All quakes program:
-  This program:
-  1- reads a number of files with earthquakes, either in the JMA or FNET formats
-  2- choose candidate earthquake for analysis, based on parameters (depth, strength, etc)
-  3- for each choosen earthquake, execute the available model tests:
-     Point in Place, Distance from Plane, Distance from fault
-  4- For each model test, Choose:
-     - The test starts inconclusive, then chooses one model
-     - The test starts with one model, then turns inconclusive
-     - The test is inconclusive all around
-     - The test is contradictory (starts with one model, and changes to another)
-  5- Totalize these values:
-     - Number of types 1 and 2 for each model
-     - Earthquakes where: N models agree on the earthquake type
-
-** Extras:
-   - [X] Creates a parameter object for loading parameters
-   - [X] Use parameter objects to load parameters
-   - [ ] Make "Datalist" try to load the file from the filesystem
-     first, and if it does not find it there, try the internal asset folder
-     - Same for loading default parameter values
-   - [ ] Remove the "parameter variables" and replace them with parameter calls 
-     with default values in TestAllQuakes.
-
-** Main goals
-   - [ ] Calculate totals for "Inconclusive", "N" won, Contradictory
-   - [ ] Store results temporarily in internal variables
-   - [ ] Print different results to different files
-
-** Improvement goals
-   - [X] Ability to run "Test All Quakes" with time quanta of different size
-   - [X] Ability to run "Test All Quakes" with different number of quanta
-   - [X] Ability to run "Test All Quakes" on different data files
-
-** Plane-Distance testing
-   - [X] Calculate the distance between one point and the quake plane
-   - [ ] Model judgement based on mean squared distance (error)
-   - [X] Is distance based on "in plane" distances for that model? or for both models?
-
-** Fault distance testing
-   - [ ] Calculate whether a fault is inside or outside the fault plane
-   - [ ] Compare faults inside the fault plane with the strike direction
-
-** Done
-   - [X] Selects a subgroup of valid earthquakes
-   Valid earthquakes have Magnitude > X, and aftershocks with mag > Z
-   after 1 day > Y
-   - [X] Calcular a hypothesis do plano para cada time period
-   - [X] Imprimir o resultado para cada time period
 
