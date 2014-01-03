@@ -1,14 +1,14 @@
 
 * CSEP Evolutionary Model Program
-- [ ] Prediction model: Defines bins and number of predicted
-  earthquake in each bin
-- [ ] Models must report their defining qualities (spatial, temporal,
-  bin dimensions, etc)
-- [ ] Models must report loglikelyhood when compared with a set of
-  data (ignoring extraneous data)
-- [ ] Implement Multi-dimensional Models
-
-
+- [X] Reading earthquakes from files, filtering them by time and
+  space.
+- [ ] Define an interface for N-dimensional models 
+  (So I can define the definitions by parameter file)
+- [ ] 2-dimensional model (latitude, longitude)
+- [ ] Assign events to model from data
+- [ ] Generate random model (from Total number of earthquakes)
+- [ ] Calculate log likelyhood of random model against data model
+- [ ] Random Search
 
 
 * Earthquake Browsing GUI

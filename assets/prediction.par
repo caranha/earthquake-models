@@ -1,0 +1,22 @@
+datafile = data/jma_cat_2000_2012_Mth2.5_formatted.dat
+filetype = jma
+
+# Start and End location. Start: SW point, End: NE point.
+start lat = 30
+end lat = 31
+start lon = 139
+end lon = 140
+
+# Start and End date for the training data, format YYYY-MM-DD [HH-mm-SS]
+training start date = 2000-01-01
+training end date = 2001-01-01
+
+# Start and End date for the testing data, format YYYY-MM-DD [HH-mm-SS]
+testing start date = 2001-01-01
+testing end date = 2002-01-01
+
+
+
+
+
+
