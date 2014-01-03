@@ -8,16 +8,14 @@ package jp.ac.tsukuba.cs.conclave.earthquake.data;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 
-public class DataList {
+public class DataList implements Iterable<DataPoint> {
 	
 	// FIXME: ArrayList data needs to be made private
 	public ArrayList<DataPoint> data;

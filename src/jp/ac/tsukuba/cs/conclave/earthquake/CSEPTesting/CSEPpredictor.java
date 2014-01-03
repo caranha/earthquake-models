@@ -4,10 +4,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.ISODateTimeFormat;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.GeographicalCSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.LocationFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.UnitaryDateFilter;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /**
@@ -52,7 +54,14 @@ public class CSEPpredictor {
 		readParameterFile(args[0]);
 		loadDataFile();
 		
+		GeographicalCSEPModel test = new GeographicalCSEPModel(Float.parseFloat(param.getParameter("start lon", "141")), 
+																Float.parseFloat(param.getParameter("start lat", "38")),
+																0.2, 0.2, 5, 5);
+		test.addData(training_data);
+		System.out.println(test);
 		
+		MapImage map = test.getEventMap();
+		map.saveToFile("testing.png");
 		
 	}
 
@@ -89,10 +98,10 @@ public class CSEPpredictor {
 		LocationFilter location = new LocationFilter();
 		CompositeEarthquakeFilter locFilter = new CompositeEarthquakeFilter();
 		
-		location.setMinimum(Float.parseFloat(param.getParameter("start lat", "30")), 
-								 Float.parseFloat(param.getParameter("start lon", "140")));
-		location.setMaximum(Float.parseFloat(param.getParameter("end lat", "31")), 
-								 Float.parseFloat(param.getParameter("end lon", "141")));
+		location.setMinimum(Float.parseFloat(param.getParameter("start lon", "140")), 
+								 Float.parseFloat(param.getParameter("start lat", "30")));
+		location.setMaximum(Float.parseFloat(param.getParameter("end lon", "141")), 
+								 Float.parseFloat(param.getParameter("end lat", "31")));
 		locFilter.addFilter(location);
 
 		data = locFilter.filter(data);

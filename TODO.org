@@ -2,14 +2,18 @@
 * CSEP Evolutionary Model Program
 - [X] Reading earthquakes from files, filtering them by time and
   space.
-- [ ] Define an interface for N-dimensional models 
+- [X] Define an interface for N-dimensional models 
   (So I can define the definitions by parameter file)
-- [ ] 2-dimensional model (latitude, longitude)
-- [ ] Assign events to model from data
-- [ ] Generate random model (from Total number of earthquakes)
+- [X] 2-dimensional model (latitude, longitude)
+- [X] Assign events to model from data
+- [X] Generate random model (from Total number of earthquakes)
+
+- [ ] Draw Grid over model
 - [ ] Calculate log likelyhood of random model against data model
 - [ ] Random Search
 
+- [ ] Simple GA search
+- [ ] DE search
 
 * Earthquake Browsing GUI
 ** TODO Complex Filtering Pane

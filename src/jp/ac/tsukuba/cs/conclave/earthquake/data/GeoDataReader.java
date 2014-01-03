@@ -1,6 +1,8 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.data;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +14,22 @@ import java.util.logging.Logger;
  */
 public class GeoDataReader {
 
+	
+	public static GeoLine[] readGeoLines(String filename)
+	{
+		BufferedReader r = null;
+		try
+		{	
+			r = new BufferedReader(new FileReader(new File(filename)));
+		}
+		catch (Exception e)
+		{
+			System.err.println("Error reading file: " + e.getMessage());
+			System.exit(1);
+		}
+		return readGeoLines(r);
+	}
+	
 	/**
 	 * Reads a file with pairs of coordinates in two columns, separated by a space
 	 * @param reader An io buffer created from an internal or external file;

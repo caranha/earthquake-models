@@ -138,21 +138,22 @@ public class MapImage {
 	
 	public void drawGeoLine(GeoLine l, Color c)
 	{
+		
 		Iterator<GeoPoint> it = l.getIterator();
 		GeoPoint prev, cur;
 		Graphics g = map.createGraphics();	
 		g.setColor(c);
 		
-		prev = it.next();
+		cur = it.next();
 		while (it.hasNext())
 		{
 			int x0,y0,x1,y1;
+			prev = cur;
 			cur = it.next();
 			x0 = calculateScreenPosLongitude(prev.lon);
 			y0 = calculateScreenPosLatitude(prev.lat);
 			x1 = calculateScreenPosLongitude(cur.lon);
 			y1 = calculateScreenPosLatitude(cur.lat);
-			
 			g.drawLine(x0,y0,x1,y1);
 		}
 		
@@ -195,17 +196,23 @@ public class MapImage {
 	 */
 	public void drawEvent(DataPoint p, Color c, float s)
 	{
+		drawEvent(p.longitude, p.latitude, c, s);
+	}	
+	public void drawEvent(double lon, double lat, Color c, float s)
+	{
 		Graphics g = map.createGraphics();	
 		g.setColor(c);
 		int x,y,r;
 		
-		x = calculateScreenPosLongitude(p.longitude);
-		y = calculateScreenPosLatitude(p.latitude);
+		x = calculateScreenPosLongitude(lon);
+		y = calculateScreenPosLatitude(lat);
 		r = (int) Math.floor(s);
 		
 		g.drawOval(x, y, r,r);
 		map.flush();
 	}
+	
+	
 	
 	/**
 	 * Creates a MapImage with the correct latitude and longitude for a japanese map

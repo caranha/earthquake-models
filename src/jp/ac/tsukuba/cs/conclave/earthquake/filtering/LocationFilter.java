@@ -11,10 +11,11 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
  */
 public class LocationFilter implements EarthquakeFilter {
 
-	Float minlat;
 	Float minlon;
-	Float maxlat;
+	Float minlat;
 	Float maxlon;
+	Float maxlat;
+
 	
 	@Override
 	public boolean testData(DataPoint p, DataList l) {
@@ -38,13 +39,13 @@ public class LocationFilter implements EarthquakeFilter {
 			return this;
 	}
 	
-	public void setMinimum(float latitude, float longitude)
+	public void setMinimum(float longitude, float latitude)
 	{
 		minlat = latitude;
 		minlon = longitude;
 	}
 	
-	public void setMaximum(float latitude, float longitude)
+	public void setMaximum(float longitude, float latitude)
 	{
 		maxlat = latitude;
 		maxlon = longitude;
