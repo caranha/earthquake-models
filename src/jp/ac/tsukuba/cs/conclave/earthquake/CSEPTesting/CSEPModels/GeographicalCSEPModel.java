@@ -63,17 +63,20 @@ public class GeographicalCSEPModel implements CSEPModel {
 
 	@Override
 	public void addData(DataList d) {
-		double maxlon = base[0] + delta[0]*(dimlength[0]-1);
-		double maxlat = base[1] + delta[1]*(dimlength[1]-1);
-		
 		for (DataPoint aux: d)
 		{
-			if (aux.longitude >= base[0] && aux.longitude <= maxlon &&
-				aux.latitude >= base[1] && aux.latitude <= maxlat)
+			int xindex = -1;
+			int yindex = -1;
+			
+			for (int i = 0; i < dimlength[0]; i++)
+				if (aux.longitude >= base[0] + delta[0]*i && aux.longitude < base[0] + delta[0]*(i+1))
+					xindex = i;
+			
+			for (int i = 0; i < dimlength[1]; i++)
+				if (aux.latitude >= base[1] + delta[1]*i && aux.latitude < base[1] + delta[1]*(i+1))
+					yindex = i;
+			if (xindex != -1 && yindex != -1)
 			{
-				int xindex = (int) Math.round((aux.longitude - base[0])/delta[0]);
-				int yindex = (int) Math.round((aux.latitude - base[1])/delta[1]);
-				
 				bins[xindex][yindex] += 1;
 				totalevents++;
 			}

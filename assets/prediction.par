@@ -1,12 +1,23 @@
+## Data files
 datafile = data/jma_cat_2000_2012_Mth2.5_formatted.dat
 filetype = jma
 coastfile = data/coast_japan.m
 
-# Start and End location. Start: SW point, End: NE point.
-start lat = 38
-end lat = 39
-start lon = 141
-end lon = 142
+## Location Parameters
+# SW Point
+start lat = 37
+start lon = 140
+
+# Grid size
+grid lat = 20
+grid lon = 20
+
+# Grid step
+delta lat = 0.2
+delta lon = 0.2
+
+
+
 
 # Start and End date for the training data, format YYYY-MM-DD [HH-mm-SS]
 training start date = 2000-01-01

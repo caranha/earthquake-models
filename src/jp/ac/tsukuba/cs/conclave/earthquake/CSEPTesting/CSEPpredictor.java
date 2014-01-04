@@ -56,7 +56,10 @@ public class CSEPpredictor {
 		
 		GeographicalCSEPModel test = new GeographicalCSEPModel(Float.parseFloat(param.getParameter("start lon", "141")), 
 																Float.parseFloat(param.getParameter("start lat", "38")),
-																0.2, 0.2, 5, 5);
+																Float.parseFloat(param.getParameter("delta lon","0.2")),
+																Float.parseFloat(param.getParameter("delta lat","0.2")),
+																Integer.parseInt(param.getParameter("grid lon","20")),
+																Integer.parseInt(param.getParameter("grid lat","20")));
 		test.addData(training_data);
 		System.out.println(test);
 		
@@ -98,10 +101,15 @@ public class CSEPpredictor {
 		LocationFilter location = new LocationFilter();
 		CompositeEarthquakeFilter locFilter = new CompositeEarthquakeFilter();
 		
-		location.setMinimum(Float.parseFloat(param.getParameter("start lon", "140")), 
-								 Float.parseFloat(param.getParameter("start lat", "30")));
-		location.setMaximum(Float.parseFloat(param.getParameter("end lon", "141")), 
-								 Float.parseFloat(param.getParameter("end lat", "31")));
+		double minlon = Double.parseDouble(param.getParameter("start lon", "139"));
+		double minlat = Double.parseDouble(param.getParameter("start lat","37"));
+		double maxlon = minlon + (Double.parseDouble(param.getParameter("delta lon", "0.2"))*
+								  Integer.parseInt(param.getParameter("grid lon","20")));
+		double maxlat = minlat + (Double.parseDouble(param.getParameter("delta lat","0.2"))*
+								  Integer.parseInt(param.getParameter("drid lat","20")));
+		
+		location.setMinimum(minlon, minlat);
+		location.setMaximum(maxlon, maxlat);
 		locFilter.addFilter(location);
 
 		data = locFilter.filter(data);
