@@ -9,7 +9,11 @@ public interface CSEPModel {
 	public void initRandom(int eventN);
 	
 	public Double getLogLikelihood(CSEPModel comp);
+	public Double getLogLikelihood();
+	
 	public MapImage getAreaMap();
 	public MapImage getEventMap();
+	
+	public int getTotalEvents();
 	
 }

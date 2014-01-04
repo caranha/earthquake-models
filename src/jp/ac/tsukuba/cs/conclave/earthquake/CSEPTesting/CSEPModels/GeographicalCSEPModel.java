@@ -129,6 +129,13 @@ public class GeographicalCSEPModel implements CSEPModel {
 		return loglikelihood;
 	}
 	
+	@Override
+	public Double getLogLikelihood() 
+	{		
+		return loglikelihood;
+	}
+	
+	
 	private void calculateLogLikelihood(GeographicalCSEPModel c)
 	{
 		loglikelihoodbase = c;
@@ -179,6 +186,11 @@ public class GeographicalCSEPModel implements CSEPModel {
 									  base[1]+(j+1)*delta[1], 
 									  new Color(1f,0f,0f,(bins[i][j]+0.9f)/(maxevents+1f)));
 		return ret;
+	}
+	
+	public int getTotalEvents()
+	{
+		return totalevents;
 	}
 	
 }

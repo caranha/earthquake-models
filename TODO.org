@@ -11,8 +11,13 @@
 - [X] Change Parameter file to use "start position, grid size, grid delta"
 - [X] Change drawing to draw squares over image
 - [X] log likelihood
-- [ ] Random Search
+- [X] Random Search
 
+- [ ] Add "Iterable" to CSEPModel Interface
+- [ ] Decouple the Random Search from the CSEPModel Implementation
+  - CSEPModel Factory with Parameter passing
+
+- [ ] Create an interface for the optimization
 - [ ] Simple GA Search
 - [ ] Simple model suggested years before by Bogdan
 

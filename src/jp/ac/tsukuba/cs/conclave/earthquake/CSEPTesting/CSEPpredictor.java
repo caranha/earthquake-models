@@ -4,7 +4,9 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.ISODateTimeFormat;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.GeographicalCSEPModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.LocationFilter;
@@ -53,41 +55,28 @@ public class CSEPpredictor {
 		
 		readParameterFile(args[0]);
 		loadDataFile();
-		
-		GeographicalCSEPModel test = new GeographicalCSEPModel(Float.parseFloat(param.getParameter("start lon", "141")), 
-																Float.parseFloat(param.getParameter("start lat", "38")),
-																Float.parseFloat(param.getParameter("delta lon","0.2")),
-																Float.parseFloat(param.getParameter("delta lat","0.2")),
-																Integer.parseInt(param.getParameter("grid lon","20")),
-																Integer.parseInt(param.getParameter("grid lat","20")));
-		GeographicalCSEPModel test2 = new GeographicalCSEPModel(Float.parseFloat(param.getParameter("start lon", "141")), 
-																Float.parseFloat(param.getParameter("start lat", "38")),
-																Float.parseFloat(param.getParameter("delta lon","0.2")),
-																Float.parseFloat(param.getParameter("delta lat","0.2")),
-																Integer.parseInt(param.getParameter("grid lon","20")),
-																Integer.parseInt(param.getParameter("grid lat","20")));
-		
-		
-		test.addData(training_data);
-		
-		Double ll = null;
-		while (ll == null)
-		{
-			test2.clearBins();
-			test2.clearLLcache();
-			test2.initRandom(911);
-			ll = test2.getLogLikelihood(test);
-		}
-		
-		System.out.println("LogLikelihood: "+ll);
-		
-		System.out.println(test);
-		
-		MapImage map = test.getEventMap();
-		map.saveToFile("testing.png");
-		
+
+		testRandomSolver();
 	}
 
+	
+	static public void testRandomSolver()
+	{
+		RandomSolver r = new RandomSolver();
+		r.init(training_data, param);
+
+		CSEPModel m; 
+		for (int i = 0; i < 100; i++)
+		{
+			r.execute(100000);
+			m = r.getBest();
+			m.getEventMap().saveToFile("map"+String.format("%03d", i)+".png");
+			System.out.println(""+m.getLogLikelihood());
+		}		
+	}
+	
+	
+	
 	static public Parameter getParameter()
 	{
 		return param;
