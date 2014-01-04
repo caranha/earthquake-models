@@ -20,6 +20,7 @@ public class GeographicalCSEPModel implements CSEPModel {
 	// Array of events;
 	int[][] bins;
 	int totalevents;
+	float maxevents;
 
 	double[] base; // base value for the SW lon/lat
 	double[] delta; // value change from base for each bin
@@ -42,6 +43,8 @@ public class GeographicalCSEPModel implements CSEPModel {
 		dimlength = new int[2];
 		dimlength[0] = binlon;
 		dimlength[1] = binlat;
+		
+		maxevents = 0;
 	}
 
 	/**
@@ -78,9 +81,11 @@ public class GeographicalCSEPModel implements CSEPModel {
 			if (xindex != -1 && yindex != -1)
 			{
 				bins[xindex][yindex] += 1;
+				if (bins[xindex][yindex] > maxevents)
+					maxevents = bins[xindex][yindex];
 				totalevents++;
 			}
-		}
+		}		
 	}
 
 	@Override
@@ -89,7 +94,11 @@ public class GeographicalCSEPModel implements CSEPModel {
 		
 		for (int i = 0; i < eventN; i++)
 		{
-			bins[dice.nextInt(dimlength[0])][dice.nextInt(dimlength[1])] += 1;
+			int intx = dice.nextInt(dimlength[0]);
+			int inty = dice.nextInt(dimlength[1]);
+			bins[intx][inty] += 1;
+			if (bins[intx][inty] > maxevents)
+				maxevents = bins[intx][inty];
 			totalevents++;
 		}
 	}
@@ -112,8 +121,12 @@ public class GeographicalCSEPModel implements CSEPModel {
 		
 		for (int i = 0; i < dimlength[0]; i++)
 			for (int j = 0; j < dimlength[1]; j++)
-				if (bins[i][j] > 0)				
-					ret.drawEvent(base[0] + delta[0]*i, base[1]+delta[1]*j, Color.red, bins[i][j]*10);
+				if (bins[i][j] > 0)		
+					ret.drawRectangle(base[0]+i*delta[0], 
+									  base[1]+j*delta[1], 
+									  base[0]+(i+1)*delta[0], 
+									  base[1]+(j+1)*delta[1], 
+									  new Color(1f,0f,0f,(bins[i][j]+0.9f)/(maxevents+1f)));
 		return ret;
 	}
 	

@@ -9,7 +9,7 @@
 - [X] Generate random model (from Total number of earthquakes)
 
 - [X] Change Parameter file to use "start position, grid size, grid delta"
-- [ ] Change drawing to draw squares over image
+- [X] Change drawing to draw squares over image
 - [ ] log likelihood
 - [ ] Random Search
 

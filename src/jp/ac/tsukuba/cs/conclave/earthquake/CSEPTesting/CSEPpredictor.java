@@ -60,7 +60,8 @@ public class CSEPpredictor {
 																Float.parseFloat(param.getParameter("delta lat","0.2")),
 																Integer.parseInt(param.getParameter("grid lon","20")),
 																Integer.parseInt(param.getParameter("grid lat","20")));
-		test.addData(training_data);
+		//test.addData(training_data);
+		test.initRandom(911);
 		System.out.println(test);
 		
 		MapImage map = test.getEventMap();

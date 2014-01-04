@@ -136,6 +136,19 @@ public class MapImage {
 		return height - (int)Math.floor(ret);
 	}
 	
+	public void drawRectangle(double slon, double slat, double elon, double elat, Color c)
+	{
+		int x0 = calculateScreenPosLongitude(slon);
+		int y0 = calculateScreenPosLatitude(slat);
+		int x1 = calculateScreenPosLongitude(elon)-x0;
+		int y1 = y0-calculateScreenPosLatitude(elat); // Y goes from top down
+		
+		Graphics g = map.createGraphics();	
+		g.setColor(c);
+		g.fillRect(x0, y0, x1,y1);
+		map.flush();
+	}
+	
 	public void drawGeoLine(GeoLine l, Color c)
 	{
 		
