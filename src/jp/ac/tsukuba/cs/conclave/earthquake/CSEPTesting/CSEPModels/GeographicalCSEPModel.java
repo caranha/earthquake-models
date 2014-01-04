@@ -20,7 +20,10 @@ public class GeographicalCSEPModel implements CSEPModel {
 	// Array of events;
 	int[][] bins;
 	int totalevents;
-	float maxevents;
+	float maxevents; // bin with maximum number of events
+	
+	Double loglikelihood = null; // ll cache
+	CSEPModel loglikelihoodbase = null; // model/data used for creating the ll cache
 
 	double[] base; // base value for the SW lon/lat
 	double[] delta; // value change from base for each bin
@@ -54,6 +57,12 @@ public class GeographicalCSEPModel implements CSEPModel {
 	{
 		bins = new int[dimlength[0]][dimlength[1]];
 		totalevents = 0;
+	}
+	
+	public void clearLLcache()
+	{
+		loglikelihood = null;
+		loglikelihoodbase = null;
 	}
 	
 	public String toString()
@@ -92,6 +101,15 @@ public class GeographicalCSEPModel implements CSEPModel {
 	public void initRandom(int eventN) {
 		Random dice = new Random(); // FIXME: use a seeded random here;
 		
+		// Guaranteeing that we have at least one event on each bin
+		for (int i = 0; i < dimlength[0]; i++)
+			for (int j = 0; j < dimlength[1]; j++)
+			{
+				eventN -=1;
+				bins[i][j] += 1;
+				totalevents++;
+			}
+
 		for (int i = 0; i < eventN; i++)
 		{
 			int intx = dice.nextInt(dimlength[0]);
@@ -104,10 +122,43 @@ public class GeographicalCSEPModel implements CSEPModel {
 	}
 
 	@Override
-	public float calculatelogLikelihood(CSEPModel comp) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Double getLogLikelihood(CSEPModel comp) 
+	{		
+		if (loglikelihood == null || !(comp.equals(loglikelihoodbase)))
+			calculateLogLikelihood((GeographicalCSEPModel) comp);
+		return loglikelihood;
 	}
+	
+	private void calculateLogLikelihood(GeographicalCSEPModel c)
+	{
+		loglikelihoodbase = c;
+		loglikelihood = 0.0;
+		
+		for (int i = 0; i < dimlength[0]; i++)
+			for (int j = 0; j < dimlength[1]; j++)
+			{
+				if (bins[i][j] == 0)
+				{
+					if (c.bins[i][j] == 0)
+						loglikelihood +=1;
+					else
+					{	
+						// TODO: replace this with a log message
+						//System.err.println("[WARNING] Log likelihood calculation: Lambda 0, Omega not 0");
+						loglikelihood = null;
+						return;
+					}
+				}		
+				else 
+				{
+					int facw = 0;
+					for (int k = 0; k < c.bins[i][j]; k++)
+						facw += Math.log(k+1);
+					loglikelihood += -bins[i][j] + c.bins[i][j]*Math.log(bins[i][j])-facw;
+				}
+			}
+	}
+	
 
 	@Override
 	public MapImage getAreaMap() {

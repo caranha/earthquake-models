@@ -10,7 +10,7 @@
 
 - [X] Change Parameter file to use "start position, grid size, grid delta"
 - [X] Change drawing to draw squares over image
-- [ ] log likelihood
+- [X] log likelihood
 - [ ] Random Search
 
 - [ ] Simple GA Search

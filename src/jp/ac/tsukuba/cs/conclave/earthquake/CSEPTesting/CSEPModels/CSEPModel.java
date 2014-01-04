@@ -8,7 +8,8 @@ public interface CSEPModel {
 	public void addData(DataList d);
 	public void initRandom(int eventN);
 	
-	public float calculatelogLikelihood(CSEPModel comp);
+	public Double getLogLikelihood(CSEPModel comp);
 	public MapImage getAreaMap();
 	public MapImage getEventMap();
+	
 }

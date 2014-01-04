@@ -60,8 +60,27 @@ public class CSEPpredictor {
 																Float.parseFloat(param.getParameter("delta lat","0.2")),
 																Integer.parseInt(param.getParameter("grid lon","20")),
 																Integer.parseInt(param.getParameter("grid lat","20")));
-		//test.addData(training_data);
-		test.initRandom(911);
+		GeographicalCSEPModel test2 = new GeographicalCSEPModel(Float.parseFloat(param.getParameter("start lon", "141")), 
+																Float.parseFloat(param.getParameter("start lat", "38")),
+																Float.parseFloat(param.getParameter("delta lon","0.2")),
+																Float.parseFloat(param.getParameter("delta lat","0.2")),
+																Integer.parseInt(param.getParameter("grid lon","20")),
+																Integer.parseInt(param.getParameter("grid lat","20")));
+		
+		
+		test.addData(training_data);
+		
+		Double ll = null;
+		while (ll == null)
+		{
+			test2.clearBins();
+			test2.clearLLcache();
+			test2.initRandom(911);
+			ll = test2.getLogLikelihood(test);
+		}
+		
+		System.out.println("LogLikelihood: "+ll);
+		
 		System.out.println(test);
 		
 		MapImage map = test.getEventMap();
