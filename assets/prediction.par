@@ -16,7 +16,9 @@ grid lon = 20
 delta lat = 0.2
 delta lon = 0.2
 
-
+# Selects the type of model used by the predictor
+# modeltype options: {geographical}
+modeltype = geographical
 
 
 # Start and End date for the training data, format YYYY-MM-DD [HH-mm-SS]

@@ -1,26 +1,27 @@
-
 * CSEP Evolutionary Model Program
-- [X] Reading earthquakes from files, filtering them by time and
-  space.
-- [X] Define an interface for N-dimensional models 
-  (So I can define the definitions by parameter file)
-- [X] 2-dimensional model (latitude, longitude)
-- [X] Assign events to model from data
-- [X] Generate random model (from Total number of earthquakes)
-
-- [X] Change Parameter file to use "start position, grid size, grid delta"
-- [X] Change drawing to draw squares over image
-- [X] log likelihood
-- [X] Random Search
 
 - [ ] Add "Iterable" to CSEPModel Interface
-- [ ] Decouple the Random Search from the CSEPModel Implementation
-  - CSEPModel Factory with Parameter passing
+  - [ ] Decouple log-likelihood calculation from implementations.
+- [X] Decouple the Random Search from the CSEPModel Implementation
+  - [X] CSEPModel Factory with Parameter passing
 
 - [ ] Create an interface for the optimization
 - [ ] Simple GA Search
 - [ ] Simple model suggested years before by Bogdan
 
+** Previous Work
+- [X] Reading earthquakes from files, filtering them by time and
+  space.
+- [X] Define an interface for N-dimensional models (So I can define
+  the definitions by parameter file)
+- [X] 2-dimensional model (latitude, longitude)
+- [X] Assign events to model from data
+- [X] Generate random model (from Total number of earthquakes)
+- [X] Change Parameter file to use "start position, grid size, grid
+  delta"
+- [X] Change drawing to draw squares over image
+- [X] log likelihood
+- [X] Random Search
 
 
 * Earthquake Browsing GUI

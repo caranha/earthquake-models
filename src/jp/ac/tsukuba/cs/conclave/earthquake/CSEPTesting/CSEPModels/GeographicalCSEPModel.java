@@ -1,11 +1,8 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels;
 
 import java.awt.Color;
-import java.util.Random;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPUtils;
-import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
-import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 
 
@@ -73,53 +70,7 @@ public class GeographicalCSEPModel implements CSEPModel {
 		return ret;
 	}
 
-	@Override
-	public void addData(DataList d) {
-		for (DataPoint aux: d)
-		{
-			int xindex = -1;
-			int yindex = -1;
-			
-			for (int i = 0; i < dimlength[0]; i++)
-				if (aux.longitude >= base[0] + delta[0]*i && aux.longitude < base[0] + delta[0]*(i+1))
-					xindex = i;
-			
-			for (int i = 0; i < dimlength[1]; i++)
-				if (aux.latitude >= base[1] + delta[1]*i && aux.latitude < base[1] + delta[1]*(i+1))
-					yindex = i;
-			if (xindex != -1 && yindex != -1)
-			{
-				bins[xindex][yindex] += 1;
-				if (bins[xindex][yindex] > maxevents)
-					maxevents = bins[xindex][yindex];
-				totalevents++;
-			}
-		}		
-	}
 
-	@Override
-	public void initRandom(int eventN) {
-		Random dice = new Random(); // FIXME: use a seeded random here;
-		
-		// Guaranteeing that we have at least one event on each bin
-		for (int i = 0; i < dimlength[0]; i++)
-			for (int j = 0; j < dimlength[1]; j++)
-			{
-				eventN -=1;
-				bins[i][j] += 1;
-				totalevents++;
-			}
-
-		for (int i = 0; i < eventN; i++)
-		{
-			int intx = dice.nextInt(dimlength[0]);
-			int inty = dice.nextInt(dimlength[1]);
-			bins[intx][inty] += 1;
-			if (bins[intx][inty] > maxevents)
-				maxevents = bins[intx][inty];
-			totalevents++;
-		}
-	}
 
 	@Override
 	public Double getLogLikelihood(CSEPModel comp) 

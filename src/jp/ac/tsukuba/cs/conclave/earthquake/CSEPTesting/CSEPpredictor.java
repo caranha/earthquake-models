@@ -1,17 +1,17 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting;
 
+import java.util.Random;
+
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.ISODateTimeFormat;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
-import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.GeographicalCSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.LocationFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.UnitaryDateFilter;
-import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /**
@@ -25,7 +25,9 @@ import jp.ac.tsukuba.cs.conclave.utils.Parameter;
  */
 public class CSEPpredictor {
 
-	static final int EXIT_ERROR = 1;
+	public static final int EXIT_ERROR = 1;
+	public static Random dice;
+	
 
 	static Parameter param;
 	
@@ -66,12 +68,28 @@ public class CSEPpredictor {
 		r.init(training_data, param);
 
 		CSEPModel m; 
-		for (int i = 0; i < 100; i++)
+		int deathcount = 20;
+		int i = 0;
+		double max = Double.NEGATIVE_INFINITY;
+		
+		while (deathcount > 0)
 		{
 			r.execute(100000);
 			m = r.getBest();
-			m.getEventMap().saveToFile("map"+String.format("%03d", i)+".png");
-			System.out.println(""+m.getLogLikelihood());
+			Double value = m.getLogLikelihood();
+			if (value > max)
+			{
+				max = value;
+				m.getEventMap().saveToFile("map"+String.format("%03d", i)+".png");
+				System.out.println("Success: "+value);
+				deathcount = 20;
+				i++;
+			}
+			else
+			{
+				deathcount --;
+				System.out.print(".");
+			}
 		}		
 	}
 	
@@ -152,6 +170,12 @@ public class CSEPpredictor {
 			System.err.println("Error reading parameter file: "+e.getMessage());
 			System.exit(EXIT_ERROR);
 		}
+		
+		// seeding the random number generator;
+		dice = new Random();		
+		String seed = param.getParameter("random seed", null);
+		if (seed != null)	
+			dice.setSeed(Long.parseLong(seed));
 	}
 
 }
