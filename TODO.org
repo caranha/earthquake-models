@@ -1,7 +1,7 @@
 * CSEP Evolutionary Model Program
 
-- [ ] Add "Iterable" to CSEPModel Interface
-  - [ ] Decouple log-likelihood calculation from implementations.
+- [X] Add "Iterable" to CSEPModel Interface
+  - [X] Decouple log-likelihood calculation from implementations.
 - [X] Decouple the Random Search from the CSEPModel Implementation
   - [X] CSEPModel Factory with Parameter passing
 

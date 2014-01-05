@@ -25,10 +25,10 @@ public class RandomSolver {
 	{
 		for (int i = 0; i < comparisons; i++)
 		{
-			CSEPModel current = factory.modelFromRandom(data.getTotalEvents());
-			Double fit = current.getLogLikelihood(data);
+			CSEPModel current = factory.modelFromRandom(data.getTotalEvents());			
+			Double fit = current.calcLogLikelihood(data);
 			
-			if (best == null || fit > best.getLogLikelihood(data))
+			if (best == null || fit > best.getLogLikelihood())
 				best = current;
 		}
 	}

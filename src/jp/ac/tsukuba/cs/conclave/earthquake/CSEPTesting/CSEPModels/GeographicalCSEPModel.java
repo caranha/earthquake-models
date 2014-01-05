@@ -1,7 +1,8 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels;
 
 import java.awt.Color;
-
+import java.util.ArrayList;
+import java.util.Iterator;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPUtils;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 
@@ -12,16 +13,13 @@ import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
  * @author Claus Aranha (caranha@cs.tsukuba.ac.jp)
  *
  */
-public class GeographicalCSEPModel implements CSEPModel {
+public class GeographicalCSEPModel extends CSEPModel {
 
 	// Array of events;
 	int[][] bins;
 	int totalevents;
 	float maxevents; // bin with maximum number of events
 	
-	Double loglikelihood = null; // ll cache
-	CSEPModel loglikelihoodbase = null; // model/data used for creating the ll cache
-
 	double[] base; // base value for the SW lon/lat
 	double[] delta; // value change from base for each bin
 	int[] dimlength; // maximum bin number
@@ -56,12 +54,6 @@ public class GeographicalCSEPModel implements CSEPModel {
 		totalevents = 0;
 	}
 	
-	public void clearLLcache()
-	{
-		loglikelihood = null;
-		loglikelihoodbase = null;
-	}
-	
 	public String toString()
 	{
 		String ret = "Simple Geographical Model:";
@@ -69,54 +61,6 @@ public class GeographicalCSEPModel implements CSEPModel {
 		ret = ret + " total events: "+totalevents+".";
 		return ret;
 	}
-
-
-
-	@Override
-	public Double getLogLikelihood(CSEPModel comp) 
-	{		
-		if (loglikelihood == null || !(comp.equals(loglikelihoodbase)))
-			calculateLogLikelihood((GeographicalCSEPModel) comp);
-		return loglikelihood;
-	}
-	
-	@Override
-	public Double getLogLikelihood() 
-	{		
-		return loglikelihood;
-	}
-	
-	
-	private void calculateLogLikelihood(GeographicalCSEPModel c)
-	{
-		loglikelihoodbase = c;
-		loglikelihood = 0.0;
-		
-		for (int i = 0; i < dimlength[0]; i++)
-			for (int j = 0; j < dimlength[1]; j++)
-			{
-				if (bins[i][j] == 0)
-				{
-					if (c.bins[i][j] == 0)
-						loglikelihood +=1;
-					else
-					{	
-						// TODO: replace this with a log message
-						//System.err.println("[WARNING] Log likelihood calculation: Lambda 0, Omega not 0");
-						loglikelihood = null;
-						return;
-					}
-				}		
-				else 
-				{
-					int facw = 0;
-					for (int k = 0; k < c.bins[i][j]; k++)
-						facw += Math.log(k+1);
-					loglikelihood += -bins[i][j] + c.bins[i][j]*Math.log(bins[i][j])-facw;
-				}
-			}
-	}
-	
 
 	@Override
 	public MapImage getAreaMap() {
@@ -139,9 +83,18 @@ public class GeographicalCSEPModel implements CSEPModel {
 		return ret;
 	}
 	
+	@Override
 	public int getTotalEvents()
 	{
 		return totalevents;
 	}
-	
+
+	@Override
+	public Iterator<Integer> iterator() {
+		ArrayList<Integer> ret = new ArrayList<Integer>(dimlength[0]*dimlength[1]);
+		for (int i = 0; i < dimlength[0]; i++)
+			for (int j = 0; j < dimlength[1]; j++)
+				ret.add(bins[i][j]);
+		return ret.iterator();
+	}
 }
