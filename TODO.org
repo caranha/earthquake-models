@@ -1,15 +1,10 @@
 * CSEP Evolutionary Model Program
 
-- [X] Add "Iterable" to CSEPModel Interface
-  - [X] Decouple log-likelihood calculation from implementations.
-- [X] Decouple the Random Search from the CSEPModel Implementation
-  - [X] CSEPModel Factory with Parameter passing
-
-- [ ] Create an interface for the optimization
 - [ ] Simple GA Search
-- [ ] Simple model suggested years before by Bogdan
+- [ ] Simple model suggested years ago by Bogdan
+- [ ] Create an interface for the optimization
 
-** Previous Work
+** First Work Stretch
 - [X] Reading earthquakes from files, filtering them by time and
   space.
 - [X] Define an interface for N-dimensional models (So I can define
@@ -22,6 +17,14 @@
 - [X] Change drawing to draw squares over image
 - [X] log likelihood
 - [X] Random Search
+
+** Second Work Stretch
+- [X] Add "Iterable" to CSEPModel Interface
+  - [X] Decouple log-likelihood calculation from implementations.
+- [X] Decouple the Random Search from the CSEPModel Implementation
+  - [X] CSEPModel Factory with Parameter passing
+
+** Third Work Stretch (GA Implementation)
 
 
 * Earthquake Browsing GUI
