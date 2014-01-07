@@ -1,7 +1,9 @@
 package jp.ac.tsukuba.cs.conclave.geneticalgorithm;
 
 import java.util.List;
+
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
+
 
 /***
  * 
@@ -14,8 +16,10 @@ import jp.ac.tsukuba.cs.conclave.utils.Parameter;
  */
 public interface SelectionOperator {
 
-	public void initialize(Parameter param);
-	public void reset();
+	public void addGeneratingOperator(GeneratingOperator op);
+	
+	public void setup(Parameter param);
+	public void preSelectionHook();
 	public Genome[] select(List<Genome> population);	
 	
 }

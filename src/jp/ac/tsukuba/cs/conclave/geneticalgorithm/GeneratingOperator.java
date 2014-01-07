@@ -2,6 +2,9 @@ package jp.ac.tsukuba.cs.conclave.geneticalgorithm;
 
 import java.util.List;
 
+import jp.ac.tsukuba.cs.conclave.utils.Parameter;
+
+
 /***
  * This Interface describes an operator that generates and/or modifies
  * a Genome, possibly based on a list of genomes.
@@ -10,7 +13,9 @@ import java.util.List;
  */
 public interface GeneratingOperator {
 
-	public Genome[] apply(List<Genome> parents);
+	public void setup(Parameter p);
+	public void preGenerationHook();
+	public Genome[] apply(Genome[] parents);
 	
 	
 }

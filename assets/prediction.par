@@ -29,7 +29,9 @@ training end date = 2001-01-01
 testing start date = 2001-01-01
 testing end date = 2002-01-01
 
-
+# GA Parameters
+population size = 100
+generation size = 100
 
 
 

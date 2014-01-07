@@ -4,7 +4,7 @@ import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 public interface FitnessEvaluation {
 
-	public void initFitness(Parameter param);
+	public void setup(Parameter param);
 	public double evaluate(Genome g);	
 	
 }

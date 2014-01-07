@@ -2,9 +2,10 @@ package jp.ac.tsukuba.cs.conclave.geneticalgorithm;
 
 public abstract class Genome implements Comparable<Genome> {
 
-	Double fitness = null;
+	protected Double fitness = null;
 	
 
+	public abstract Genome clone();
 	
 	public void setFitness(Double fit)
 	{
@@ -15,5 +16,7 @@ public abstract class Genome implements Comparable<Genome> {
 	{
 		return fitness;
 	}
+	
+
 	
 }

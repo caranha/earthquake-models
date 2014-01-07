@@ -97,4 +97,9 @@ public class GeographicalCSEPModel extends CSEPModel {
 				ret.add(bins[i][j]);
 		return ret.iterator();
 	}
+
+	@Override
+	public int getTotalBins() {
+		return dimlength[0]*dimlength[1];
+	}
 }

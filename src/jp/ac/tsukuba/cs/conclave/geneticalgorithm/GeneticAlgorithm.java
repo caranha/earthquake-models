@@ -1,23 +1,37 @@
 package jp.ac.tsukuba.cs.conclave.geneticalgorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
+/**
+ * Implements a simple genetic algorithm
+ * 
+ * @author Claus Aranha (caranha@cs.tsukuba.ac.jp)
+ */
 public class GeneticAlgorithm {
 
 	Parameter param;
 	
 	GeneratingOperator genOp;
+	FitnessEvaluation eval;
+	
 	ArrayList<SelectionOperator> selectOpList;
 	ArrayList<Genome> population;
 	
+	Genome best;
 	
-	GeneticAlgorithm(Parameter p)
+	int maxgeneration;
+	int currentgeneration;
+	
+	
+	public GeneticAlgorithm(Parameter p)
 	{
 		selectOpList = new ArrayList<SelectionOperator>();
 		population = new ArrayList<Genome>();
 		param = p;
+		maxgeneration = Integer.parseInt(p.getParameter("generation size", null));
 	}
 	
 	
@@ -30,7 +44,22 @@ public class GeneticAlgorithm {
 	 */
 	public void initialize()
 	{
-		// TODO: Stub
+		currentgeneration = 0;
+		
+		int popsize = Integer.parseInt(param.getParameter("population size", null));
+		int count = 0;
+		
+		Genome[] newguys;
+		while (count < popsize)
+		{
+			newguys = genOp.apply(null);
+			for (int i = 0; i < newguys.length; i++)
+				population.add(newguys[i]);
+			count += newguys.length;
+		}		
+		evaluateIndividuals();
+		
+		best = population.get(0).clone();
 	}	
 	
 	/**
@@ -43,13 +72,18 @@ public class GeneticAlgorithm {
 	 */
 	public boolean runGenerations(int n)
 	{
-		// TODO: Stub
-		return false;
+		
+		while (n != 0 || !hasEnded())
+		{
+			runOneGeneration();
+			n--;
+		}
+		return hasEnded();
 	}
 	
 	public Genome getBestGenome()
 	{
-		return population.get(0);
+		return best;
 	}
 	
 	public Genome[] getAllGenome()
@@ -75,29 +109,55 @@ public class GeneticAlgorithm {
 		return ret;
 	}
 	
-	public void setGenerator(GeneratingOperator op)
+	public void addInitializationOperator(GeneratingOperator op)
 	{
 		genOp = op;
 	}
 	
-	public void addSelection(SelectionOperator op)
+	public void addSelectionOperator(SelectionOperator op)
 	{
-		op.initialize(param);
 		selectOpList.add(op);
 	}
 	
-	/**
-	 * Return true if the end condition has been reached
-	 * @return
-	 */
-	public boolean endCondition()
+	public boolean hasEnded()
 	{
-		return true;
+		return !(currentgeneration < maxgeneration);
 	}
 	
 	
-	// Private methods
+	//******** Private methods *********//
 	
+	void evaluateIndividuals()
+	{
+		for (Genome aux: population)
+			eval.evaluate(aux);
+		
+		Collections.sort(population);
+	}
 	
+	void runOneGeneration()
+	{
+		ArrayList<Genome> newpop = new ArrayList<Genome>();
+		for (SelectionOperator aux:selectOpList)
+			aux.preSelectionHook();
+		
+		int count = 0;
+		while (newpop.size() < population.size())
+		{
+			Genome[] list = selectOpList.get(count).select(population);
+			if (list != null)
+				for (int i = 0; i < list.length; i++)
+					if (newpop.size() < population.size())
+						newpop.add(list[i]);
+			count += count%selectOpList.size();
+		}
+
+		population = newpop;
+		evaluateIndividuals();
+		if (best.compareTo(population.get(0)) > 0)
+			best = population.get(0).clone();
+		
+		currentgeneration++;
+	}
 	
 }
