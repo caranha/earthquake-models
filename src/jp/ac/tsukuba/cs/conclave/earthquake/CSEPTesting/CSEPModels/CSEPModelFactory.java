@@ -34,4 +34,8 @@ public class CSEPModelFactory {
 		return factory.modelFromData(data);
 	}
 	
+	public CSEPModel modelFromRealArray(double array[])
+	{
+		return factory.modelFromRealArray(array);
+	}
 }

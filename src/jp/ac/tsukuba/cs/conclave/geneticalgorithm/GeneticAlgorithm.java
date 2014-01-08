@@ -143,7 +143,10 @@ public class GeneticAlgorithm {
 	void evaluateIndividuals()
 	{
 		for (Genome aux: population)
-			eval.evaluate(aux);
+		{
+			double result = eval.evaluate(aux);
+			aux.setFitness(result);
+		}
 		
 		Collections.sort(population);
 	}

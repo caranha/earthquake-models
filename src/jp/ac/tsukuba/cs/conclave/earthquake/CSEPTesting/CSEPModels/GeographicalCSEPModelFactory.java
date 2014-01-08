@@ -85,4 +85,18 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		return ret;
 	}
 
+
+	@Override
+	public CSEPModel modelFromRealArray(double[] array) {
+		
+		GeographicalCSEPModel ret = new GeographicalCSEPModel(startlon,startlat,deltalon,deltalat,binlon,binlat);
+		for(int i = 0; i < binlon; i++)
+			for(int j = 0; j < binlat; j++)
+			{
+				ret.bins[i][j] = 1; // + array[i*binlat+j];
+				// FIXME: make correspondence between linear double value and event size
+			}
+		return ret;
+	}
+
 }

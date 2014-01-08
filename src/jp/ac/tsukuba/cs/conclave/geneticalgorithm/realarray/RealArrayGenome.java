@@ -30,4 +30,9 @@ public class RealArrayGenome extends Genome {
 		return ret;
 	}
 
+	public double[] getGenes()
+	{
+		return genes;
+	}
+	
 }

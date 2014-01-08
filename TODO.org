@@ -2,9 +2,10 @@
 
 ** Third Work Stretch (GA Implementation)
 - [X] Create Basic GA Structure
-- [ ] Create Fitness Object for Earthquake Problem
+- [X] Create Fitness Object for Earthquake Problem
 - [ ] Testing of GA Structure
 - [ ] Simple GA Testing
+- [ ] Implement GAM compatibility
 
 - [ ] Proper Real Valued Crossover Operator
 - [ ] Initial GA Testing
