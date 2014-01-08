@@ -44,7 +44,7 @@ public class RALinearRandomGeneration implements BreedingPipeline {
 		RealArrayGenome aux = new RealArrayGenome(genesize);
 		for (int i = 0; i < genesize; i++)
 			aux.genes[i] = dice.nextDouble();
-		
+		ret.add(aux);
 		return ret;
 	}
 

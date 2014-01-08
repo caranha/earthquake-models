@@ -32,6 +32,7 @@ testing end date = 2002-01-01
 # GA Parameters
 population size = 100
 generation size = 100
+mutation chance = 0.9
 
 
 

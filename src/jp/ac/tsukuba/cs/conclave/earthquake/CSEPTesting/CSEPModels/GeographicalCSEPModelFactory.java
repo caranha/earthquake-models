@@ -93,7 +93,7 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		for(int i = 0; i < binlon; i++)
 			for(int j = 0; j < binlat; j++)
 			{
-				ret.bins[i][j] = 1; // + array[i*binlat+j];
+				ret.bins[i][j] = 1 + (int) Math.ceil(array[i*binlat+j]*10);
 				// FIXME: make correspondence between linear double value and event size
 			}
 		return ret;

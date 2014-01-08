@@ -15,10 +15,8 @@ public class RealArrayGenome extends Genome {
 	public int compareTo(Genome o) {
 		if (this.equals(o))
 			return 0;
-		if (o.getFitness() > fitness)
-			return -1;
-		else
-			return 1;
+		
+		return (int) Math.signum(o.getFitness() - this.fitness);
 	}
 
 	@Override
@@ -33,6 +31,19 @@ public class RealArrayGenome extends Genome {
 	public double[] getGenes()
 	{
 		return genes;
+	}
+	
+	public String toString()
+	{
+		String ret = "[";
+		for (int i = 0; i < genes.length; i++)
+		{
+			ret += String.format("%.3f", genes[i]);
+			if (i < genes.length-1)
+				ret += ",";
+		}
+		ret +="]";
+		return ret;
 	}
 	
 }

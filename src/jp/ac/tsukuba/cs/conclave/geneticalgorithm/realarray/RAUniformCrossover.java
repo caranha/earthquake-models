@@ -19,10 +19,17 @@ public class RAUniformCrossover implements BreedingPipeline {
 	double crossoverchance;
 	Random dice;
 	
+	public RAUniformCrossover()
+	{
+		upstream = new ArrayList<BreedingPipeline>();
+	}
+	
 	@Override
 	public void setup(Parameter p, Random d) {
 		crossoverchance = Double.parseDouble(p.getParameter("crossover chance", "0.8"));
 		dice = d;
+		for (BreedingPipeline aux: upstream)
+			aux.setup(p, d);
 	}
 
 	@Override
@@ -35,19 +42,21 @@ public class RAUniformCrossover implements BreedingPipeline {
 
 	@Override
 	public List<Genome> apply(List<Genome> parents) {
-		ArrayList<Genome> ret = new ArrayList<Genome>();
+		ArrayList<Genome> ret = new ArrayList<Genome>(2);
+		ArrayList<Genome> ret2 = new ArrayList<Genome>();
 		
 		for (BreedingPipeline aux: upstream)
-			ret.addAll(aux.apply(parents));
+			ret2.addAll(aux.apply(parents));
 		
-		if (ret.size() < 2)
+		if (ret2.size() < 2)
 		{
 			System.err.println("RAUniformCrossover Error: Not enough elements for uniform Crossover (Put this on a log)");
 			return null;
 			// TODO: Put this on a log.
 		}
 		
-		ret = (ArrayList<Genome>) ret.subList(0, 2);
+		ret.addAll(ret2.subList(0, 2));
+		
 		if (dice.nextDouble() < crossoverchance)
 		{
 			RealArrayGenome p0 = (RealArrayGenome) ret.get(0);

@@ -49,6 +49,7 @@ public class EliteSelection implements BreedingPipeline {
 		{
 			ret.add(inds.get(i).clone());
 		}
+		selectednumber = 0;
 		return ret;
 	}
 

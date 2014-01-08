@@ -27,11 +27,18 @@ public class RALinearMutation implements BreedingPipeline {
 	ArrayList<BreedingPipeline> upstream;
 	Random dice;
 	
+	public RALinearMutation()
+	{
+		upstream = new ArrayList<BreedingPipeline>();
+	}
+	
 	@Override
 	public void setup(Parameter p, Random d) {
 		mutationchance = Double.parseDouble(p.getParameter("mutation chance", "0.1"));
 		cumulativegenemutation = Double.parseDouble(p.getParameter("cumulative gene mutation", "0.5"));
 		dice = d;
+		for (BreedingPipeline aux: upstream)
+			aux.setup(p, d);
 	}
 
 	@Override
@@ -49,11 +56,11 @@ public class RALinearMutation implements BreedingPipeline {
 		for (BreedingPipeline aux: upstream)
 			ret.addAll(aux.apply(parents));
 
-		for (Genome aux: parents)
+		for (Genome aux: ret)
 			if (dice.nextDouble() < mutationchance)
 			{
 				RealArrayGenome foo = (RealArrayGenome) aux;
-				int genemutationchance = 1;
+				double genemutationchance = 1;
 				while (dice.nextDouble() < genemutationchance)
 				{
 					int choice = dice.nextInt(foo.genes.length);

@@ -3,7 +3,10 @@
 ** Third Work Stretch (GA Implementation)
 - [X] Create Basic GA Structure
 - [X] Create Fitness Object for Earthquake Problem
-- [ ] Testing of GA Structure
+- [X] Testing of GA Structure
+
+- [ ] Model Generation from genome
+
 - [ ] Simple GA Testing
 - [ ] Implement GAM compatibility
 

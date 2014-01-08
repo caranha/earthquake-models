@@ -50,11 +50,11 @@ public class TournamentSelection implements BreedingPipeline {
 			Genome aux;
 			do {
 				aux = inds.get(dice.nextInt(inds.size()));
-			} while (!tournament.contains(aux));
+			} while (tournament.contains(aux));
 			
 			tournament.add(aux);
 		}
-		
+				
 		Collections.sort(tournament);
 		ret.add(tournament.get(0).clone());
 		

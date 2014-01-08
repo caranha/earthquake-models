@@ -7,6 +7,7 @@ import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.ISODateTimeFormat;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver.GASolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
@@ -58,7 +59,8 @@ public class CSEPpredictor {
 		readParameterFile(args[0]);
 		loadDataFile();
 
-		testRandomSolver();
+		//testRandomSolver();
+		GASolver.codeTester(training_data, param, dice);
 	}
 
 	
