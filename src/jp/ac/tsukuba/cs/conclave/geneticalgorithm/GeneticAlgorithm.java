@@ -2,6 +2,8 @@ package jp.ac.tsukuba.cs.conclave.geneticalgorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
@@ -13,25 +15,29 @@ import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 public class GeneticAlgorithm {
 
 	Parameter param;
+	Random dice;
 	
-	GeneratingOperator genOp;
+	BreedingPipeline initOperator; // Generates the initial population	
+	ArrayList<BreedingPipeline> breedingOperators;
 	FitnessEvaluation eval;
-	
-	ArrayList<SelectionOperator> selectOpList;
-	ArrayList<Genome> population;
-	
+
+	ArrayList<Genome> population;	
 	Genome best;
 	
 	int maxgeneration;
 	int currentgeneration;
 	
 	
-	public GeneticAlgorithm(Parameter p)
+	public GeneticAlgorithm(Parameter p, Random d)
 	{
-		selectOpList = new ArrayList<SelectionOperator>();
+		param = p; 
+		dice = d;
+		maxgeneration = Integer.parseInt(p.getParameter("generation size", "10"));
+		
+		breedingOperators = new ArrayList<BreedingPipeline>();
+		
 		population = new ArrayList<Genome>();
 		param = p;
-		maxgeneration = Integer.parseInt(p.getParameter("generation size", null));
 	}
 	
 	
@@ -42,20 +48,27 @@ public class GeneticAlgorithm {
 	 * 
 	 * @param param
 	 */
-	public void initialize()
+	public void initializeRun()
 	{
 		currentgeneration = 0;
 		
 		int popsize = Integer.parseInt(param.getParameter("population size", null));
 		int count = 0;
 		
-		Genome[] newguys;
+		initOperator.setup(param, dice);
+		for (BreedingPipeline aux: breedingOperators)
+			aux.setup(param, dice);
+		
+		
+		List<Genome> newguys;
+		initOperator.preGenerationHook();
+		
 		while (count < popsize)
 		{
-			newguys = genOp.apply(null);
-			for (int i = 0; i < newguys.length; i++)
-				population.add(newguys[i]);
-			count += newguys.length;
+			newguys = initOperator.apply(null);
+			for (Genome aux: newguys)
+				population.add(aux);
+			count += newguys.size();
 		}		
 		evaluateIndividuals();
 		
@@ -109,14 +122,14 @@ public class GeneticAlgorithm {
 		return ret;
 	}
 	
-	public void addInitializationOperator(GeneratingOperator op)
+	public void addInitializationOperator(BreedingPipeline op)
 	{
-		genOp = op;
+		initOperator = op;
 	}
 	
-	public void addSelectionOperator(SelectionOperator op)
+	public void addSelectionOperator(BreedingPipeline op)
 	{
-		selectOpList.add(op);
+		breedingOperators.add(op);
 	}
 	
 	public boolean hasEnded()
@@ -138,18 +151,20 @@ public class GeneticAlgorithm {
 	void runOneGeneration()
 	{
 		ArrayList<Genome> newpop = new ArrayList<Genome>();
-		for (SelectionOperator aux:selectOpList)
-			aux.preSelectionHook();
+		for (BreedingPipeline aux:breedingOperators)
+			aux.preGenerationHook();
 		
 		int count = 0;
+		List<Genome> children;
 		while (newpop.size() < population.size())
 		{
-			Genome[] list = selectOpList.get(count).select(population);
-			if (list != null)
-				for (int i = 0; i < list.length; i++)
+			children = breedingOperators.get(count).apply(population);
+			if (children != null)
+				for (Genome aux:children)
 					if (newpop.size() < population.size())
-						newpop.add(list[i]);
-			count += count%selectOpList.size();
+						newpop.add(aux);
+			count = (count+1)%breedingOperators.size();
+			// TODO: check for infinite loops of non-generation
 		}
 
 		population = newpop;

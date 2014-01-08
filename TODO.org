@@ -1,8 +1,16 @@
 * CSEP Evolutionary Model Program
 
-- [ ] Simple GA Search
-- [ ] Simple model suggested years ago by Bogdan
-- [ ] Create an interface for the optimization
+** Third Work Stretch (GA Implementation)
+- [X] Create Basic GA Structure
+- [ ] Create Fitness Object for Earthquake Problem
+- [ ] Testing of GA Structure
+- [ ] Simple GA Testing
+
+- [ ] Proper Real Valued Crossover Operator
+- [ ] Initial GA Testing
+
+- [ ] Implement Simple model suggested by Bogdan
+
 
 ** First Work Stretch
 - [X] Reading earthquakes from files, filtering them by time and
@@ -24,7 +32,7 @@
 - [X] Decouple the Random Search from the CSEPModel Implementation
   - [X] CSEPModel Factory with Parameter passing
 
-** Third Work Stretch (GA Implementation)
+
 
 
 * Earthquake Browsing GUI

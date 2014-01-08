@@ -9,19 +9,28 @@ import jp.ac.tsukuba.cs.conclave.geneticalgorithm.Genome;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /**
- * Implements a uniform crossover operator
+ * Linear mutation takes each element from the parent, and
+ * changes some of the genes for random linear values. 
+ * 
+ * Parameters: 
+ * "mutation chance = 0.1"
+ * "cumulative gene mutation = 0.5"
+ * 
  * @author caranha
  *
  */
-public class RAUniformCrossover implements BreedingPipeline {
+public class RALinearMutation implements BreedingPipeline {
 
+	double mutationchance;
+	double cumulativegenemutation;
+	
 	ArrayList<BreedingPipeline> upstream;
-	double crossoverchance;
 	Random dice;
 	
 	@Override
 	public void setup(Parameter p, Random d) {
-		crossoverchance = Double.parseDouble(p.getParameter("crossover chance", "0.8"));
+		mutationchance = Double.parseDouble(p.getParameter("mutation chance", "0.1"));
+		cumulativegenemutation = Double.parseDouble(p.getParameter("cumulative gene mutation", "0.5"));
 		dice = d;
 	}
 
@@ -39,31 +48,21 @@ public class RAUniformCrossover implements BreedingPipeline {
 		
 		for (BreedingPipeline aux: upstream)
 			ret.addAll(aux.apply(parents));
-		
-		if (ret.size() < 2)
-		{
-			System.err.println("RAUniformCrossover Error: Not enough elements for uniform Crossover (Put this on a log)");
-			return null;
-			// TODO: Put this on a log.
-		}
-		
-		ret = (ArrayList<Genome>) ret.subList(0, 2);
-		if (dice.nextDouble() < crossoverchance)
-		{
-			RealArrayGenome p0 = (RealArrayGenome) ret.get(0);
-			RealArrayGenome p1 = (RealArrayGenome) ret.get(1);
-			for (int i = 0; i < p0.genes.length; i++)
-				if (dice.nextDouble() < 0.5)
+
+		for (Genome aux: parents)
+			if (dice.nextDouble() < mutationchance)
+			{
+				RealArrayGenome foo = (RealArrayGenome) aux;
+				int genemutationchance = 1;
+				while (dice.nextDouble() < genemutationchance)
 				{
-					double aux = p0.genes[i];
-					p0.genes[i] = p1.genes[i];
-					p1.genes[i] = aux;
+					int choice = dice.nextInt(foo.genes.length);
+					foo.genes[choice] = dice.nextDouble();
+					genemutationchance *= cumulativegenemutation;
 				}
-		}
-		
+			}		
 		return ret;
 	}
-
 
 	@Override
 	public void chainBreedingPipeline(BreedingPipeline bp) {
