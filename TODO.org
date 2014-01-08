@@ -4,8 +4,7 @@
 - [X] Create Basic GA Structure
 - [X] Create Fitness Object for Earthquake Problem
 - [X] Testing of GA Structure
-
-- [ ] Model Generation from genome
+- [X] Model Generation from genome
 
 - [ ] Simple GA Testing
 - [ ] Implement GAM compatibility

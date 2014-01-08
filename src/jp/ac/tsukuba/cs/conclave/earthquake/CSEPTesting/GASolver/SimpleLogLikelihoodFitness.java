@@ -11,11 +11,14 @@ public class SimpleLogLikelihoodFitness implements FitnessEvaluation {
 
 	CSEPModel events;
 	CSEPModelFactory factory;
+	double lambda;
 	
 	public SimpleLogLikelihoodFitness(CSEPModel e, CSEPModelFactory f)
 	{
 		events = e;
 		factory = f;
+		lambda = ((double)events.getTotalEvents())/events.getTotalBins();
+		lambda = lambda*2;
 	}
 	
 	@Override
@@ -37,6 +40,6 @@ public class SimpleLogLikelihoodFitness implements FitnessEvaluation {
 	CSEPModel createModelFromGenome(Genome g)
 	{
 		RealArrayGenome aux = (RealArrayGenome) g;
-		return factory.modelFromRealArray(aux.getGenes());
+		return factory.modelFromRealArray(aux.getGenes(),lambda);
 	}
 }

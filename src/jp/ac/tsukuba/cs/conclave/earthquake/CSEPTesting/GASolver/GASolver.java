@@ -13,7 +13,6 @@ import jp.ac.tsukuba.cs.conclave.geneticalgorithm.FitnessEvaluation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.Genome;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearRandomGeneration;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RAUniformCrossover;
-import jp.ac.tsukuba.cs.conclave.geneticalgorithm.selection.EliteSelection;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.selection.TournamentSelection;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
@@ -42,7 +41,6 @@ public class GASolver {
 		
 		
 		fittest = new SimpleLogLikelihoodFitness(comp, factory);
-				
 		p.addParameter("RAG gene size", Integer.toString(comp.getTotalBins()));
 		
 		ArrayList<Genome> aux = new ArrayList<Genome>();		
