@@ -18,7 +18,7 @@ public class GeographicalCSEPModel extends CSEPModel {
 	// Array of events;
 	int[][] bins;
 	int totalevents;
-	float maxevents; // bin with maximum number of events
+	int maxevents; // bin with maximum number of events
 	
 	double[] base; // base value for the SW lon/lat
 	double[] delta; // value change from base for each bin
@@ -75,11 +75,17 @@ public class GeographicalCSEPModel extends CSEPModel {
 		for (int i = 0; i < dimlength[0]; i++)
 			for (int j = 0; j < dimlength[1]; j++)
 				if (bins[i][j] > 0)		
+				try {
 					ret.drawRectangle(base[0]+i*delta[0], 
 									  base[1]+j*delta[1], 
 									  base[0]+(i+1)*delta[0], 
 									  base[1]+(j+1)*delta[1], 
 									  new Color(1f,0f,0f,(bins[i][j]+0.9f)/(maxevents+1f)));
+				} catch (IllegalArgumentException e)
+				{
+					System.err.println(bins[i][j] + " max:" +maxevents);
+					System.exit(1);
+				}
 		return ret;
 	}
 	

@@ -1,12 +1,7 @@
 * CSEP Evolutionary Model Program
 
-** Third Work Stretch (GA Implementation)
-- [X] Create Basic GA Structure
-- [X] Create Fitness Object for Earthquake Problem
-- [X] Testing of GA Structure
-- [X] Model Generation from genome
-
-- [ ] Simple GA Testing
+** Fourth Work Stretch (GA Testing)
+- [X] Simple GA Testing
 - [ ] Implement GAM compatibility
 
 - [ ] Proper Real Valued Crossover Operator
@@ -36,6 +31,12 @@
   - [X] CSEPModel Factory with Parameter passing
 
 
+
+** Third Work Stretch (GA Implementation)
+- [X] Create Basic GA Structure
+- [X] Create Fitness Object for Earthquake Problem
+- [X] Testing of GA Structure
+- [X] Model Generation from genome
 
 
 * Earthquake Browsing GUI

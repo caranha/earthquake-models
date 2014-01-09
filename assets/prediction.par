@@ -30,8 +30,8 @@ testing start date = 2001-01-01
 testing end date = 2002-01-01
 
 # GA Parameters
-population size = 100
-generation size = 100
+population size = 1000
+generation size = 1000
 mutation chance = 0.9
 
 

@@ -8,7 +8,11 @@ import java.util.Random;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /**
- * Implements a simple genetic algorithm
+ * Implements a simple genetic algorithm.
+ * 
+ * Parameters:
+ * "generation size" (default value 10)
+ * "population size" (default value 100)
  * 
  * @author Claus Aranha (caranha@cs.tsukuba.ac.jp)
  */
@@ -52,13 +56,13 @@ public class GeneticAlgorithm {
 	{
 		currentgeneration = 0;
 		
-		int popsize = Integer.parseInt(param.getParameter("population size", null));
+		int popsize = Integer.parseInt(param.getParameter("population size", "100"));
 		int count = 0;
 		
 		initOperator.setup(param, dice);
 		for (BreedingPipeline aux: breedingOperators)
 			aux.setup(param, dice);
-		
+		eval.setup(param);
 		
 		List<Genome> newguys;
 		initOperator.preGenerationHook();
@@ -86,13 +90,19 @@ public class GeneticAlgorithm {
 	public boolean runGenerations(int n)
 	{
 		
-		while (n != 0 || !hasEnded())
+		while (n > 0 && !hasEnded())
 		{
 			runOneGeneration();
 			n--;
 		}
-		return hasEnded();
+		return hasEnded();		
 	}
+	
+	public boolean hasEnded()
+	{
+		return (maxgeneration <= currentgeneration);
+	}
+
 	
 	public Genome getBestGenome()
 	{
@@ -122,20 +132,26 @@ public class GeneticAlgorithm {
 		return ret;
 	}
 	
+	public int getCurrentGeneration()
+	{
+		return currentgeneration;
+	}
+	
 	public void addInitializationOperator(BreedingPipeline op)
 	{
 		initOperator = op;
 	}
 	
-	public void addSelectionOperator(BreedingPipeline op)
+	public void addBreedingOperator(BreedingPipeline op)
 	{
 		breedingOperators.add(op);
 	}
 	
-	public boolean hasEnded()
+	public void addFitnessMeasure(FitnessEvaluation e)
 	{
-		return !(currentgeneration < maxgeneration);
+		eval = e;
 	}
+	
 	
 	
 	//******** Private methods *********//
@@ -169,7 +185,6 @@ public class GeneticAlgorithm {
 			count = (count+1)%breedingOperators.size();
 			// TODO: check for infinite loops of non-generation
 		}
-
 		population = newpop;
 		evaluateIndividuals();
 		if (best.compareTo(population.get(0)) > 0)

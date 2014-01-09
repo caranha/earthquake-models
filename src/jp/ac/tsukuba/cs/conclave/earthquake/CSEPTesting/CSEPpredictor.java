@@ -60,7 +60,7 @@ public class CSEPpredictor {
 		loadDataFile();
 
 		//testRandomSolver();
-		GASolver.codeTester(training_data, param, dice);
+		GASolver.simpleGAEvolution(training_data, param, dice);
 	}
 
 	

@@ -88,10 +88,14 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 	@Override
 	public CSEPModel modelFromRealArray(double[] array, double lambda) {		
 		GeographicalCSEPModel ret = new GeographicalCSEPModel(startlon,startlat,deltalon,deltalat,binlon,binlat);
+		ret.maxevents = 0;
 		for(int i = 0; i < binlon; i++)
 			for(int j = 0; j < binlat; j++)
 			{
 				ret.bins[i][j] = getPoisson(array[i*binlat+j], lambda);
+				if (ret.maxevents < ret.bins[i][j])
+					ret.maxevents = ret.bins[i][j];
+				ret.totalevents += ret.bins[i][j];
 			}
 		return ret;
 	}
