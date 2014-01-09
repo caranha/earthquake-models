@@ -29,11 +29,16 @@ training end date = 2001-01-01
 testing start date = 2001-01-01
 testing end date = 2002-01-01
 
-# GA Parameters
+### GA Parameters ###
 population size = 1000
-generation size = 1000
-mutation chance = 0.9
+generation size = 300
 
+mutation chance = 0.8
+cumulative gene mutation = 0.5
+
+crossover chance = 0.8
+tournament size = 5
+elite size = 1
 
 
 

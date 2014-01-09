@@ -2,13 +2,17 @@
 
 ** Fourth Work Stretch (GA Testing)
 - [X] Simple GA Testing
-- [ ] Implement GAM compatibility
-
-- [ ] Proper Real Valued Crossover Operator
-- [ ] Initial GA Testing
+- [X] Change Parameter to report missing Parameters
+- [X] Implement GAM compatibility
 
 - [ ] Implement Simple model suggested by Bogdan
+- [ ] Examine GA against Test Data
 
+- [ ] Multiple Model Fitness
+
+- [ ] Proper Real Valued Crossover Operator
+
+- [ ] Understand how Logger API works, or switch to log4j lib
 
 ** First Work Stretch
 - [X] Reading earthquakes from files, filtering them by time and

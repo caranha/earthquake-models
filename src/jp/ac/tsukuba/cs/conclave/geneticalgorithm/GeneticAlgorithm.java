@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import gam_writer.RWriter;
+import jp.ac.tsukuba.cs.conclave.utils.MathUtils;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /**
@@ -31,6 +33,9 @@ public class GeneticAlgorithm {
 	int maxgeneration;
 	int currentgeneration;
 	
+	RWriter gam_output;
+	int repetition = 0;
+	
 	
 	public GeneticAlgorithm(Parameter p, Random d)
 	{
@@ -38,10 +43,11 @@ public class GeneticAlgorithm {
 		dice = d;
 		maxgeneration = Integer.parseInt(p.getParameter("generation size", "10"));
 		
-		breedingOperators = new ArrayList<BreedingPipeline>();
-		
+		breedingOperators = new ArrayList<BreedingPipeline>();		
 		population = new ArrayList<Genome>();
 		param = p;
+		
+		gam_output = new RWriter();
 	}
 	
 	
@@ -55,6 +61,7 @@ public class GeneticAlgorithm {
 	public void initializeRun()
 	{
 		currentgeneration = 0;
+		population.clear();
 		
 		int popsize = Integer.parseInt(param.getParameter("population size", "100"));
 		int count = 0;
@@ -120,9 +127,9 @@ public class GeneticAlgorithm {
 		return getBestGenome().getFitness();
 	}
 	
-	public Double[] getAllFitness()
+	public double[] getAllFitness()
 	{
-		Double ret[] = new Double[population.size()];
+		double ret[] = new double[population.size()];
 		int i = 0;
 		for (Genome aux:population)
 		{
@@ -147,12 +154,47 @@ public class GeneticAlgorithm {
 		breedingOperators.add(op);
 	}
 	
+	public void clearBreedingOperators()
+	{
+		breedingOperators.clear();
+	}
+	
 	public void addFitnessMeasure(FitnessEvaluation e)
 	{
 		eval = e;
 	}
 	
+	public void setRepetition(int r)
+	{
+		repetition = r;
+	}
 	
+	public void GAMOutput()
+	{
+		// TODO: Encapsulate the cleaning of infinite values from here.
+		
+		gam_output.set_repetition_no(repetition);
+		gam_output.set_generation_no(currentgeneration);
+		
+		double[] genfit = getAllFitness();
+		ArrayList<Double> avvie = new ArrayList<Double>();		
+		double avg = 0;		
+		for (int i = 0; i < genfit.length;i++)
+			if (!Double.isInfinite(genfit[i]))
+			{
+				avvie.add(genfit[i]);
+				avg += genfit[i];
+			}
+		Double[] cleanfit = avvie.toArray(new Double[1]);
+		
+		gam_output.set_avg_fitness(avg/avvie.size());
+		gam_output.set_best_fitness(genfit[0]);
+		gam_output.set_fitness_stdev(MathUtils.deviation(cleanfit));
+
+		gam_output.set_diversity(0);
+		
+		gam_output.write_line();
+	}
 	
 	//******** Private methods *********//
 	

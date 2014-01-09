@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
@@ -19,7 +20,7 @@ public class DataList implements Iterable<DataPoint> {
 	
 	// FIXME: ArrayList data needs to be made private
 	public ArrayList<DataPoint> data;
-	private final static Logger logger = Logger.getLogger(DataList.class.getName());
+	static Logger logger = Logger.getLogger(DataList.class.getName());
 
 	int linecount;
 	
@@ -130,7 +131,7 @@ public class DataList implements Iterable<DataPoint> {
 			System.exit(1);
 		}
 
-		logger.info("Read "+lines_read+" lines from "+filename);		
+		logger.log(Level.FINE,"Read "+lines_read+" lines from "+filename);		
 		if (moredata)
 		{
 			Collections.sort(data);

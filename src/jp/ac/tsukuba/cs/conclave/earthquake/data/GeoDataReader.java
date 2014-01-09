@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  */
 public class GeoDataReader {
 
+	static Logger logger = Logger.getLogger(GeoDataReader.class.getName());
 	
 	public static GeoLine[] readGeoLines(String filename)
 	{
@@ -37,8 +38,6 @@ public class GeoDataReader {
 	 */
 	public static GeoLine[] readGeoLines(BufferedReader reader)
 	{
-		Logger logger = Logger.getLogger(DataList.class.getName());
-		
 		ArrayList<GeoLine> buffer = new ArrayList<GeoLine>();
 		GeoLine tmp = null;
 		

@@ -1,6 +1,7 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting;
 
 import java.util.Random;
+import java.util.logging.Logger;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
@@ -26,10 +27,13 @@ import jp.ac.tsukuba.cs.conclave.utils.Parameter;
  */
 public class CSEPpredictor {
 
+	Logger log = Logger.getLogger(CSEPpredictor.class.getName());
+	
 	public static final int EXIT_ERROR = 1;
 	public static Random dice;
-	
 
+	
+	
 	static Parameter param;
 	
 	static DataList training_data;
@@ -57,14 +61,22 @@ public class CSEPpredictor {
 		}
 		
 		readParameterFile(args[0]);
+		seedRandomGenerator();
 		loadDataFile();
-
-		//testRandomSolver();
-		GASolver.simpleGAEvolution(training_data, param, dice);
+		
+		simplega();
 	}
 
 	
-	static public void testRandomSolver()
+	static public void simplega()
+	{
+		GASolver gas = new GASolver();
+		gas.configureGA(training_data, param, dice);
+		gas.setVerbose(true);
+		gas.runGA(0);
+	}
+	
+	static public void RandomSolver()
 	{
 		RandomSolver r = new RandomSolver();
 		r.init(training_data, param);
@@ -135,7 +147,7 @@ public class CSEPpredictor {
 		double maxlon = minlon + (Double.parseDouble(param.getParameter("delta lon", "0.2"))*
 								  Integer.parseInt(param.getParameter("grid lon","20")));
 		double maxlat = minlat + (Double.parseDouble(param.getParameter("delta lat","0.2"))*
-								  Integer.parseInt(param.getParameter("drid lat","20")));
+								  Integer.parseInt(param.getParameter("grid lat","20")));
 		
 		location.setMinimum(minlon, minlat);
 		location.setMaximum(maxlon, maxlat);
@@ -150,7 +162,6 @@ public class CSEPpredictor {
 		traindate.setMaximum(formatter.parseDateTime(param.getParameter("training end date", "2001-01-01")));		
 		trainFilter.addFilter(traindate);
 		training_data = trainFilter.filter(data);
-		System.out.println(training_data.size());
 		
 		// Create the filter for the testing data
 		CompositeEarthquakeFilter testFilter = new CompositeEarthquakeFilter();
@@ -159,7 +170,6 @@ public class CSEPpredictor {
 		testdate.setMaximum(formatter.parseDateTime(param.getParameter("testing end date", "2002-01-01")));		
 		testFilter.addFilter(testdate);
 		testing_data = testFilter.filter(data);		
-		System.out.println(testing_data.size());
 	}
 	
 	static void readParameterFile(String filename)
@@ -172,8 +182,10 @@ public class CSEPpredictor {
 			System.err.println("Error reading parameter file: "+e.getMessage());
 			System.exit(EXIT_ERROR);
 		}
-		
-		// seeding the random number generator;
+	}
+	
+	static void seedRandomGenerator()
+	{
 		dice = new Random();		
 		String seed = param.getParameter("random seed", null);
 		if (seed != null)	
