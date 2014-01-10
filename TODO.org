@@ -1,16 +1,19 @@
 * CSEP Evolutionary Model Program
 
-** Fourth Work Stretch (GA Testing)
-- [X] Simple GA Testing
-- [X] Change Parameter to report missing Parameters
-- [X] Implement GAM compatibility
-
+** Fifth Work Stretch (Valuable Expermiments)
 - [ ] Implement Simple model suggested by Bogdan
-- [ ] Examine GA against Test Data
+- [ ] Test GA/Random/RI against Test Data
+  - [ ] likelihood
+  - [ ] images
+  - [ ] CSEP tests (R, N, Etc)
 
-- [ ] Multiple Model Fitness
+- [ ] Draw events on model map
+    
 
+- [ ] Fitness with multiple comparison data (predictability testing)
 - [ ] Proper Real Valued Crossover Operator
+
+- [ ] Magnitude Model (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)exi
 
 - [ ] Understand how Logger API works, or switch to log4j lib
 
@@ -41,6 +44,12 @@
 - [X] Create Fitness Object for Earthquake Problem
 - [X] Testing of GA Structure
 - [X] Model Generation from genome
+
+** Fourth Work Stretch (GA Testing)
+- [X] Simple GA Testing
+- [X] Change Parameter to report missing Parameters
+- [X] Implement GAM compatibility
+
 
 
 * Earthquake Browsing GUI

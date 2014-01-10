@@ -1,14 +1,11 @@
 package jp.ac.tsukuba.cs.conclave.earthquake;
 
-
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.joda.time.Duration;
 
-import jp.ac.tsukuba.cs.conclave.earthquake.RI.RIModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.faultmodel.FMBase;
@@ -60,12 +57,4 @@ public class TestMain {
 	}
 	
 	
-	static int[] frequencyArray(double minMag, RIModel r)
-	{
-		int[] ret = new int[r.getHighCount(minMag)+1];
-		for (int i = 0; i < r.boxsizeX; i++)
-			for (int j = 0; j < r.boxsizeY; j++)
-				ret[r.eventgrid[i][j].getEvents(minMag)]++;
-		return ret;
-	}
 }
