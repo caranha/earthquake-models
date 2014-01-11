@@ -38,4 +38,9 @@ public class CSEPModelFactory {
 	{
 		return factory.modelFromRealArray(array, lambda);
 	}
+	
+	public CSEPModel modelFromIntegerArray(int array[])
+	{
+		return factory.modelFromIntegerArray(array);
+	}
 }

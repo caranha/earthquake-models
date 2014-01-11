@@ -13,7 +13,7 @@ public class RandomSolver {
 	Parameter param;
 	CSEPModelFactory factory;
 	
-	public void init(DataList events, Parameter param)
+	public void setup(DataList events, Parameter param)
 	{
 		best = null;
 		this.param = param;

@@ -108,4 +108,30 @@ public class GeographicalCSEPModel extends CSEPModel {
 	public int getTotalBins() {
 		return dimlength[0]*dimlength[1];
 	}
+
+	@Override
+	public int getTotalLatBins() {
+		return dimlength[1];
+	}
+
+	@Override
+	public int getTotalLonBins() {
+		return dimlength[0];
+	}
+
+	@Override
+	public int getTotalMagBins() {
+		return 1;
+	}
+
+	// TODO: check for invalid parameters;
+	@Override
+	public int getEventsFromBin(int lonbin, int latbin, int magbin) {		
+		return bins[lonbin][latbin];
+	}
+
+	@Override
+	public int getEventsFromBin(int lonbin, int latbin) {
+		return bins[lonbin][latbin];
+	}
 }

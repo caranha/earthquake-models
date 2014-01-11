@@ -100,6 +100,21 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		return ret;
 	}
 	
+	@Override
+	public CSEPModel modelFromIntegerArray(int[] array) {		
+		GeographicalCSEPModel ret = new GeographicalCSEPModel(startlon,startlat,deltalon,deltalat,binlon,binlat);
+		ret.maxevents = 0;
+		for(int i = 0; i < binlon; i++)
+			for(int j = 0; j < binlat; j++)
+			{
+				ret.bins[i][j] = array[i*binlat+j];
+				if (ret.maxevents < ret.bins[i][j])
+					ret.maxevents = ret.bins[i][j];
+				ret.totalevents += ret.bins[i][j];
+			}
+		return ret;
+	}
+	
 	/**
 	 * Algorithm based on the random generation of Poissonian numbers,
 	 * based on Knuth and Numerical Recipes (7.3.12).

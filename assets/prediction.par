@@ -9,12 +9,12 @@ start lat = 37
 start lon = 140
 
 # Grid size
-grid lat = 20
-grid lon = 20
+grid lat = 40
+grid lon = 40
 
 # Grid step
-delta lat = 0.2
-delta lon = 0.2
+delta lat = 0.1
+delta lon = 0.1
 
 # Selects the type of model used by the predictor
 # modeltype options: {geographical}
@@ -40,5 +40,7 @@ crossover chance = 0.8
 tournament size = 5
 elite size = 1
 
+### RI Parameters ###
+ri s parameter = 1
 
 

@@ -3,17 +3,15 @@ package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.ISODateTimeFormat;
-
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver.GASolver;
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RISolver.RISolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.LocationFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.UnitaryDateFilter;
+import jp.ac.tsukuba.cs.conclave.earthquake.utils.DateUtils;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 /**
@@ -37,15 +35,7 @@ public class CSEPpredictor {
 	static Parameter param;
 	
 	static DataList training_data;
-	static DataList testing_data;
-	
-	// This JODA time formart understands YYYY-MM-DD [HH:mm:ss] date strings
-	static final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-		.append(ISODateTimeFormat.date().getParser())
-		.appendOptional(new DateTimeFormatterBuilder()
-			.appendLiteral(' ')
-			.append(ISODateTimeFormat.hourMinuteSecond()).toParser())
-		.toFormatter();
+	static DataList testing_data;	
 	
 	/**
 	 * @param args: an external file that dictates the parameters for this run.
@@ -64,9 +54,18 @@ public class CSEPpredictor {
 		seedRandomGenerator();
 		loadDataFile();
 		
-		simplega();
+		//simplega();
+		RIsolver();
 	}
 
+	static public void RIsolver()
+	{
+		RISolver ri = new RISolver();
+		ri.setup(param, training_data);
+		ri.execute();
+		
+		ri.getBest().getEventMap().saveToFile("RImodel.png");
+	}
 	
 	static public void simplega()
 	{
@@ -79,7 +78,7 @@ public class CSEPpredictor {
 	static public void RandomSolver()
 	{
 		RandomSolver r = new RandomSolver();
-		r.init(training_data, param);
+		r.setup(training_data, param);
 
 		CSEPModel m; 
 		int deathcount = 20;
@@ -158,16 +157,16 @@ public class CSEPpredictor {
 		// Create the filter for the training data
 		CompositeEarthquakeFilter trainFilter = new CompositeEarthquakeFilter();		
 		UnitaryDateFilter traindate = new UnitaryDateFilter();
-		traindate.setMinimum(formatter.parseDateTime(param.getParameter("training start date", "2000-01-01")));
-		traindate.setMaximum(formatter.parseDateTime(param.getParameter("training end date", "2001-01-01")));		
+		traindate.setMinimum(DateUtils.getDateTimeFormatter().parseDateTime(param.getParameter("training start date", "2000-01-01")));
+		traindate.setMaximum(DateUtils.getDateTimeFormatter().parseDateTime(param.getParameter("training end date", "2001-01-01")));		
 		trainFilter.addFilter(traindate);
 		training_data = trainFilter.filter(data);
 		
 		// Create the filter for the testing data
 		CompositeEarthquakeFilter testFilter = new CompositeEarthquakeFilter();
 		UnitaryDateFilter testdate = new UnitaryDateFilter();
-		testdate.setMinimum(formatter.parseDateTime(param.getParameter("testing start date", "2001-01-01")));
-		testdate.setMaximum(formatter.parseDateTime(param.getParameter("testing end date", "2002-01-01")));		
+		testdate.setMinimum(DateUtils.getDateTimeFormatter().parseDateTime(param.getParameter("testing start date", "2001-01-01")));
+		testdate.setMaximum(DateUtils.getDateTimeFormatter().parseDateTime(param.getParameter("testing end date", "2002-01-01")));		
 		testFilter.addFilter(testdate);
 		testing_data = testFilter.filter(data);		
 	}

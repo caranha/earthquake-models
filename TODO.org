@@ -1,23 +1,29 @@
 * CSEP Evolutionary Model Program
 
 ** Fifth Work Stretch (Valuable Expermiments)
-- [ ] Implement Simple model suggested by Bogdan
+- [X] Implement Simple model suggested by Bogdan
+  - [ ] Make Sure RI model is correct
 - [ ] Test GA/Random/RI against Test Data
   - [ ] likelihood
   - [ ] images
   - [ ] CSEP tests (R, N, Etc)
-
 - [ ] Draw events on model map
-    
-
-- [ ] Fitness with multiple comparison data (predictability testing)
+- [ ] Magnitude Model (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)exi
+- [ ] Fitness with multiple comparison data
 - [ ] Proper Real Valued Crossover Operator
 
-- [ ] Magnitude Model (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)exi
 
-- [ ] Understand how Logger API works, or switch to log4j lib
 
-** First Work Stretch
+** Issues
+- [ ] Implement a proper logging service, such as log4j, for all my projects
+- [ ] Put the DateTimeFormatter that I always use somewhere public.
+- [ ] Tri-dimensional model with magnitude is the one true model,
+  remove the others and simplify the factory.
+- [ ] Bi-dimensional models are simply 3-dimensional models with only one bin!
+  (Change later)
+
+
+** DONE First Work Stretch
 - [X] Reading earthquakes from files, filtering them by time and
   space.
 - [X] Define an interface for N-dimensional models (So I can define
@@ -31,27 +37,26 @@
 - [X] log likelihood
 - [X] Random Search
 
-** Second Work Stretch
+** DONE Second Work Stretch
 - [X] Add "Iterable" to CSEPModel Interface
   - [X] Decouple log-likelihood calculation from implementations.
 - [X] Decouple the Random Search from the CSEPModel Implementation
   - [X] CSEPModel Factory with Parameter passing
 
 
-
-** Third Work Stretch (GA Implementation)
+** DONE Third Work Stretch (GA Implementation)
 - [X] Create Basic GA Structure
 - [X] Create Fitness Object for Earthquake Problem
 - [X] Testing of GA Structure
 - [X] Model Generation from genome
 
-** Fourth Work Stretch (GA Testing)
+** DONE Fourth Work Stretch (GA Testing)
 - [X] Simple GA Testing
 - [X] Change Parameter to report missing Parameters
 - [X] Implement GAM compatibility
 
 
-
+   
 * Earthquake Browsing GUI
 ** TODO Complex Filtering Pane
 ** TODO Simple Filtering Pane

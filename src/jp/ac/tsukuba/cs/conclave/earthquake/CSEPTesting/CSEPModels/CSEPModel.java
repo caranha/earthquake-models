@@ -49,7 +49,16 @@ public abstract class CSEPModel implements Iterable<Integer> {
 	
 	public abstract MapImage getAreaMap();
 	public abstract MapImage getEventMap();	
+
 	public abstract int getTotalEvents();
 	public abstract int getTotalBins();
+	
+	public abstract int getTotalLatBins();
+	public abstract int getTotalLonBins();
+	public abstract int getTotalMagBins();
+	public abstract int getEventsFromBin(int lonbin, int latbin, int magbin);
+	public abstract int getEventsFromBin(int lonbin, int latbin);
+	
+	
 	
 }
