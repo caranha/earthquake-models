@@ -15,7 +15,7 @@
   - [ ] Molchan Test
   - [ ] ASS Test
   - [ ] ROC Test
-  - [ ] Variance in N, L, R tests
+  - [ ] Variance in N, L, R tests (variations in observed data)
 
 - [ ] Define good parameter values for experiments
   - [ ] Time Values (3 months and 1 year)

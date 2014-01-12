@@ -44,7 +44,7 @@ public class RandomSolver {
 			else
 				sdcount--;
 			
-			if (verbose && i%10000 == 0)
+			if (verbose && i%(repetitions/20) == 0)
 				System.out.print(".");
 			
 			if (sdcount == 0)

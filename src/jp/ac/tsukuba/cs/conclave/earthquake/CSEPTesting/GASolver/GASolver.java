@@ -34,6 +34,7 @@ public class GASolver {
 		while (!ga.runGenerations(1))
 		{
 			ga.GAMOutput();
+			// TODO: make periods proportional to 5% progress
 			if (verbose && (ga.getCurrentGeneration()%20 == 0))
 				System.out.print(".");
 		}

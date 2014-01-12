@@ -27,9 +27,12 @@ public class CSEPTests {
 	{
 		double sum = 0;
 		CSEPModel simulations[] = generateSimulations(Test, n);
+
 		for (int i = 0; i < n; i++)
+		{
 			if (simulations[i].getTotalEvents() <= Reference.getTotalEvents())
 				sum += 1;
+		}
 		return sum/n;
 	}
 	
@@ -41,6 +44,7 @@ public class CSEPTests {
 		CSEPModel simulations[] = generateSimulations(Test, n);
 		for (int i = 0; i < n; i++)
 		{
+
 			double simll = Test.calcLogLikelihood(simulations[i]);
 			if (simll <= baselikelihood) 
 				sum += 1;
@@ -76,7 +80,7 @@ public class CSEPTests {
 			int j = 0;
 			for (Integer aux: reference)
 			{
-				values[j] = MathUtils.getPoisson(CSEPpredictor.dice.nextDouble(), aux);
+				values[j] = MathUtils.getRandomPoisson(CSEPpredictor.dice, aux);
 				j++;
 			}
 			ret[i] = CSEPpredictor.getModelFactory().modelFromIntegerArray(values);

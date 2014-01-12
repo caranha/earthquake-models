@@ -63,13 +63,24 @@ public class CSEPpredictor {
 		CSEPModel testmodel = factory.modelFromData(testing_data);
 		testmodel.getEventMap().saveToFile("testmodel.png");
 
-		CSEPModel m;
-		m = RandomSolver();		
-		testModel(m,"RandomModel");
-		m = RIsolver();		
-		testModel(m,"RIModel");
-		m = GAsolver();		
-		testModel(m,"GAModel");
+		CSEPModel random, ri;
+		random = RandomSolver();		
+		testModel(random,"RandomModel");
+		System.out.println("L Value: "+CSEPTests.LTest(testmodel, random, 3));
+		System.out.println("N Value: "+CSEPTests.NTest(testmodel, random, 3));
+
+		ri = RIsolver();		
+		testModel(ri,"RIModel");
+		System.out.println("L Value: "+CSEPTests.LTest(testmodel, ri, 3));
+		System.out.println("N Value: "+CSEPTests.NTest(testmodel, ri, 3));
+		
+		System.out.println("R Test, Random x RI: "+CSEPTests.RTest(testmodel, random, ri, 10));
+		System.out.println("R Test, RI x Random: "+CSEPTests.RTest(testmodel, ri, random, 10));
+		
+		//m = GAsolver();		
+		//testModel(m,"GAModel");
+		
+		
 		
 	}
 

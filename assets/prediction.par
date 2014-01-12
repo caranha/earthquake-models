@@ -50,6 +50,6 @@ ri b parameter = 0.9
 ri s parameter = 5
 
 ### Random Parameters ###
-random search max = 500000
+random search max = 50000
 random death count = -1
 
