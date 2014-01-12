@@ -189,7 +189,11 @@ public class GeneticAlgorithm {
 		
 		gam_output.set_avg_fitness(avg/avvie.size());
 		gam_output.set_best_fitness(genfit[0]);
-		gam_output.set_fitness_stdev(MathUtils.deviation(cleanfit));
+		
+		if (cleanfit[0] != null)
+			gam_output.set_fitness_stdev(MathUtils.deviation(cleanfit));
+		else
+			gam_output.set_fitness_stdev(0);
 
 		gam_output.set_diversity(0);
 		

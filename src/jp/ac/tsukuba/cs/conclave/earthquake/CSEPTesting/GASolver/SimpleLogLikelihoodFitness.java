@@ -13,12 +13,12 @@ public class SimpleLogLikelihoodFitness implements FitnessEvaluation {
 	CSEPModelFactory factory;
 	double lambda;
 	
-	public SimpleLogLikelihoodFitness(CSEPModel e, CSEPModelFactory f)
+	public SimpleLogLikelihoodFitness(CSEPModel e, CSEPModelFactory f, double lambdamultiplier)
 	{
 		events = e;
 		factory = f;
 		lambda = ((double)events.getTotalEvents())/events.getTotalBins();
-		lambda = lambda*2;
+		lambda = lambda*lambdamultiplier;
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFactory;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver.GASolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RISolver.RISolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
@@ -54,7 +55,12 @@ public class CSEPpredictor {
 		seedRandomGenerator();
 		loadDataFile();
 		
-		//simplega();
+		CSEPModel trainmodel = (new CSEPModelFactory(param)).modelFromData(training_data);
+		trainmodel.getEventMap().saveToFile("trainmodel.png");
+		CSEPModel testmodel = (new CSEPModelFactory(param)).modelFromData(testing_data);
+		testmodel.getEventMap().saveToFile("testmodel.png");
+		
+		simplega();
 		RIsolver();
 	}
 
@@ -73,6 +79,8 @@ public class CSEPpredictor {
 		gas.configureGA(training_data, param, dice);
 		gas.setVerbose(true);
 		gas.runGA(0);
+		
+		gas.getBest().getEventMap().saveToFile("GAmodel.png");
 	}
 	
 	static public void RandomSolver()

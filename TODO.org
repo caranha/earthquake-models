@@ -2,15 +2,17 @@
 
 ** Fifth Work Stretch (Valuable Expermiments)
 - [X] Implement Simple model suggested by Bogdan
-  - [ ] Make Sure RI model is correct
+  - [X] Make Sure RI model is correct
+
 - [ ] Test GA/Random/RI against Test Data
   - [ ] likelihood
   - [ ] images
   - [ ] CSEP tests (R, N, Etc)
 - [ ] Draw events on model map
-- [ ] Magnitude Model (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)exi
+- [ ] Magnitude Model (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)
 - [ ] Fitness with multiple comparison data
 - [ ] Proper Real Valued Crossover Operator
+- [ ] Improve Model Generation for GA    
 
 
 

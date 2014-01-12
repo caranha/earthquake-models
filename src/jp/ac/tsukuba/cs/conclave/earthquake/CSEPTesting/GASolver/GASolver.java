@@ -18,6 +18,9 @@ public class GASolver {
 
 	GeneticAlgorithm ga;
 	boolean verbose = false;
+	CSEPModel best;
+	
+	SimpleLogLikelihoodFitness fittest;
 	
 	public void runGA(int rep)
 	{
@@ -36,16 +39,17 @@ public class GASolver {
 		}
 		if (verbose)
 			System.out.println();
+		
 	}
 	
 	public void configureGA(DataList data, Parameter p, Random d)
 	{
 		CSEPModelFactory factory = new CSEPModelFactory(p);
 		CSEPModel comparator = factory.modelFromData(data);
-		comparator.getEventMap().saveToFile("base.png");
 		p.addParameter("RAG gene size", Integer.toString(comparator.getTotalBins()));
-		SimpleLogLikelihoodFitness fittest = 
-				new SimpleLogLikelihoodFitness(comparator, factory);
+		
+		double lambdamult = Double.parseDouble(p.getParameter("lambda multiplier", "2"));
+		fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);
 		
 		// Evolutionary Operators
 		BreedingPipeline generator = new RALinearRandomGeneration();
@@ -61,6 +65,11 @@ public class GASolver {
 		ga.addBreedingOperator(elitism);
 		ga.addBreedingOperator(mutation);
 		ga.addFitnessMeasure(fittest);
+	}
+	
+	public CSEPModel getBest()
+	{
+		return fittest.createModelFromGenome(ga.getBestGenome());
 	}
 	
 	public void setVerbose(Boolean b)

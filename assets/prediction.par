@@ -3,6 +3,9 @@ datafile = data/jma_cat_2000_2012_Mth2.5_formatted.dat
 filetype = jma
 coastfile = data/coast_japan.m
 
+cutoff magnitude = 2.5
+cutoff depth = 100
+
 ## Location Parameters
 # SW Point
 start lat = 37
@@ -19,7 +22,7 @@ delta lon = 0.1
 # Selects the type of model used by the predictor
 # modeltype options: {geographical}
 modeltype = geographical
-
+magnitude bins = false
 
 # Start and End date for the training data, format YYYY-MM-DD [HH-mm-SS]
 training start date = 2000-01-01
@@ -31,7 +34,7 @@ testing end date = 2002-01-01
 
 ### GA Parameters ###
 population size = 1000
-generation size = 300
+generation size = 500
 
 mutation chance = 0.8
 cumulative gene mutation = 0.5
@@ -40,7 +43,9 @@ crossover chance = 0.8
 tournament size = 5
 elite size = 1
 
-### RI Parameters ###
-ri s parameter = 1
+lambda multiplier = 10
 
+### RI Parameters ###
+ri b parameter = 0.9
+ri s parameter = 5
 

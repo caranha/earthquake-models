@@ -111,7 +111,7 @@ public class RISolver {
 				if (PI[i][j] == 0)
 					PI[i][j] = minPI;
 				
-				PI[i][j] = totevent*((double) testtimewindow.getStandardSeconds()/(double)trainingtimewindow.getStandardSeconds()); 
+				PI[i][j] = PI[i][j]*totevent*((double) testtimewindow.getStandardSeconds()/(double)trainingtimewindow.getStandardSeconds()); 
 			}
 		
 		if (usemagnitudebins)
@@ -127,7 +127,7 @@ public class RISolver {
 			int array[] = new int[trainingmodel.getTotalBins()];
 			for (int i = 0; i < totlon; i++)
 				for (int j = 0; j < totlat; j++)
-					array[i*totlat+j] = (int) Math.round(PI[i][j]);
+					array[i*totlat+j] = (int) Math.ceil(PI[i][j]);
 			RIModel = (new CSEPModelFactory(param)).modelFromIntegerArray(array);
 		}
 	}
