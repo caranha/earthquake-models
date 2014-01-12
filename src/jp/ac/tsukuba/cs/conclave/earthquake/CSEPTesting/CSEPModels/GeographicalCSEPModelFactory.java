@@ -5,6 +5,7 @@ import java.util.Random;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPpredictor;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
+import jp.ac.tsukuba.cs.conclave.utils.MathUtils;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
 public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
@@ -95,7 +96,7 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		for(int i = 0; i < binlon; i++)
 			for(int j = 0; j < binlat; j++)
 			{
-				ret.bins[i][j] = getPoisson(array[i*binlat+j], lambda);
+				ret.bins[i][j] = MathUtils.getPoisson(array[i*binlat+j], lambda);
 				if (ret.maxevents < ret.bins[i][j])
 					ret.maxevents = ret.bins[i][j];
 				ret.totalevents += ret.bins[i][j];
@@ -118,31 +119,5 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		return ret;
 	}
 	
-	/**
-	 * Algorithm based on the random generation of Poissonian numbers,
-	 * based on Knuth and Numerical Recipes (7.3.12).
-	 * 
-	 * In the sources above, prob is actually a uniform random number 
-	 * between 0-1, sampled each iteration. I have to make sure that 
-	 * my alteration for a fixed value (to replace gene values) is 
-	 * correct...
-	 * 
-	 * @param lambda
-	 * @return
-	 */
-	int getPoisson(double prob, double lambda)
-	{
-		double L = Math.exp(-lambda);
-		int k = 0;
-		double p = 1;
 
-		do {
-			k++;
-			p = p*prob;			
-		} while (p > L);
-		
-		// The original algorithm returns k-1, but we return k to guarantee
-		// That each bin has at least one event.
-		return k;
-	}
 }

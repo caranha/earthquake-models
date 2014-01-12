@@ -37,13 +37,13 @@ population size = 1000
 generation size = 500
 
 mutation chance = 0.8
-cumulative gene mutation = 0.5
+cumulative gene mutation = 0.8
 
 crossover chance = 0.8
 tournament size = 50
 elite size = 1
 
-lambda multiplier = 10
+lambda multiplier = 2
 
 ### RI Parameters ###
 ri b parameter = 0.9

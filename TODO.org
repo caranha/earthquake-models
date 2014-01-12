@@ -4,23 +4,37 @@
 - [X] Implement Simple model suggested by Bogdan
   - [X] Make Sure RI model is correct
 
-- [ ] Test GA/Random/RI against Test Data
+- [X] Test GA/Random/RI against Test Data
   - [X] likelihood
   - [X] images (events on model map)
-  - [ ] CSEP tests (R, N, Etc)
 
+- [-] CSEP tests
+  - [X] N Test
+  - [X] L Test
+  - [X] R Test
+  - [ ] Molchan Test
+  - [ ] ASS Test
+  - [ ] ROC Test
+  - [ ] Variance in N, L, R tests
+
+- [ ] Define good parameter values for experiments
+  - [ ] Time Values (3 months and 1 year)
+  - [ ] Terrain Values (Kanto, Tohoku, Kansai, Large Areas)
+
+** Sixth Work Stretch (GA Improvements)
+- [ ] Fitness with multiple comparison data
+- [ ] Proper Real Valued Crossover Operator
+- [ ] Improve Initial Genome Generation
+
+** Seventh Woth Stretch (Three dimensional models)
 - [ ] Magnitude Modeling (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)
   - [ ] Add filter by magnitude (different for testing and training)
   - [ ] Create Magnitude based model
   - [ ] Add magnitude Model to GA Method
   - [ ] Add magnitude Model to RI Method
 
-** Sixth Work Stretch (GA Improvements)
-- [ ] Fitness with multiple comparison data
-- [ ] Proper Real Valued Crossover Operator
-- [ ] Improve Model Generation for GA    
-
-
+** Eight Stretch (Other Methods)
+- [ ] Differential Evolution
 
 ** Issues
 - [ ] Implement a proper logging service, such as log4j, for all my projects

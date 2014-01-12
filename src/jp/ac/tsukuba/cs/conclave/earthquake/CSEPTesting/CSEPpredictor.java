@@ -37,9 +37,9 @@ public class CSEPpredictor {
 	
 	
 	static Parameter param;
-	
 	static DataList training_data;
 	static DataList testing_data;	
+	static CSEPModelFactory factory;
 	
 	/**
 	 * @param args: an external file that dictates the parameters for this run.
@@ -53,12 +53,14 @@ public class CSEPpredictor {
 		}
 		
 		readParameterFile(args[0]);
+		factory = new CSEPModelFactory(param);
+		
 		seedRandomGenerator();
 		loadDataFile();
 		
-		CSEPModel trainmodel = (new CSEPModelFactory(param)).modelFromData(training_data);
+		CSEPModel trainmodel = factory.modelFromData(training_data);
 		trainmodel.getEventMap().saveToFile("trainmodel.png");
-		CSEPModel testmodel = (new CSEPModelFactory(param)).modelFromData(testing_data);
+		CSEPModel testmodel = factory.modelFromData(testing_data);
 		testmodel.getEventMap().saveToFile("testmodel.png");
 
 		CSEPModel m;
@@ -73,8 +75,8 @@ public class CSEPpredictor {
 
 	static void testModel(CSEPModel m, String modelname)
 	{
-		CSEPModel testmodel = (new CSEPModelFactory(param)).modelFromData(testing_data);
-		CSEPModel trainmodel = (new CSEPModelFactory(param)).modelFromData(training_data);
+		CSEPModel testmodel = factory.modelFromData(testing_data);
+		CSEPModel trainmodel = factory.modelFromData(training_data);
 				
 		// Output LogLikelihood Value
 		System.out.println("Log Likelihood for model "+modelname+" against train data: "+m.calcLogLikelihood(trainmodel));
@@ -123,6 +125,11 @@ public class CSEPpredictor {
 	static public Parameter getParameter()
 	{
 		return param;
+	}
+	
+	static public CSEPModelFactory getModelFactory()
+	{
+		return factory;
 	}
 	
 	// TODO: I might want to replace DataList here with Models instead
