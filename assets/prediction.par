@@ -40,7 +40,7 @@ mutation chance = 0.8
 cumulative gene mutation = 0.5
 
 crossover chance = 0.8
-tournament size = 5
+tournament size = 50
 elite size = 1
 
 lambda multiplier = 10
@@ -48,4 +48,8 @@ lambda multiplier = 10
 ### RI Parameters ###
 ri b parameter = 0.9
 ri s parameter = 5
+
+### Random Parameters ###
+random search max = 500000
+random death count = -1
 

@@ -35,11 +35,13 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		GeographicalCSEPModel ret = new GeographicalCSEPModel(startlon,startlat,deltalon,deltalat,binlon,binlat);
 		
 		// We need to guarantee that each bin has at least one event.
+		ret.maxevents = 0;
 		for (int i = 0; i < ret.dimlength[0]; i++)
 			for (int j = 0; j < ret.dimlength[1]; j++)
 			{
-				events -=1;
 				ret.bins[i][j] += 1;
+				if (ret.maxevents < ret.bins[i][j])
+					ret.maxevents = ret.bins[i][j];
 				ret.totalevents++;
 			}
 
@@ -73,6 +75,7 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 				for (int i = 0; i < ret.dimlength[1]; i++)
 					if (aux.latitude >= ret.base[1] + ret.delta[1]*i && aux.latitude < ret.base[1] + ret.delta[1]*(i+1))
 						yindex = i;
+				
 				if (xindex != -1 && yindex != -1)
 				{
 					ret.bins[xindex][yindex] += 1;
@@ -138,6 +141,8 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 			p = p*prob;			
 		} while (p > L);
 		
-		return k-1;
+		// The original algorithm returns k-1, but we return k to guarantee
+		// That each bin has at least one event.
+		return k;
 	}
 }

@@ -1,5 +1,6 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting;
 
+import java.awt.Color;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -8,10 +9,12 @@ import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFact
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver.GASolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RISolver.RISolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
+import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.LocationFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.UnitaryDateFilter;
+import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.DateUtils;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
@@ -43,8 +46,6 @@ public class CSEPpredictor {
 	 */
 	public static void main(String[] args) {
 
-		
-		// DONE: Read parameters from parameter file
 		if (args.length == 0)
 		{
 			System.err.println("Error: Parameter file not specified.");
@@ -59,59 +60,62 @@ public class CSEPpredictor {
 		trainmodel.getEventMap().saveToFile("trainmodel.png");
 		CSEPModel testmodel = (new CSEPModelFactory(param)).modelFromData(testing_data);
 		testmodel.getEventMap().saveToFile("testmodel.png");
+
+		CSEPModel m;
+		m = RandomSolver();		
+		testModel(m,"RandomModel");
+		m = RIsolver();		
+		testModel(m,"RIModel");
+		m = GAsolver();		
+		testModel(m,"GAModel");
 		
-		simplega();
-		RIsolver();
 	}
 
-	static public void RIsolver()
+	static void testModel(CSEPModel m, String modelname)
+	{
+		CSEPModel testmodel = (new CSEPModelFactory(param)).modelFromData(testing_data);
+		CSEPModel trainmodel = (new CSEPModelFactory(param)).modelFromData(training_data);
+				
+		// Output LogLikelihood Value
+		System.out.println("Log Likelihood for model "+modelname+" against train data: "+m.calcLogLikelihood(trainmodel));
+		System.out.println("Log Likelihood for model "+modelname+" against test data: "+m.calcLogLikelihood(testmodel));
+		
+		
+		
+		// Draw Testing Events
+		MapImage map = m.getEventMap();
+		for (DataPoint aux: testing_data)
+			map.drawEvent(aux, Color.BLACK, (float) aux.magnitude);
+		map.saveToFile(modelname+".png");
+		
+		// CSEP Tests
+	}
+	
+	static CSEPModel RIsolver()
 	{
 		RISolver ri = new RISolver();
 		ri.setup(param, training_data);
 		ri.execute();
 		
-		ri.getBest().getEventMap().saveToFile("RImodel.png");
+		return ri.getBest();
 	}
 	
-	static public void simplega()
+	static CSEPModel GAsolver()
 	{
 		GASolver gas = new GASolver();
 		gas.configureGA(training_data, param, dice);
 		gas.setVerbose(true);
 		gas.runGA(0);
 		
-		gas.getBest().getEventMap().saveToFile("GAmodel.png");
+		return gas.getBest();		
 	}
 	
-	static public void RandomSolver()
+	static CSEPModel RandomSolver()
 	{
 		RandomSolver r = new RandomSolver();
 		r.setup(training_data, param);
-
-		CSEPModel m; 
-		int deathcount = 20;
-		int i = 0;
-		double max = Double.NEGATIVE_INFINITY;
-		
-		while (deathcount > 0)
-		{
-			r.execute(100000);
-			m = r.getBest();
-			Double value = m.getLogLikelihood();
-			if (value > max)
-			{
-				max = value;
-				m.getEventMap().saveToFile("map"+String.format("%03d", i)+".png");
-				System.out.println("Success: "+value);
-				deathcount = 20;
-				i++;
-			}
-			else
-			{
-				deathcount --;
-				System.out.print(".");
-			}
-		}		
+		r.execute(true);
+		return r.getBest();
 	}
 	
 	

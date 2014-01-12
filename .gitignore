@@ -1,3 +1,5 @@
+outputs/
 bin/
-testmap.png
+*.png
 joda-time-2.2/src/
+

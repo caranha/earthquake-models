@@ -5,11 +5,17 @@
   - [X] Make Sure RI model is correct
 
 - [ ] Test GA/Random/RI against Test Data
-  - [ ] likelihood
-  - [ ] images
+  - [X] likelihood
+  - [X] images (events on model map)
   - [ ] CSEP tests (R, N, Etc)
-- [ ] Draw events on model map
-- [ ] Magnitude Model (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)
+
+- [ ] Magnitude Modeling (0.1 Magnitude bins: 4.0->4.1, 4.1->4.2, etc)
+  - [ ] Add filter by magnitude (different for testing and training)
+  - [ ] Create Magnitude based model
+  - [ ] Add magnitude Model to GA Method
+  - [ ] Add magnitude Model to RI Method
+
+** Sixth Work Stretch (GA Improvements)
 - [ ] Fitness with multiple comparison data
 - [ ] Proper Real Valued Crossover Operator
 - [ ] Improve Model Generation for GA    
