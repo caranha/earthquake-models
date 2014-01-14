@@ -4,8 +4,8 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 
 public class DepthFilter implements EarthquakeFilter {
-	float maximum = 0;
-	float minimum = 0;
+	double maximum = 0;
+	double minimum = 0;
 
 	/**
 	 * Sets the maximum depth for this filter (if no maximum is set, or 
@@ -13,7 +13,7 @@ public class DepthFilter implements EarthquakeFilter {
 	 * 
 	 * @param m
 	 */
-	public void setmax(float m)
+	public void setmax(double m)
 	{
 		maximum = m;
 	}
@@ -24,7 +24,7 @@ public class DepthFilter implements EarthquakeFilter {
 	 * 
 	 * @param m
 	 */
-	public void setmin(float m)
+	public void setmin(double m)
 	{
 		minimum = m;
 	}

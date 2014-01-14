@@ -12,6 +12,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolve
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
+import jp.ac.tsukuba.cs.conclave.earthquake.filtering.DepthFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.LocationFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.UnitaryDateFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.image.MapImage;
@@ -41,6 +42,8 @@ public class CSEPpredictor {
 	static DataList testing_data;	
 	static CSEPModelFactory factory;
 	
+	static String fileprefix;
+	
 	/**
 	 * @param args: an external file that dictates the parameters for this run.
 	 */
@@ -59,28 +62,21 @@ public class CSEPpredictor {
 		loadDataFile();
 		
 		CSEPModel trainmodel = factory.modelFromData(training_data);
-		trainmodel.getEventMap().saveToFile("trainmodel.png");
+		trainmodel.getEventMap().saveToFile(fileprefix+"trainmodel.png");
 		CSEPModel testmodel = factory.modelFromData(testing_data);
-		testmodel.getEventMap().saveToFile("testmodel.png");
+		testmodel.getEventMap().saveToFile(fileprefix+"testmodel.png");
 
-		CSEPModel random, ri;
-		random = RandomSolver();		
-		testModel(random,"RandomModel");
-		System.out.println("L Value: "+CSEPTests.LTest(testmodel, random, 3));
-		System.out.println("N Value: "+CSEPTests.NTest(testmodel, random, 3));
+		//CSEPModel random;
+		//random = RandomSolver();		
+		//testModel(random,fileprefix+"RandomModel");
 
+		CSEPModel ri;
 		ri = RIsolver();		
-		testModel(ri,"RIModel");
-		System.out.println("L Value: "+CSEPTests.LTest(testmodel, ri, 3));
-		System.out.println("N Value: "+CSEPTests.NTest(testmodel, ri, 3));
+		testModel(ri,fileprefix+"RIModel");
 		
-		System.out.println("R Test, Random x RI: "+CSEPTests.RTest(testmodel, random, ri, 10));
-		System.out.println("R Test, RI x Random: "+CSEPTests.RTest(testmodel, ri, random, 10));
-		
-		//m = GAsolver();		
-		//testModel(m,"GAModel");
-		
-		
+		//CSEPModel ga;
+		//ga = GAsolver();		
+		//testModel(ga,fileprefix+"GAModel");
 		
 	}
 
@@ -98,7 +94,7 @@ public class CSEPpredictor {
 		// Draw Testing Events
 		MapImage map = m.getEventMap();
 		for (DataPoint aux: testing_data)
-			map.drawEvent(aux, Color.BLACK, (float) aux.magnitude);
+			map.drawEvent(aux, Color.BLUE, (float) aux.magnitude);
 		map.saveToFile(modelname+".png");
 		
 		// CSEP Tests
@@ -169,6 +165,7 @@ public class CSEPpredictor {
 		DataList data = new DataList();
 		data.loadData(param.getParameter("datafile", null), param.getParameter("filetype", null));
 		LocationFilter location = new LocationFilter();
+		DepthFilter depth = new DepthFilter();
 		CompositeEarthquakeFilter locFilter = new CompositeEarthquakeFilter();
 		
 		double minlon = Double.parseDouble(param.getParameter("start lon", "139"));
@@ -177,10 +174,13 @@ public class CSEPpredictor {
 								  Integer.parseInt(param.getParameter("grid lon","20")));
 		double maxlat = minlat + (Double.parseDouble(param.getParameter("delta lat","0.2"))*
 								  Integer.parseInt(param.getParameter("grid lat","20")));
+		double maxdepth = Double.parseDouble(param.getParameter("cutoff depth", "100"));
 		
 		location.setMinimum(minlon, minlat);
 		location.setMaximum(maxlon, maxlat);
+		depth.setmax(maxdepth);
 		locFilter.addFilter(location);
+		locFilter.addFilter(depth);
 
 		data = locFilter.filter(data);
 		
@@ -206,6 +206,9 @@ public class CSEPpredictor {
 		param = new Parameter();
 		try	{
 			param.loadTextFile(filename);
+			param.loadTextFile(param.getParameter("geofile", "base")+".geo");
+			fileprefix = param.getParameter("fileprefix", ""); 
+
 		} catch (Exception e)
 		{
 			System.err.println("Error reading parameter file: "+e.getMessage());

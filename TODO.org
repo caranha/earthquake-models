@@ -1,5 +1,18 @@
 * CSEP Evolutionary Model Program
 
+** Issues
+- [ ] Implement a proper logging service, such as log4j, for all my projects
+- [ ] Put the DateTimeFormatter that I always use somewhere public.
+- [ ] Tri-dimensional model with magnitude is the one true model,
+  remove the others and simplify the factory.
+- [ ] Bi-dimensional models are simply 3-dimensional models with only one bin!
+  (Change later)
+- [ ] Load a secondary parameter file for data filter/geometrical definitions
+  (So I can have secondary parameter files for region definition)
+- [ ] Selection of Solvers via parameters
+- [ ] Verbose GA prints always exactly 20 periods (fluff)
+- [ ] Create "meaning table" in the risk image.
+
 ** Fifth Work Stretch (Valuable Expermiments)
 - [X] Implement Simple model suggested by Bogdan
   - [X] Make Sure RI model is correct
@@ -16,6 +29,8 @@
   - [ ] ASS Test
   - [ ] ROC Test
   - [ ] Variance in N, L, R tests (variations in observed data)
+
+- [X] Depth Filtering
 
 - [ ] Define good parameter values for experiments
   - [ ] Time Values (3 months and 1 year)
@@ -35,15 +50,6 @@
 
 ** Eight Stretch (Other Methods)
 - [ ] Differential Evolution
-
-** Issues
-- [ ] Implement a proper logging service, such as log4j, for all my projects
-- [ ] Put the DateTimeFormatter that I always use somewhere public.
-- [ ] Tri-dimensional model with magnitude is the one true model,
-  remove the others and simplify the factory.
-- [ ] Bi-dimensional models are simply 3-dimensional models with only one bin!
-  (Change later)
-
 
 ** DONE First Work Stretch
 - [X] Reading earthquakes from files, filtering them by time and
@@ -126,6 +132,8 @@
 ** DONE Issues
    - [X] Earthquakes in "draw earthquake" are ugly
    - [X] Map does not update automatically when adding earthquakes
+   - [ ] Save Program State (Open Views, names, etc)
+     - [ ] Make everything serializable and save it.
 
 
 

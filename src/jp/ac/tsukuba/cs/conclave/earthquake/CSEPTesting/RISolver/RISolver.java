@@ -46,7 +46,7 @@ public class RISolver {
 		param = p; 
 		data = l;
 		
-		Mmin = Double.parseDouble(param.getParameter("cutoff magnitude","2.5"));
+		Mmin = Double.parseDouble(param.getParameter("cutoff magnitude train","2.5"));
 		usemagnitudebins = Boolean.parseBoolean(param.getParameter("magnitude bins", "false"));
 		if (usemagnitudebins)
 		{

@@ -33,7 +33,8 @@ public class GeneticAlgorithm {
 	int maxgeneration;
 	int currentgeneration;
 	
-	RWriter gam_output;
+	boolean gamVerbose;
+	RWriter gamOutput;
 	int repetition = 0;
 	
 	
@@ -47,7 +48,8 @@ public class GeneticAlgorithm {
 		population = new ArrayList<Genome>();
 		param = p;
 		
-		gam_output = new RWriter();
+		gamVerbose = Boolean.parseBoolean(p.getParameter("gam output", "true"));
+		gamOutput = new RWriter();
 	}
 	
 	
@@ -171,10 +173,12 @@ public class GeneticAlgorithm {
 	
 	public void GAMOutput()
 	{
-		// TODO: Encapsulate the cleaning of infinite values from here.
+		if (!gamVerbose)
+			return;
 		
-		gam_output.set_repetition_no(repetition);
-		gam_output.set_generation_no(currentgeneration);
+		// TODO: Encapsulate the cleaning of infinite values from here.
+		gamOutput.set_repetition_no(repetition);
+		gamOutput.set_generation_no(currentgeneration);
 		
 		double[] genfit = getAllFitness();
 		ArrayList<Double> avvie = new ArrayList<Double>();		
@@ -187,17 +191,17 @@ public class GeneticAlgorithm {
 			}
 		Double[] cleanfit = avvie.toArray(new Double[1]);
 		
-		gam_output.set_avg_fitness(avg/avvie.size());
-		gam_output.set_best_fitness(genfit[0]);
+		gamOutput.set_avg_fitness(avg/avvie.size());
+		gamOutput.set_best_fitness(genfit[0]);
 		
 		if (cleanfit[0] != null)
-			gam_output.set_fitness_stdev(MathUtils.deviation(cleanfit));
+			gamOutput.set_fitness_stdev(MathUtils.deviation(cleanfit));
 		else
-			gam_output.set_fitness_stdev(0);
+			gamOutput.set_fitness_stdev(0);
 
-		gam_output.set_diversity(0);
+		gamOutput.set_diversity(0);
 		
-		gam_output.write_line();
+		gamOutput.write_line();
 	}
 	
 	//******** Private methods *********//
