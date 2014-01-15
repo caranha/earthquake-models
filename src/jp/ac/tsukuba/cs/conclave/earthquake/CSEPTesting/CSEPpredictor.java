@@ -79,7 +79,8 @@ public class CSEPpredictor {
 		CSEPModel ga;
 		ga = GAsolver();		
 		testModel(ga,"GAModel");
-		
+
+		// TODO: change the 5 for the "s" RI parameter
 		ga.doSmooth(5);
 		testModel(ga,"GASmooth");
 	}
