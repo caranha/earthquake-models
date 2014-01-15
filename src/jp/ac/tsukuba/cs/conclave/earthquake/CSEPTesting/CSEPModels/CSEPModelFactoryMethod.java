@@ -8,4 +8,5 @@ public interface CSEPModelFactoryMethod {
 	public CSEPModel modelFromData(DataList data);
 	public CSEPModel modelFromRealArray(double[] array, double lambda);
 	public CSEPModel modelFromIntegerArray(int[] array);
+	public CSEPModel simulationFromModel(CSEPModel reference);
 }

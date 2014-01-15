@@ -8,8 +8,8 @@ coastfile = data/coast_japan.m
 
 ## file with geographical information about the area to be tested
 # base, alljapan, kagoshima, kansai, kantocesp, kantomini, niigata, touhoku
-geofile = assets/kagoshima
-fileprefix = kagoshima_
+geofile = assets/base
+fileprefix = base_
 
 # Selects the type of model used by the predictor
 # modeltype options: {geographical}
@@ -25,7 +25,7 @@ testing start date = 2009-01-01
 testing end date = 2010-01-01
 
 ### GA Parameters ###
-GAM output = false
+GAM output = true
 population size = 1000
 generation size = 500
 

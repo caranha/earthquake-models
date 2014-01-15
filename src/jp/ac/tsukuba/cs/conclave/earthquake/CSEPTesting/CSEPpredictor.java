@@ -66,18 +66,19 @@ public class CSEPpredictor {
 		CSEPModel testmodel = factory.modelFromData(testing_data);
 		testmodel.getEventMap().saveToFile(fileprefix+"testmodel.png");
 
-		//CSEPModel random;
-		//random = RandomSolver();		
-		//testModel(random,fileprefix+"RandomModel");
+		System.out.println("Executing for area "+fileprefix);
+		
+//		CSEPModel random;
+//		random = RandomSolver();		
+//		testModel(random,"RandomModel");
 
 		CSEPModel ri;
 		ri = RIsolver();		
-		testModel(ri,fileprefix+"RIModel");
+		testModel(ri,"RIModel");
 		
-		//CSEPModel ga;
-		//ga = GAsolver();		
-		//testModel(ga,fileprefix+"GAModel");
-		
+		CSEPModel ga;
+		ga = GAsolver();		
+		testModel(ga,"GAModel");
 	}
 
 	static void testModel(CSEPModel m, String modelname)
@@ -88,14 +89,13 @@ public class CSEPpredictor {
 		// Output LogLikelihood Value
 		System.out.println("Log Likelihood for model "+modelname+" against train data: "+m.calcLogLikelihood(trainmodel));
 		System.out.println("Log Likelihood for model "+modelname+" against test data: "+m.calcLogLikelihood(testmodel));
-		
-		
+		System.out.println("AIC (?) for model "+modelname+" against test data "+(2*m.getTotalBins()-2*m.getLogLikelihood()));
 		
 		// Draw Testing Events
 		MapImage map = m.getEventMap();
 		for (DataPoint aux: testing_data)
 			map.drawEvent(aux, Color.BLUE, (float) aux.magnitude);
-		map.saveToFile(modelname+".png");
+		map.saveToFile(fileprefix+modelname+".png");
 		
 		// CSEP Tests
 	}

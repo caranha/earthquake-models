@@ -1,43 +1,48 @@
 * CSEP Evolutionary Model Program
 
 ** Issues
-- [ ] Implement a proper logging service, such as log4j, for all my projects
-- [ ] Put the DateTimeFormatter that I always use somewhere public.
 - [ ] Tri-dimensional model with magnitude is the one true model,
   remove the others and simplify the factory.
 - [ ] Bi-dimensional models are simply 3-dimensional models with only one bin!
   (Change later)
-- [ ] Load a secondary parameter file for data filter/geometrical definitions
-  (So I can have secondary parameter files for region definition)
-- [ ] Selection of Solvers via parameters
-- [ ] Verbose GA prints always exactly 20 periods (fluff)
 - [ ] Create "meaning table" in the risk image.
+- [ ] Selection of Solvers via parameters
+- [ ] Lambda Value used by fitness is actually not a property of the fitness.
+  It is used by the factory, and is dependent on the genome and the model for 
+  the training data.
+- [ ] Verbose GA prints always exactly 20 periods (fluff)
+- [ ] Implement a proper logging service, such as log4j, for all my projects
+- [ ] Put the DateTimeFormatter that I always use somewhere public.
+- [X] Load a secondary parameter file for data filter/geometrical definitions
+  (So I can have secondary parameter files for region definition)
 
 ** Fifth Work Stretch (Valuable Expermiments)
-- [X] Implement Simple model suggested by Bogdan
-  - [X] Make Sure RI model is correct
-
-- [X] Test GA/Random/RI against Test Data
-  - [X] likelihood
-  - [X] images (events on model map)
-
 - [-] CSEP tests
-  - [X] N Test
-  - [X] L Test
-  - [X] R Test
+  - [ ] AIC Analysis
+    - [ ] Make sure AIC Analysis is valid
   - [ ] Molchan Test
   - [ ] ASS Test
   - [ ] ROC Test
   - [ ] Variance in N, L, R tests (variations in observed data)
+  - [X] L Test
+  - [X] R Test
+  - [X] N Test
 
-- [X] Depth Filtering
-
-- [ ] Define good parameter values for experiments
+- [-] Define good parameter values for experiments
   - [ ] Time Values (3 months and 1 year)
-  - [ ] Terrain Values (Kanto, Tohoku, Kansai, Large Areas)
+  - [X] Terrain Values (Kanto, Tohoku, Kansai, Large Areas)
+
+- [X] Test GA/Random/RI against Test Data
+  - [X] likelihood
+  - [X] images (events on model map)
+- [X] Implement Simple model suggested by Bogdan
+  - [X] Make Sure RI model is correct
+- [X] Depth Filtering
 
 ** Sixth Work Stretch (GA Improvements)
 - [ ] Fitness with multiple comparison data
+  - [X] Fitness with multiple simulated data
+  - [ ] Fitness splitting data across time
 - [ ] Proper Real Valued Crossover Operator
 - [ ] Improve Initial Genome Generation
 
@@ -129,7 +134,7 @@
    - [X] Create Singleton for the model (Map Controller)
    - [X] Make map view the model and redraw on updates
 
-** DONE Issues
+** TODO Issues
    - [X] Earthquakes in "draw earthquake" are ugly
    - [X] Map does not update automatically when adding earthquakes
    - [ ] Save Program State (Open Views, names, etc)

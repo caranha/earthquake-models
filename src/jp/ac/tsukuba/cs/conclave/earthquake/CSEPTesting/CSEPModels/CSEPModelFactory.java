@@ -43,4 +43,9 @@ public class CSEPModelFactory {
 	{
 		return factory.modelFromIntegerArray(array);
 	}
+	
+	public CSEPModel simulationFromModel(CSEPModel reference)
+	{
+		return factory.simulationFromModel(reference);
+	}
 }

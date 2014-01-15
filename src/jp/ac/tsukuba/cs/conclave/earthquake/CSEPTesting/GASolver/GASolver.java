@@ -2,10 +2,12 @@ package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver;
 
 import java.util.Random;
 
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPpredictor;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFactory;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.BreedingPipeline;
+import jp.ac.tsukuba.cs.conclave.geneticalgorithm.FitnessEvaluation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.GeneticAlgorithm;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearMutation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearRandomGeneration;
@@ -20,7 +22,8 @@ public class GASolver {
 	boolean verbose = false;
 	CSEPModel best;
 	
-	SimpleLogLikelihoodFitness fittest;
+	//SimpleLogLikelihoodFitnessEvaluation fittest;
+	SimulatedLogLikelihoodFitness fittest;
 	
 	public void runGA(int rep)
 	{
@@ -45,12 +48,14 @@ public class GASolver {
 	
 	public void configureGA(DataList data, Parameter p, Random d)
 	{
-		CSEPModelFactory factory = new CSEPModelFactory(p);
+		CSEPModelFactory factory = CSEPpredictor.getModelFactory();
 		CSEPModel comparator = factory.modelFromData(data);
 		p.addParameter("RAG gene size", Integer.toString(comparator.getTotalBins()));
 		
 		double lambdamult = Double.parseDouble(p.getParameter("lambda multiplier", "2"));
-		fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);
+		//fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);
+		fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
+		
 		
 		// Evolutionary Operators
 		BreedingPipeline generator = new RALinearRandomGeneration();
@@ -70,6 +75,7 @@ public class GASolver {
 	
 	public CSEPModel getBest()
 	{
+		// TODO: encapsulate this
 		return fittest.createModelFromGenome(ga.getBestGenome());
 	}
 	

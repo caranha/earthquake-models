@@ -119,5 +119,17 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		return ret;
 	}
 	
+	@Override
+	public CSEPModel simulationFromModel(CSEPModel reference)
+	{
+		int values[] = new int[reference.getTotalBins()];
+		int j = 0;
+		for (Integer aux: reference)
+		{
+			values[j] = MathUtils.getRandomPoisson(CSEPpredictor.dice, aux);
+			j++;
+		}
+		return modelFromIntegerArray(values);
+	}
 
 }
