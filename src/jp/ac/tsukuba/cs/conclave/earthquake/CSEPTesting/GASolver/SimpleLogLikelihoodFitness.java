@@ -2,16 +2,13 @@ package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver;
 
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFactory;
-import jp.ac.tsukuba.cs.conclave.geneticalgorithm.FitnessEvaluation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.Genome;
-import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RealArrayGenome;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
-public class SimpleLogLikelihoodFitness implements FitnessEvaluation {
+public class SimpleLogLikelihoodFitness extends CSEPFitness {
 
 	CSEPModel events;
 	CSEPModelFactory factory;
-	double lambda;
 	
 	public SimpleLogLikelihoodFitness(CSEPModel e, CSEPModelFactory f, double lambdamultiplier)
 	{
@@ -34,12 +31,5 @@ public class SimpleLogLikelihoodFitness implements FitnessEvaluation {
 			return result;
 		else
 			return Double.NEGATIVE_INFINITY;
-	}
-
-	// FIXME: encapsulate this
-	CSEPModel createModelFromGenome(Genome g)
-	{
-		RealArrayGenome aux = (RealArrayGenome) g;
-		return factory.modelFromRealArray(aux.getGenes(),lambda);
 	}
 }

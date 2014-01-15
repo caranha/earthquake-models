@@ -79,6 +79,9 @@ public class CSEPpredictor {
 		CSEPModel ga;
 		ga = GAsolver();		
 		testModel(ga,"GAModel");
+		
+		ga.doSmooth(5);
+		testModel(ga,"GASmooth");
 	}
 
 	static void testModel(CSEPModel m, String modelname)

@@ -9,12 +9,10 @@ import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.UnitaryDateFilter;
 import jp.ac.tsukuba.cs.conclave.earthquake.utils.DateUtils;
-import jp.ac.tsukuba.cs.conclave.geneticalgorithm.FitnessEvaluation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.Genome;
-import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RealArrayGenome;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 
-public class TimeWeightedLogLikelihoodFitness implements FitnessEvaluation {
+public class TimeWeightedLogLikelihoodFitness extends CSEPFitness {
 
 	DataList data;
 	
@@ -22,8 +20,6 @@ public class TimeWeightedLogLikelihoodFitness implements FitnessEvaluation {
 	CSEPModel[] trainModels;
 	
 	CSEPModelFactory factory;
-	double lambda;
-
 	
 	public TimeWeightedLogLikelihoodFitness(DataList d, CSEPModel e, CSEPModelFactory f, double lambdamultiplier)
 	{
@@ -76,12 +72,5 @@ public class TimeWeightedLogLikelihoodFitness implements FitnessEvaluation {
 		}
 		return result;
 				
-	}
-
-	// FIXME: encapsulate this
-	CSEPModel createModelFromGenome(Genome g)
-	{
-		RealArrayGenome aux = (RealArrayGenome) g;
-		return factory.modelFromRealArray(aux.getGenes(),lambda);
 	}
 }

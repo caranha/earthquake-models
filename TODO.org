@@ -1,6 +1,7 @@
 * CSEP Evolutionary Model Program
 
 ** Issues
+- [ ] Need Copy of a CSEPModel (Factory?)
 - [ ] Tri-dimensional model with magnitude is the one true model,
   remove the others and simplify the factory.
 - [ ] Bi-dimensional models are simply 3-dimensional models with only one bin!

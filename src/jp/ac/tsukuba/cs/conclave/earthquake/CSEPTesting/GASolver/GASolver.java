@@ -21,8 +21,7 @@ public class GASolver {
 	boolean verbose = false;
 	CSEPModel best;
 	
-	//SimpleLogLikelihoodFitnessEvaluation fittest;
-	TimeWeightedLogLikelihoodFitness fittest;
+	CSEPFitness fittest;
 	
 	public void runGA(int rep)
 	{
@@ -52,6 +51,7 @@ public class GASolver {
 		p.addParameter("RAG gene size", Integer.toString(comparator.getTotalBins()));
 		
 		double lambdamult = Double.parseDouble(p.getParameter("lambda multiplier", "2"));
+
 		//fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);
 		//fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
 		fittest = new TimeWeightedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
@@ -81,6 +81,5 @@ public class GASolver {
 	public void setVerbose(Boolean b)
 	{
 		verbose = b;
-	}
-	
+	}	
 }

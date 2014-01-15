@@ -59,6 +59,7 @@ public abstract class CSEPModel implements Iterable<Integer> {
 	public abstract int getEventsFromBin(int lonbin, int latbin, int magbin);
 	public abstract int getEventsFromBin(int lonbin, int latbin);
 	
+	public abstract void doSmooth(int factor);
 	
 	
 }

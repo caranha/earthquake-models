@@ -124,7 +124,6 @@ public class GeographicalCSEPModel extends CSEPModel {
 		return 1;
 	}
 
-	// TODO: check for invalid parameters;
 	@Override
 	public int getEventsFromBin(int lonbin, int latbin, int magbin) {		
 		return bins[lonbin][latbin];
@@ -133,5 +132,39 @@ public class GeographicalCSEPModel extends CSEPModel {
 	@Override
 	public int getEventsFromBin(int lonbin, int latbin) {
 		return bins[lonbin][latbin];
+	}
+
+	@Override
+	public void doSmooth(int factor) {
+		int [][] newbin = new int[dimlength[0]][dimlength[1]];
+				
+		for (int i = 0; i < dimlength[0]; i++)
+			for (int j = 0; j < dimlength[1]; j++)
+			{
+				double bincount = 0;
+				double sum = 0;
+				for (int ii = 0; ii < 2*factor; ii++)
+					for (int jj = 0; jj < 2*factor; jj ++)
+					{
+						int di = i + ii - factor/2;
+						int dj = j + jj - factor/2;
+						if ((di >= 0 && di < dimlength[0] && dj >= 0 && dj < dimlength[1]) &&
+							 (factor > distance(di,dj,i,j)))
+						{
+							bincount++;
+							sum += bins[di][dj];
+						}
+					}
+				newbin[i][j] = (int) Math.round(sum/bincount);
+			}
+		
+		for (int i = 0; i < dimlength[0]; i++)
+			for (int j = 0; j < dimlength[1]; j++)
+				bins[i][j] = newbin[i][j];
+	}
+	
+	double distance(int x0, int y0, int x1, int y1)
+	{
+		return Math.sqrt((x0 - x1)*(x0 - x1) + (y0 - y1)*(y0 - y1));
 	}
 }
