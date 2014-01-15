@@ -46,3 +46,5 @@ ri s parameter = 5
 random search max = 500000
 random death count = -1
 
+### Fitness Parameters ###
+fitness time slices = 8

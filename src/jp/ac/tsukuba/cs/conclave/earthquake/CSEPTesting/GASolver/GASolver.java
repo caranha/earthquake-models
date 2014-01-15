@@ -7,7 +7,6 @@ import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModel;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFactory;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.BreedingPipeline;
-import jp.ac.tsukuba.cs.conclave.geneticalgorithm.FitnessEvaluation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.GeneticAlgorithm;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearMutation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearRandomGeneration;
@@ -23,7 +22,7 @@ public class GASolver {
 	CSEPModel best;
 	
 	//SimpleLogLikelihoodFitnessEvaluation fittest;
-	SimulatedLogLikelihoodFitness fittest;
+	TimeWeightedLogLikelihoodFitness fittest;
 	
 	public void runGA(int rep)
 	{
@@ -54,8 +53,8 @@ public class GASolver {
 		
 		double lambdamult = Double.parseDouble(p.getParameter("lambda multiplier", "2"));
 		//fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);
-		fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
-		
+		//fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
+		fittest = new TimeWeightedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
 		
 		// Evolutionary Operators
 		BreedingPipeline generator = new RALinearRandomGeneration();

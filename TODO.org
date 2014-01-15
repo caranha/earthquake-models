@@ -40,9 +40,9 @@
 - [X] Depth Filtering
 
 ** Sixth Work Stretch (GA Improvements)
-- [ ] Fitness with multiple comparison data
+- [X] Fitness with multiple comparison data
   - [X] Fitness with multiple simulated data
-  - [ ] Fitness splitting data across time
+  - [X] Fitness splitting data across time
 - [ ] Proper Real Valued Crossover Operator
 - [ ] Improve Initial Genome Generation
 
