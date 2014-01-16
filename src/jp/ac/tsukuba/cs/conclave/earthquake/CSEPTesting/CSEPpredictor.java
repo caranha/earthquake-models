@@ -75,14 +75,32 @@ public class CSEPpredictor {
 		CSEPModel ri;
 		ri = RIsolver();		
 		testModel(ri,"RIModel");
-		
-		CSEPModel ga;
-		ga = GAsolver();		
-		testModel(ga,"GAModel");
 
+
+
+		CSEPModel ga;
+
+		param.addParameter("fitness operator", "simple");
+		param.addParameter("crossover operator", "andx");
+		ga = GAsolver(0);
+		testModel(ga,"GA_simple_andx");
+		
+		param.addParameter("crossover operator", "uniform");
+		ga = GAsolver(1);
+		testModel(ga,"GA_simple_uniform");
+		
+		param.addParameter("fitness operator", "timeslice");
+		param.addParameter("crossover operator", "andx");
+		ga = GAsolver(2);
+		testModel(ga,"GA_timeslice_andx");
+		
+		param.addParameter("crossover operator", "uniform");
+		ga = GAsolver(3);
+		testModel(ga,"GA_timeslice_uniform");
+		
 		// TODO: change the 5 for the "s" RI parameter
-		ga.doSmooth(5);
-		testModel(ga,"GASmooth");
+		//		ga.doSmooth(5);
+		//		testModel(ga,"GASmooth");
 	}
 
 	static void testModel(CSEPModel m, String modelname)
@@ -113,13 +131,16 @@ public class CSEPpredictor {
 		return ri.getBest();
 	}
 	
-	static CSEPModel GAsolver()
+	static CSEPModel GAsolver(int rep)
 	{
+		long time = System.currentTimeMillis();
+		
 		GASolver gas = new GASolver();
 		gas.configureGA(training_data, param, dice);
 		gas.setVerbose(true);
-		gas.runGA(0);
+		gas.runGA(rep);
 		
+		System.out.println("Time Spent (s): "+(System.currentTimeMillis()-time)/1000.0);
 		return gas.getBest();		
 	}
 	
@@ -228,4 +249,7 @@ public class CSEPpredictor {
 			dice.setSeed(Long.parseLong(seed));
 	}
 
+	
+	
+	
 }

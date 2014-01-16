@@ -8,9 +8,11 @@ import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFact
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.BreedingPipeline;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.GeneticAlgorithm;
+import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RAClampValues;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearMutation;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RALinearRandomGeneration;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RAUniformCrossover;
+import jp.ac.tsukuba.cs.conclave.geneticalgorithm.realarray.RAandx;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.selection.EliteSelection;
 import jp.ac.tsukuba.cs.conclave.geneticalgorithm.selection.TournamentSelection;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
@@ -52,18 +54,51 @@ public class GASolver {
 		
 		double lambdamult = Double.parseDouble(p.getParameter("lambda multiplier", "2"));
 
-		//fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);
-		//fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
-		fittest = new TimeWeightedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
-		
+		String fitness = p.getParameter("fitness operator","simple");
+
+		switch(fitness)
+		{
+		case "simulated":
+			fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
+			break;
+		case "timeslice":
+			fittest = new TimeWeightedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
+			break;
+		case "simple":
+			fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);	
+			break;
+		default:			
+			System.err.println("Error: Crossover parameter not recognized, using uniform");
+			System.exit(CSEPpredictor.EXIT_ERROR);
+		}
+
 		// Evolutionary Operators
 		BreedingPipeline generator = new RALinearRandomGeneration();
 		BreedingPipeline elitism = new EliteSelection();
 		BreedingPipeline mutation = new RALinearMutation();
-		BreedingPipeline crossover = new RAUniformCrossover();
-		crossover.chainBreedingPipeline(new TournamentSelection());
-		crossover.chainBreedingPipeline(new TournamentSelection());
-		mutation.chainBreedingPipeline(crossover);
+		
+		String crossover = p.getParameter("crossover operator", "uniform");
+		BreedingPipeline xover;
+		switch(crossover)
+		{
+		case "andx":
+			BreedingPipeline andx = new RAandx();
+			int parents = Integer.parseInt(p.getParameter("andx parents","3"));
+			for (int i = 0; i < parents; i++)
+				andx.chainBreedingPipeline(new TournamentSelection());
+			xover = new RAClampValues();
+			xover.chainBreedingPipeline(andx);
+			break;
+		default:
+			System.err.println("Error: Crossover parameter not recognized, using uniform");
+		case "uniform":
+			xover = new RAUniformCrossover();
+			xover.chainBreedingPipeline(new TournamentSelection());
+			xover.chainBreedingPipeline(new TournamentSelection());
+			break;
+		}
+		
+		mutation.chainBreedingPipeline(xover);
 		
 		ga = new GeneticAlgorithm(p, d);
 		ga.addInitializationOperator(generator);

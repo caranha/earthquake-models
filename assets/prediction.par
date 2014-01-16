@@ -26,13 +26,19 @@ testing end date = 2010-01-01
 
 ### GA Parameters ###
 GAM output = true
-population size = 1000
-generation size = 500
+population size = 100
+generation size = 100
+
+# Fitness: simple, simulated, timeslice
+fitness operator = simple
+
+# Crossover: andx, uniform
+crossover operator = uniform
 
 mutation chance = 0.8
 cumulative gene mutation = 0.8
 
-crossover chance = 0.8
+crossover chance = 0.9
 tournament size = 50
 elite size = 1
 
@@ -48,3 +54,14 @@ random death count = -1
 
 ### Fitness Parameters ###
 fitness time slices = 8
+
+### ANDX Crossover Parameters ###
+andx parents = 4
+andx zeta = 0.5
+andx sigma = 1
+
+
+### Gene Clamp values ###
+clamp maximum value = 0.999
+clamp minimum value = 0
+
