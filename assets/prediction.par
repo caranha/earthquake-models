@@ -26,8 +26,8 @@ testing end date = 2010-01-01
 
 ### GA Parameters ###
 GAM output = true
-population size = 100
-generation size = 100
+population size = 500
+generation size = 500
 
 # Fitness: simple, simulated, timeslice
 fitness operator = simple
