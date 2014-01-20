@@ -18,6 +18,6 @@ public class DateUtils {
 				.appendLiteral(' ')
 				.append(ISODateTimeFormat.hourMinuteSecond()).toParser())
 				.toFormatter();
-		return formatter;
+		return formatter.withZoneUTC();
 	}
 }

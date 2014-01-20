@@ -3,6 +3,7 @@ package jp.ac.tsukuba.cs.conclave.earthquake.data;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
 
 public class DataPoint implements Comparable<DataPoint> {
@@ -67,7 +68,7 @@ public class DataPoint implements Comparable<DataPoint> {
 				Integer.parseInt(token[ti[type][2]]), 
 				Integer.parseInt(token[ti[type][3]]), 
 				Integer.parseInt(token[ti[type][4]]), 
-				(int) Math.floor(Double.parseDouble(token[ti[type][5]])));
+				(int) Math.floor(Double.parseDouble(token[ti[type][5]])), DateTimeZone.UTC);
 		
 		/* fnet time stamps are in UCT - converting them to Japanese time (shouldn't actually do that) */
 		if (type == 1)
@@ -108,7 +109,7 @@ public class DataPoint implements Comparable<DataPoint> {
 		latitude = o.latitude;
 		magnitude = o.magnitude;
 		depth = o.depth;
-		time = new DateTime(o.time);
+		time = new DateTime(o.time, DateTimeZone.UTC);
 		FM = o.FM;
 		S = new int[2];
 		D = new int[2];
