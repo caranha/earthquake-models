@@ -78,33 +78,7 @@ public class CSEPpredictor {
 
 		CSEPModel ga;
 		ga = GAsolver(0);
-		testModel(ga,"GAModel");
-		
-//		param.addParameter("fitness operator", "simple");
-//		param.addParameter("crossover operator", "andx");
-//		ga = GAsolver(0);
-//		testModel(ga,"GA_simple_andx");
-//		ga.doSmooth(Integer.parseInt(param.getParameter("ri s parameter","5")));
-//		testModel(ga,"GA_simple_andx_smooth");
-//		
-//		param.addParameter("crossover operator", "uniform");
-//		ga = GAsolver(1);
-//		testModel(ga,"GA_simple_uniform");
-//		ga.doSmooth(Integer.parseInt(param.getParameter("ri s parameter","5")));
-//		testModel(ga,"GA_simple_uniform_smooth");
-//		
-//		param.addParameter("fitness operator", "timeslice");
-//		param.addParameter("crossover operator", "andx");
-//		ga = GAsolver(2);
-//		testModel(ga,"GA_timeslice_andx");
-//		ga.doSmooth(Integer.parseInt(param.getParameter("ri s parameter","5")));
-//		testModel(ga,"GA_timeslice_andx_smooth");
-//		
-//		param.addParameter("crossover operator", "uniform");
-//		ga = GAsolver(3);
-//		testModel(ga,"GA_timeslice_uniform");
-//		ga.doSmooth(Integer.parseInt(param.getParameter("ri s parameter","5")));
-//		testModel(ga,"GA_timeslice_uniform_smooth");
+		testModel(ga,"GAModel");		
 	}
 
 	static void testModel(CSEPModel m, String modelname)

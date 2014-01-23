@@ -1,0 +1,367 @@
+% This .tex source is an example which *does* use
+% the .bib file (from which the .bbl file % is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission, you *NEED* to 'insert'
+% your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+
+\documentclass{sig-alternate}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\begin{document}
+
+\conferenceinfo{GECCO'14}{July 12-16,2014, Vancouver, BC, Canada.}
+\CopyrightYear{2014}
+\crdata{TBA}
+\clubpenalty=10000
+\widowpenalty=10000
+
+\title{Is it possible to generate good Earthquake Risk Models using Genetic Algorithms?}
+
+\numberofauthors{4} 
+
+\author{
+\alignauthor Blind Author 1\\
+       \affaddr{University 1}\\
+       \affaddr{Address 1}\\
+       \affaddr{Address 2}\\
+       \email{e-mail@address.com}
+\alignauthor Blind Author 2\\
+       \affaddr{University 1}\\
+       \affaddr{Address 1}\\
+       \affaddr{Address 2}\\
+       \email{e-mail@address.com}
+\and
+\alignauthor Blind Author 3\\
+       \affaddr{University 1}\\
+       \affaddr{Address 1}\\
+       \affaddr{Address 2}\\
+       \email{e-mail@address.com}
+\alignauthor Blind Author 4\\
+       \affaddr{University 1}\\
+       \affaddr{Address 1}\\
+       \affaddr{Address 2}\\
+       \email{e-mail@address.com}
+}
+
+\date{29 January 2014}
+
+
+\maketitle
+\begin{abstract}
+Understanding the mechanisms and patterns of earthquake occurrence is of
+crucial importance for assessing and mitigating the seismic risk. In this
+work we analyze the viability of using Evolutionary Computation (EC) as a
+means of generating models for the occurrence of earthquakes. Our proposal
+is made in the context of the "Collaboratory for the Study of Earthquake
+Predictability" (CSEP), an international effort to standardize the study
+and testing of earthquake forecasting models.
+
+We use a standard Genetic Algorithm (GA) with real valued genome, where
+each allele corresponds to a bin in the forecast model. The design of an
+appropriate fitness function is the main challenge for this task, and we
+test three different proposals, all based on the log-likelihood of the
+candidate model against the training data set.
+
+The resulting forecasting models are compared with statistical models
+traditionally employed by the CSEP community, using data from the
+Japan Meteorological Agency (JMA) earthquake catalog. Our results
+indicate promise for the use of GA as basis for constructing
+statistical earthquake forecast models. Based on these results, we
+identify research directions that we consider deserve more attention
+from the EC community.
+\end{abstract}
+
+% A category with the (minimum) three required fields
+\category{I.2.8}{Artificial Intelligence}{Problem Solving, Control
+  Methods and Search Heuristic Methods}
+%A category including the fourth, optional field follows...
+\category{J.2}{Computer Application}{Physical Sciences and
+  Engineering}[Earth and Atmospheric Sciences]
+
+\terms{Real World Applications}
+
+\keywords{Earthquakes, Risk Models, Genetic Algorithms, Forecasting}
+
+\section{Introduction}
+
+(Goals of the introduction, 1: Establish significance of Earthquake
+studies, and define the ``Forecast Model'' problem. Define the CESP
+and RELM initiatives. 2: Explain the difficulty of the Forecast Model
+problem and explain the motivation for use of Genetic Algorithms. 3:
+This is a little explored problem in GA, establish the scope of this
+paper. 4: Summarize the contribution and results of this paper)
+
+** Studying earthquakes is important to society. Earthquakes are
+natural events that can cause large amounts of damage both in terms of
+loss of human life, and material damages. By understanding and
+measuring the risk of earthquakes, it would be possible to guide
+policy decisions regarding construction regulations, and the
+deployment of disaster relief infrastructure.
+
+** However, the specifics of earthquake generation mechanisms are not
+yet completely understood. In this sense, the development of accurate
+models for the risk assessment of earthquake activity is a very active
+area of study.
+
+** In the study of Earthquake predictability, we highlight the RELM
+(Relative Earthquake Log-likelihood Model) and the CSEP
+
+**** Evolutionary algorithms have shown themselves to be very
+effective in hard problems, such as (...). However, the use of EC
+techniques in seismology studies, and in particular in the development
+of earthquake risk models, is extremely scarse.
+
+** We believe that a real contribution can be make by the use of
+evolutionary techniques in this field. Therefore in this paper we ****
+make a tutorial on earthquakes,
+
+*** We illustrate these ideas by designing a simple genetic algorithm
+that creates an earthquake prediction model as defined by the CSEP. We
+compare this algorithm with a ``skilless'' model (random model), and
+the RI model. Using Data from the JMA catalog between 2002 and 2010
+
+** Outline of the paper
+In section 2, we describe the Earthquake predictability problem.
+
+\section{The Earthquake Predictability Problem}
+
+Earthquake Risk Analysis is a huge area, which includes the
+development of models for earthquakes, and many other fun things. We
+are concentrating on the development of Earthquake Predictability
+Model. 
+
+In this problem, we want to create a model that, for a certain area
+during a certain time in the future, defines expected number of
+earthquakes and their respective power.
+
+   - This area is huge, we are focusing in a small sub area, which is
+   nonetheless very intersting.
+
+There are two main types of models: In the statistical models, the
+forecast is based mainly on the distribution of earthquakes of
+different magnitudes in the past. In Geophisical models, a theoretical
+model of how the seismic energy is released, and forecasts are made
+based on these models.
+
+%%% IMAGE HERE: A forecast model with the earthquakes in it.
+
+\subsection{RELM And CSEP}
+
+Description of the CSEP - collaboratory for the study of earthquake
+predictability.  It stabilish ways to analyse and compare earthquake
+predictability experiments.
+
+The CSEP define a series of standardized tests, such as RELM based
+tests (R Test, N Test, ETC)~\cite{Schorlemmer2007}, and also alarm
+based tests, such as the Molchamm Diagram, the Area Skill
+Score~\cite{Zechar2010}, etc.
+
+The CSEP determines ``testing windows'' -- one day, one month, three
+months, one year, three years.
+
+\subsection{Earthquake Predictability Model Testing}
+
+Model Definition -- bins with a number of earthquakes in them.
+
+Log Likelyhood comparison - Explanation
+
+CSEP tests - Explanation
+
+\subsection{The RI algorithm}
+
+Outline of the RI Algorithm~\cite{Nanjo2011}, and how it is often used as a benchmark
+
+
+\section{Evolutionary Computation for Earthquake Risk Analysis}
+
+%% TODO: Read Yuri's Paper list and incorporate into this text.
+Compared to other application fields, there are relatively few
+applications of Evolutionary Computation to seismology problems.
+We identify 
+
+In the field of seismology and earthquake risk analysis, the few cases
+of Evolutionary Algorithm approaches have usually taken one of two
+forms. EC is often used to estimate parameter values for seismological
+models.  These models can be used to describe and understand
+earthquakes.
+
+For example, Ramos~\cite{Ramos2011} uses Genetic Algorithms to decide
+the location of sensing stations in a seismically active area in
+Mexico. Nicknam et. al~\cite{Nicknam2010} and Kennett and
+Sambridge~\cite{Kennett1992} used evolutionary computation to
+determine the Fault Model parameters (such as epicenter location,
+strike, dip, etc) of a given earthquake. Evolutionary Computation has
+also been used to estimate the peak ground accelleration of
+seismically active areas~\cite{Kermani2009, Cabalar2009}.
+
+EC has also been used very few times as a method to generate seismic
+forecast model. One such approach is described by Zhang and
+Wang~\cite{Zhang2012}, where they fine tune a Neural Network with a
+GA, and then use this system to produce a forecast. Unfortunately that
+work did not provide enough information to reproduce the proposed
+GA+ANN system or their results.
+
+\section{A Forecast Model Using Genetic Algorithms}
+
+To investigate the ability of Evolutionary Computation to generate
+earthquake forecast models, we design and test a simple Genetic
+Algorithm. Let us call this system the \emph{GAModel}.
+
+An individual in GAModel will encode a forecast model as defined in
+the CSEP framework~(\ref{CSEP_definition}). The population will be
+trained on earthquake occurrence data for a fixed training period. The
+best generated individual will be compared with a model generated by
+the RI algorithm, and a skilless (random) model. This comparison is
+based on earthquake occurrence data for a test period immediately
+posterior to the training period.
+
+By encoding the entire forecast model as one individual, we identified
+two main concerns while designing GAModel: First, as the forecast
+model contains a large number of bins, the genome of an individual
+will be respectively large. Evolutionary operators and parameters must
+be chosen carefully to guarantee convergence in a reasonable time, and
+avoid local optima.
+
+Secondly, the design of the fitness function deserves a lot of
+attention, to avoid the risk of the system overfitting to the training
+data.
+
+\subsection{Genome Representation}
+
+In GAModel, each individual represents an entire forecast model. The
+genome is a real valued array $X$, where each element corresponds to
+one bin in the desired model (the number of bins is defined by the
+problem). Each element $x_i \in X$ can take a value from $[0,1)$. In
+  the initial population, these values are sampled from a uniform
+  distribution.
+
+In the CSEP framework, a model is defined as a set of integer valued
+expectations, corresponding to the number of predicted earthquakes for
+each bin. To convert from the real valued chromossome to a integer
+forecast, we use a modification of the Poisson deviates extraction
+algorithm from~\cite{NumericalRecipes}~(Chapter 7.3.12).
+
+\begin{algorithm}
+  \caption{Obtain a poisson deviate from a $[0,1)$ value}
+  \label{InversePoisson}
+  \begin{algorithmic}
+    \STATE Parameters $0 \leq x < 1, \mu \geq 0$
+    \STATE $L \gets \exp{(-\mu)}, k \gets 0, prob \gets 1$
+    \REPEAT 
+    \STATE $\text{increment }k$
+    \STATE $prob \gets prob*x$
+    \UNTIL{$prob > L$}
+    \RETURN $k$
+  \end{algorithmic}
+\end{algorithm}
+
+In Algorithm~\ref{InversePoisson}, $x$ is the value taken from the
+chromossome, and $\mu$ is the average number of earthquakes observed
+across the entire training data. Note that in the original algorithm,
+$k-1$ is returned. Because the log likelihood calculation used for
+model comparison discards models that estimate 0 events in bins where
+earthquakes are observed, we modify the original algorithm here to
+make sure all bins estimate at least one event. 
+
+%% TODO: If We have space -- Explain that \mu is resized if the time
+%% intervals are different between the training and the testing data
+%% sets.
+
+\subsection{Fitness Function Choice}
+
+\subsection{Evolutionary Operators and Parameters}
+
+GAModel uses a regular generational genetic algorithm. For selection,
+we use Elitism and Tournament selection. 
+
+For the crossover operator we use \emph{aNDX}, recently proposed by
+Someya~\cite{Someya2013}. If the value of a chromossome after the
+crossover falls outside the $(0,1]$ boundary, it is truncated to these
+  limits. For the mutation operator, we sample entirely new values
+  from $(0,1]$ for each mutated chromossome.
+
+The parameters used for the evolutionary computation are described in
+Table~\ref{GAParameters}. %% TODO: We chose these parameters
+                          %% because...  BLABLABLA
+
+\begin{table}[!h]
+  \caption{Parameters for GAModel}
+  \label{GAParameters}
+  \begin{center}
+  \begin{tabular}{|l|r|}
+    \hline
+    Population Size & 1000\\
+    Generation Number & 500\\
+    Elite Size & 1\\
+    Tournament Size & 50\\
+    Crossover Chance & 0.9\\
+    aNDX parents & 4\\
+    aNDX zeta & 0.5\\
+    aNDX sigma & 1\\
+    Mutation Chance (individual) & 0.8\\
+    Mutation Chance (chromossome) & (genome size)$^{-1}$\\
+    \hline    
+  \end{tabular}
+  \end{center}
+\end{table}
+
+
+\section{Experiments}
+
+\subsection{Experimental Data}
+
+%% Where the data came from
+We took the data from the JMA catalog, and we divided it into regions
+and dates, using the following filters.
+
+%% Images with the japanese regions that we have choosen
+We use the following regions - All japan, an assortment of land
+regions, and a mixed land-sear region to see how the algorithm
+behaves.
+
+%% Reasons for choosing these regions
+Land-locked region, blablabla.
+
+%% Time of the data
+After dividing the data spatially, we divide it temporally too.
+
+
+\subsection{Experimental Design}
+
+*** What do we want to find out?
+    - Is it possible to find a good model using our GA proposal?
+      (evolution testing)
+    - Is our simple proposal acceptable as a Predictability model?
+      (Comparison with traditional models)
+*** Description of the experiments and analysis made
+    - Data description
+    - Time period description
+    - Comparison metric descriptions and reasoning
+      - Log Likelihood
+      - Visual Comparison
+      - Molcham Diagram
+      - ASS
+    - Comparison Methods (RI, Random) description and reasoning
+
+\subsection{Results}
+
+\section{Conclusion}
+-- Conclusions and Future Work
+   - Development of the current idea
+   - Involvement of the community (De-clustering, Parameter optimization)
+   - Please let's work with earthquakes!
+   - GP
+\subsection{Future Work}
+
+
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{earthquake}
+
+%\balancecolumns
+\end{document}

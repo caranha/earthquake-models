@@ -1,6 +1,8 @@
 * CSEP Evolutionary Model Program
 
 ** Issues
+- [ ] Save and Load Models from file (problem how to deal with bin 
+  definition)
 - [ ] Need Copy of a CSEPModel (Factory?)
 - [ ] Tri-dimensional model with magnitude is the one true model,
   remove the others and simplify the factory.
@@ -145,3 +147,4 @@
 
 
 
+   
