@@ -88,19 +88,26 @@ from the EC community.
 
 \section{Introduction}
 
-(Goals of the introduction, 1: Establish significance of Earthquake
-studies, and define the ``Forecast Model'' problem. Define the CESP
-and RELM initiatives. 2: Explain the difficulty of the Forecast Model
-problem and explain the motivation for use of Genetic Algorithms. 3:
-This is a little explored problem in GA, establish the scope of this
-paper. 4: Summarize the contribution and results of this paper)
+Earthquakes pose a huge risk for human society, in their potential for
+large scale loss of life and destruction of infra-structure. In the
+last decade, large earthquakes such as Sumatra (2004), Kashmir (2005),
+Sichuan (2008) and Tohoku (2011) caused terrible amounts of casualties.
 
-** Studying earthquakes is important to society. Earthquakes are
-natural events that can cause large amounts of damage both in terms of
-loss of human life, and material damages. By understanding and
-measuring the risk of earthquakes, it would be possible to guide
-policy decisions regarding construction regulations, and the
-deployment of disaster relief infrastructure.
+Therefore, it is crucially important to understand the patterns and
+mechanisms behind the occurrence of earthquakes. These may allow us to
+create better seismic risk forecast models, with general information
+about about when and how often large earthquakes are expected to
+happen. Such information can be put to good use for mitigating damage
+through urban planning, civil engineering codes, emergency
+preparedness, et cetera.
+
+%TODO:
+% - Outline of earthquake model research
+% - Prediction models
+% -- RELM and CESP
+
+% - GA contributions (a few in other 
+
 
 ** However, the specifics of earthquake generation mechanisms are not
 yet completely understood. In this sense, the development of accurate
@@ -122,59 +129,82 @@ make a tutorial on earthquakes,
 *** We illustrate these ideas by designing a simple genetic algorithm
 that creates an earthquake prediction model as defined by the CSEP. We
 compare this algorithm with a ``skilless'' model (random model), and
-the RI model. Using Data from the JMA catalog between 2002 and 2010
+the RI model. Using Data from the JMA catalog between 2000 and 2012
+
+** Our Results
+
+-- Our main goal is to understand X
 
 ** Outline of the paper
 In section 2, we describe the Earthquake predictability problem.
 
-\section{The Earthquake Predictability Problem}
 
-Earthquake Risk Analysis is a huge area, which includes the
-development of models for earthquakes, and many other fun things. We
-are concentrating on the development of Earthquake Predictability
-Model. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Earthquake Prediction Problem}
 
-In this problem, we want to create a model that, for a certain area
-during a certain time in the future, defines expected number of
-earthquakes and their respective power.
+- What is the Earthquake Prediction Problem
 
-   - This area is huge, we are focusing in a small sub area, which is
-   nonetheless very intersting.
+%% What is the CSEP
+In this context, the Collaboratory Study for Earthquake Predictability
+(CSEP) is a global project to support rigorous research into the
+forecast models of earthquake rupture processes.  
 
-There are two main types of models: In the statistical models, the
-forecast is based mainly on the distribution of earthquakes of
-different magnitudes in the past. In Geophisical models, a theoretical
-model of how the seismic energy is released, and forecasts are made
-based on these models.
+%% What does it do
+
+%% Why it is important for us
+
+In order to objectively compare forecasts 
+
+\subsection{Earthquake Forecast Model}
+
+In the CSEP framework, a testable forecast model is defined by a
+geographical region and a time period of interest. 
+
+The region will be divided in bins
+
+
+
+
+A good forecast model will...
 
 %%% IMAGE HERE: A forecast model with the earthquakes in it.
 
-\subsection{RELM And CSEP}
+\subsection{The CSEP Tests}
 
-Description of the CSEP - collaboratory for the study of earthquake
-predictability.  It stabilish ways to analyse and compare earthquake
-predictability experiments.
+The CSEP framework uses six different tests to compare earthquake
+forecasts. These are divided into two groups: log-likelihood based
+tests, and alarm based tests.
 
-The CSEP define a series of standardized tests, such as RELM based
-tests (R Test, N Test, ETC)~\cite{Schorlemmer2007}, and also alarm
-based tests, such as the Molchamm Diagram, the Area Skill
-Score~\cite{Zechar2010}, etc.
 
-The CSEP determines ``testing windows'' -- one day, one month, three
-months, one year, three years.
 
-\subsection{Earthquake Predictability Model Testing}
+R-Test, N-Test, L-Test\cite{Schorlemmer2007} - Based on the log
+likelihood. -- takes into account number of events
 
-Model Definition -- bins with a number of earthquakes in them.
+Molchann Diagram, ASS Test and ROC test\cite{Zechar2010} - Considers both the
+number of missed earthquakes, and the coverage of the model. -- does not take into account events
 
-Log Likelyhood comparison - Explanation
+%% TODO: We are still having some problems defining exactly how many
+%% events are predicted, so we use the Molchan and ASS test in this paper
 
-CSEP tests - Explanation
+\subsection{The Relative Intensity Algorithm}
 
-\subsection{The RI algorithm}
+The Relative Intensity (RI) algorithm is a commonly used benchmark for
+earthquake prediction models~\cite{Nanjo2011}. In this paper, we use
+it as goalpost to assess the suitability of evolutionary computation
+for this problem.
 
-Outline of the RI Algorithm~\cite{Nanjo2011}, and how it is often used
-as a benchmark
+The working assumption behind the RI is that larger earthquakes are
+more likely to occur at locations of high seismicity in the
+past. Accordingly, the RI algorithm will estimate the number of
+earthquakes in a bin based on the number of earthquakes observed in
+the past for that bin, plus an attenuation factor that takes into
+account the seismicity of neighboring bins.
+
+For more details on the implementation of the RI, please see the paper
+by Nanjo~\cite{Nanjo2011}. In the experiments in this paper, we use
+the following parameters: $b = 0.8$ and $s = 5$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Evolutionary Computation for Earthquake Risk Analysis}
@@ -385,8 +415,8 @@ crossover falls outside the $(0,1]$ boundary, it is truncated to these
   \begin{center}
   \begin{tabular}{|l|r|}
     \hline
-    Population Size & 1000\\
-    Generation Number & 500\\
+    Population Size & 500\\
+    Generation Number & 100\\
     Elite Size & 1\\
     Tournament Size & 50\\
     Crossover Chance & 0.9\\
@@ -424,8 +454,8 @@ Agency's (JMA) catalog. The catalog lists earthquakes recorded by the
 sensing station network in Japan, along with the time, magnitude,
 latitude, longitude and depth of the hypocenter.
 
-The part of the catalog used in this work spans a period from 1997 to
-2013, and has over 300.000 recorded earthquakes over the Japanese
+The part of the catalog used in this work spans a period from 2000 to
+2013, and has over 220.000 earthquakes recorded in the Japanese
 archipelago. In order to better understand the predictive power of
 GAModel, we divide the catalog into 5 areas, which are used in the
 experiments below. The relative position and size of these areas can
@@ -452,11 +482,11 @@ by the proposed method.
 
 We define a ``scenario'' as a region and a forecast period. In this
 experiment, we will test 5 regions (all japan, pacific, kanto, tohoku,
-kansai), and 8 one-year periods (from 2004 to 2012), for a total of 40
+kansai), and 7 one-year periods (from 2005 to 2012), for a total of 40
 scenarios.
 
 Each scenario has a corresponding training window, which consists of
-the 6 years prior to the scenario's forecast time. This training
+the 5 years prior to the scenario's forecast time. This training
 period is used by the RI algorithm and by the proposed method to
 generate their respectives forecasts. For the sake of statistical
 testing, we generate 20 forecasts using the GAModel. Unless noted
@@ -468,7 +498,7 @@ log-likelihood between the forecast and the testing data, Using the
 ASS value, and visually by comparing the forecast maps of some
 significative scenarios.
 
-\subsection{Forecast Model comparison}
+\subsection{Results and Comparison of forecast models}
 
 %% TODO: Table with all the log likelihood results
 %% Indicate whether the difference between RI and GA is statistically significant
@@ -488,12 +518,19 @@ significative scenarios.
 -- We choose the parameters hapzardly - a more careful parameter
 selection might improve the result (or at least the running time)
 
--- Conclusions and Future Work
-   - Development of the current idea
-   - Involvement of the community (De-clustering, Parameter optimization)
-   - Please let's work with earthquakes!
-   - GP
+
+-- There is a large number of problems related to the development of
+forecast models: Parameter optimization, model construction,
+earthquake clustering, etc.
+
+-- On the evolutionary side, we think GA or ANNs might be a good idea.
+
+-- We encourage people to work on this with us.
+
 \subsection{Future Work}
+
+
+
 
 \section*{Acknowledgements}
 
