@@ -1,6 +1,10 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -61,6 +65,11 @@ public class CSEPpredictor {
 		seedRandomGenerator();
 		loadDataFile();
 		
+		GARepetitionTest();
+	}
+
+	static void defaultTest()
+	{
 		CSEPModel trainmodel = factory.modelFromData(training_data);
 		trainmodel.getEventMap().saveToFile(fileprefix+"trainmodel.png");
 		CSEPModel testmodel = factory.modelFromData(testing_data);
@@ -78,9 +87,75 @@ public class CSEPpredictor {
 
 		CSEPModel ga;
 		ga = GAsolver(0);
-		testModel(ga,"GAModel");		
+		testModel(ga,"GAModel");
 	}
+	
+	static void GARepetitionTest()
+	{
+		CSEPModel testmodel = factory.modelFromData(testing_data);
+		CSEPModel trainmodel = factory.modelFromData(training_data);
+		writeModelFile(testmodel,"testdata");
+		int repetitions = Integer.parseInt(param.getParameter("repetition number", "1"));
+		
+		// Executing all the models
+		CSEPModel random = RandomSolver();
+		CSEPModel ri = RIsolver();
+				
+		CSEPModel[] gaNDX = new CSEPModel[repetitions];
+		CSEPModel[] gaUNI = new CSEPModel[repetitions];
+		
+		System.out.print("Running GA:");
+		param.addParameter("crossover operator","andx");
+		int count = 0;
+		for (int i = 0; i < repetitions; i++)
+		{
+			System.out.print("#");
+			gaNDX[i] = GAsolver(count);
+			count++;
+		}
 
+		param.addParameter("crossover operator","uniform");
+		for (int i = 0; i < repetitions; i++)
+		{
+			System.out.print("$");
+			gaUNI[i] = GAsolver(count);
+			count++;
+		}
+		
+		// Printing out the data
+		System.out.println("\n*** RESULTS ***");
+		System.out.print("Random Model: LL Train: "+random.calcLogLikelihood(trainmodel)+" LL Test: "+random.calcLogLikelihood(testmodel));
+		System.out.print("RI Model: LL Train: "+ri.calcLogLikelihood(trainmodel)+" LL Test: "+ri.calcLogLikelihood(testmodel));
+		eventMapWithTestQuakes(random,"random");
+		writeModelFile(random,"random");
+		eventMapWithTestQuakes(ri,"RI");
+		writeModelFile(ri,"RI");
+		
+		System.out.println("GA Model with ANDX: ");
+		System.out.print("(Train)");
+		for(int i = 0; i < repetitions; i++)
+			System.out.print(" "+gaNDX[i].calcLogLikelihood(trainmodel));
+		System.out.print("\n(Test)");
+		for(int i = 0; i < repetitions; i++)
+		{
+			System.out.print(" "+gaNDX[i].calcLogLikelihood(testmodel));
+			eventMapWithTestQuakes(gaNDX[i],"gaNDX_"+i);
+			writeModelFile(gaNDX[i],"gaNDX_"+i);
+		}
+		
+		System.out.println("\nGA Model with Uniform: ");
+		System.out.print("(Train)");
+		for(int i = 0; i < repetitions; i++)
+			System.out.print(" "+gaUNI[i].calcLogLikelihood(trainmodel));
+		System.out.print("\n(Test)");
+		for(int i = 0; i < repetitions; i++)
+		{
+			System.out.print(" "+gaUNI[i].calcLogLikelihood(testmodel));
+			eventMapWithTestQuakes(gaUNI[i],"gaUNI_"+i);
+			writeModelFile(gaUNI[i],"gaUNI_"+i);
+		}
+	}	
+	
 	static void testModel(CSEPModel m, String modelname)
 	{
 		CSEPModel testmodel = factory.modelFromData(testing_data);
@@ -92,13 +167,37 @@ public class CSEPpredictor {
 		System.out.println("AIC (?) for model "+modelname+" against test data "+(2*m.getTotalBins()-2*m.getLogLikelihood()));
 		
 		// Draw Testing Events
+		eventMapWithTestQuakes(m,modelname);
+	}
+	
+	static void eventMapWithTestQuakes(CSEPModel m, String name)
+	{
 		MapImage map = m.getEventMap();
 		for (DataPoint aux: testing_data)
 			map.drawEvent(aux, Color.BLUE, (float) aux.magnitude);
-		map.saveToFile(fileprefix+modelname+".png");
-		
-		// CSEP Tests
+		map.saveToFile(fileprefix+name+".png");
 	}
+	
+	static void writeModelFile(CSEPModel m, String name)
+	{
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(fileprefix+name+".txt"), "utf-8"));
+			
+			writer.write("CSEP Model "+fileprefix+name+"\n");
+			writer.write(m.getTotalBins()+" Bins\n");
+			for (Integer aux:m)
+				writer.write(aux+"\n");
+		} catch (IOException ex) {
+			// report
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception ex) {}
+		}
+	}
+	
 	
 	static CSEPModel RIsolver()
 	{
@@ -111,14 +210,10 @@ public class CSEPpredictor {
 	
 	static CSEPModel GAsolver(int rep)
 	{
-		long time = System.currentTimeMillis();
-		
 		GASolver gas = new GASolver();
 		gas.configureGA(training_data, param, dice);
-		gas.setVerbose(true);
+		gas.setVerbose(false);
 		gas.runGA(rep);
-		
-		System.out.println("Time Spent (s): "+(System.currentTimeMillis()-time)/1000.0);
 		return gas.getBest();		
 	}
 	

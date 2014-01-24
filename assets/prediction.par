@@ -2,7 +2,8 @@
 # random seed = 10
 
 #### Data Filtering Parameters
-datafile = data/jma_cat_2000_2012_Mth2.5_formatted.dat
+#datafile = data/jma_cat_2000_2012_Mth2.5_formatted.dat
+datafile = data/jmacat_20000101_20131115_Mth2.5.dat
 filetype = jma
 coastfile = data/coast_japan.m
 
@@ -18,19 +19,21 @@ magnitude bins = false # Remove this later
 
 # Start and End date for the training data, format YYYY-MM-DD [HH-mm-SS]
 training start date = 2000-01-01
-training end date = 2009-01-01
+training end date = 2005-01-01
 
 # Start and End date for the testing data, format YYYY-MM-DD [HH-mm-SS]
-testing start date = 2009-01-01
-testing end date = 2010-01-01
+testing start date = 2005-01-01
+testing end date = 2006-01-01
 
 ### GA Parameters ###
+population size = 50
+generation number = 50
+
 GAM output = true
-population size = 500
-generation size = 500
+repetition number = 20
 
 # Fitness: simple, simulated, timeslice
-fitness operator = simple
+fitness operator = timeslice
 
 # Crossover: andx, uniform
 crossover operator = uniform
@@ -49,11 +52,11 @@ ri b parameter = 0.9
 ri s parameter = 5
 
 ### Random Parameters ###
-random search max = 500000
+random search max = 100
 random death count = -1
 
 ### Fitness Parameters ###
-fitness time slices = 8
+fitness time slices = 5
 
 ### ANDX Crossover Parameters ###
 andx parents = 4

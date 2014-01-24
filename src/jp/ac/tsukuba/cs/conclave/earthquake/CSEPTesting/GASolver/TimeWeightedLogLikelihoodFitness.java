@@ -26,8 +26,9 @@ public class TimeWeightedLogLikelihoodFitness extends CSEPFitness {
 		data = d;
 		mainEvent = e;
 		factory = f;
-		lambda = ((double)mainEvent.getTotalEvents())/mainEvent.getTotalBins();
-		lambda = lambda*lambdamultiplier;
+		// Old Lambda calculation
+//		lambda = ((double)mainEvent.getTotalEvents())/mainEvent.getTotalBins();
+//		lambda = lambda*lambdamultiplier;
 	}
 	
 	@Override
@@ -43,6 +44,7 @@ public class TimeWeightedLogLikelihoodFitness extends CSEPFitness {
 		DateTime end = DateUtils.getDateTimeFormatter().parseDateTime(param.getParameter("training start date", "2000-01-01"));
 		DateTime start;
 		
+		lambda = 0;
 		for (int i = 0; i < n; i++)
 		{
 			start = end;
@@ -54,7 +56,10 @@ public class TimeWeightedLogLikelihoodFitness extends CSEPFitness {
 			sliceFilter.addFilter(slicedate);
 			
 			trainModels[i] = factory.modelFromData(sliceFilter.filter(data));
+			lambda = +((double)trainModels[i].getTotalEvents())/trainModels[i].getTotalBins();
 		}
+		
+		lambda = lambda/4;
 	}
 
 	@Override

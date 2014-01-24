@@ -27,23 +27,16 @@ public class GASolver {
 	
 	public void runGA(int rep)
 	{
-		if (verbose)
-			System.out.println("Initializing GA");
 		ga.initializeRun();
 		ga.setRepetition(rep);
 		
-		if (verbose)
-			System.out.print("Running GA: ");
 		while (!ga.runGenerations(1))
 		{
 			ga.GAMOutput();
 			// TODO: make periods proportional to 5% progress
-			if (verbose && (ga.getCurrentGeneration()%20 == 0))
+			if (verbose && (ga.getCurrentGeneration()%50 == 0))
 				System.out.print(".");
 		}
-		if (verbose)
-			System.out.println();
-		
 	}
 	
 	public void configureGA(DataList data, Parameter p, Random d)

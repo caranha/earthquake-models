@@ -42,7 +42,7 @@ public class GeneticAlgorithm {
 	{
 		param = p; 
 		dice = d;
-		maxgeneration = Integer.parseInt(p.getParameter("generation size", "10"));
+		maxgeneration = Integer.parseInt(p.getParameter("generation number", "10"));
 		
 		breedingOperators = new ArrayList<BreedingPipeline>();		
 		population = new ArrayList<Genome>();
