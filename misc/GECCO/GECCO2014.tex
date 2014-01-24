@@ -155,7 +155,7 @@ forecast models of earthquake rupture processes.
 
 In order to objectively compare forecasts 
 
-\subsection{Earthquake Forecast Model}
+\subsection{Earthquake Forecast Model}\label{CSEP_definition}
 
 In the CSEP framework, a testable forecast model is defined by a
 geographical region and a time period of interest. 
@@ -175,18 +175,34 @@ The CSEP framework uses six different tests to compare earthquake
 forecasts. These are divided into two groups: log-likelihood based
 tests, and alarm based tests.
 
+%% REDUCE THE EXPLANATION HERE IF WE NEED SPACE
+Log likelihood tests are based on a direct analysis of the similarity
+between the forecast and the actual earthquake
+catalog~\cite{Schorlemmer2007}. A Poissonian probability distribution
+function is used to measure the likelihood between the forecast and
+the data. Three statistical tests are defined using this metric: the
+\emph{L-test}, which compares a forecast with the data, the
+\emph{N-test}, which compares the total number of earthquakes forecast
+with the total number of observed earthquakes, and the \emph{R-test},
+which compares multiple forecasts at the same time. These tests
+require that all the forecasts being compared have the same number and
+size of bins.
 
+Alarm based tests, on the other hand, are based on a treshold
+analysis~\cite{Zechar2010}. All bins with forecast values above the
+treshold are added to an ``alarm set''. The tests generate two values:
+a miss rate $v$, the proportion of earthquakes in the data that
+occurred in bins outside the alarm set; and the coverage rate $\tau$,
+the proportion of the total bins in the model covered by the alarm
+set. Three alarm based tests are defined: the \emph{Molcham Diagram}
+draws a path of $v$ and $\tau$ based on varying values of the
+treshold, the \emph{Area Skill Score (ASS)} summarizes a Molcham
+Diagram into a single number. A Receiver Operating Characteristic
+(ROC) can also be drawn using method of analysis. These testes do not
+take into account the total number of earthquakes, either from the
+forecast or the data.
 
-R-Test, N-Test, L-Test\cite{Schorlemmer2007} - Based on the log
-likelihood. -- takes into account number of events
-
-Molchann Diagram, ASS Test and ROC test\cite{Zechar2010} - Considers both the
-number of missed earthquakes, and the coverage of the model. -- does not take into account events
-
-%% TODO: We are still having some problems defining exactly how many
-%% events are predicted, so we use the Molchan and ASS test in this paper
-
-\subsection{The Relative Intensity Algorithm}
+\subsection{The Relative Intensity Algorithm} %% DONE
 
 The Relative Intensity (RI) algorithm is a commonly used benchmark for
 earthquake prediction models~\cite{Nanjo2011}. In this paper, we use
@@ -205,14 +221,8 @@ by Nanjo~\cite{Nanjo2011}. In the experiments in this paper, we use
 the following parameters: $b = 0.8$ and $s = 5$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 \section{Evolutionary Computation for Earthquake Risk Analysis}
-
-%% TODO: Read Yuri's Paper list and incorporate into this text.
-Compared to other application fields, there are relatively few
-applications of Evolutionary Computation to seismology problems.
-We identify 
+%% Partially done. Need to Merge with Yuri's version.
 
 In the field of seismology and earthquake risk analysis, the few cases
 of Evolutionary Algorithm approaches have usually taken one of two
@@ -510,6 +520,8 @@ significative scenarios.
 
 %% TODO: If there is not enough space, indicate that extra results
 %% will be left as additional material
+
+%% TODO: Justify the use of Molcham Diagrams and ASS
 
 \section{Conclusion}
 
