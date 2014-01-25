@@ -147,26 +147,28 @@ last section.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Earthquake Prediction Problem}
+%% TO Review
 
-% Because of the large amount of study works, drawing from many
-% different sources, there is a need for a standardization of testing.
+In the field of seismology, there is a large number of model proposals
+for earthquake forecasting. These range from methods based on
+geophisical principles to purely statistical algorithms.
 
-% This is where the CSEP comes in.
-
-
-%%%%%
-
-(WRITE) What is the Earthquake Prediction Problem
-
-%% What is the CSEP
 In this context, the Collaboratory Study for Earthquake Predictability
-(CSEP) is a global project to support rigorous research into the
-forecast models of earthquake rupture processes.  
+(CSEP)\footnote{http://www.cseptesting.org} proposes a methodology for
+rigorous scientific testing of these widely varying models. The main
+form of this testing is through distributed virtual
+laboratories~\cite{Nanjo2011b}, to which multiple research groups
+submit their forecast methods. However, the CSEP also makes its
+testing suite publicly available, so that researchers can develop and
+test their models.
 
-(WRITE) What does it do (defines standard tests and experiments)
+In many application domains, the lack of an unified testing protocol
+means that comparing methods developed by different research groups
+can be a great burden. The CSEP framework allows us to easily and
+objectively compare our proposed algorithms with other approaches.
 
-(WRITE) Why this is relevant for us EC researchers.
-In order to objectively compare forecasts 
+The CSEP testing framework defines how to represent a forecast, and
+defines 6 statistical tests. These will be briefly outlined below.
 
 \subsection{Earthquake Forecast Model}\label{CSEP_definition} 
 %% TO REVIEW
@@ -198,7 +200,7 @@ of expected earthquakes for that bin. A good forecast is that which
 the number of estimated earthquakes in each bin corresponds to the
 actual number of earthquakes that occurs in the target time period.
 
-\subsection{The CSEP Tests} 
+\subsection{Comparison Testing} 
 %% TO REVIEW, 2nd paragraph can be reduced if needed.
 
 The CSEP framework uses six different tests to compare earthquake
@@ -233,6 +235,7 @@ forecast or the data.
 
 \subsection{The Relative Intensity Algorithm}
 %% TO REVIEW
+%% TODO: maybe move this to experimental design.
 
 The Relative Intensity (RI) algorithm is a commonly used benchmark for
 earthquake prediction models~\cite{Nanjo2011}. In this paper, we use
@@ -455,7 +458,7 @@ crossover falls outside the $(0,1]$ boundary, it is truncated to these
   limits. For the mutation operator, we sample entirely new values
   from $(0,1]$ for each mutated chromossome.
 
-\begin{table}[!h]
+\begin{table}[!ht]
   \begin{center}
   \begin{tabular}{|l|r|}
     \hline
