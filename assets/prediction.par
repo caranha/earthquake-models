@@ -30,7 +30,7 @@ population size = 500
 generation number = 100
 
 GAM output = true
-repetition number = 20
+repetition number = 1
 
 # Fitness: simple, simulated, timeslice
 fitness operator = timeslice

@@ -87,6 +87,7 @@ from the EC community.
 \keywords{Earthquakes, Risk Models, Genetic Algorithms, Forecasting}
 
 \section{Introduction}
+%% TO REVIEW
 
 Earthquakes pose a huge risk for human society, in their potential for
 large scale loss of life and destruction of infra-structure. In the
@@ -94,40 +95,46 @@ last decade, large earthquakes such as Sumatra (2004), Kashmir (2005),
 Sichuan (2008) and Tohoku (2011) caused terrible amounts of casualties.
 
 Therefore, it is crucially important to understand the patterns and
-mechanisms behind the occurrence of earthquakes. These may allow us to
-create better seismic risk forecast models, with general information
-about about when and how often large earthquakes are expected to
+mechanisms behind the occurrence of earthquakes. This knowledge may
+allow us to create better seismic risk forecast models, indicating
+where, when and how often large earthquakes are expected to
 happen. Such information can be put to good use for mitigating damage
 through urban planning, civil engineering codes, emergency
 preparedness, et cetera.
 
-% - Outline of earthquake model research
-% - Prediction models
-% - CSEP
-(WRITE) However, the specifics of earthquake generation mechanisms are not
-yet completely understood. In this sense, the development of accurate
-models for the risk assessment of earthquake activity is a very active
-area of study.
+Still, earthquake prediction is still a largely unsolved problem, and
+the specific geological mechanisms behind earthquake generation are
+not completely understood. Therefore this is a very active topic of
+research in the seismology community. There are many proposed models,
+drawing from both geophysical principles and statistical analysis of
+previous seismic activity.
 
-(WRITE) In the study of Earthquake predictability, we highlight the RELM
-(Relative Earthquake Log-likelihood Model) and the CSEP
+%% TODO: CITE HUMIES
+Surprisingly enough, applications of Evolutionary Computation (EC) for
+this problem have been few and far between. Given that EC has some
+times managed to find better solutions than humans for many hard
+problems, we wonder if Artificial Evolution might not be able to find
+something that humans are missing.
 
-% - EC is so sucessful, but is not used here.
-(WRITE) Evolutionary algorithms have shown themselves to be very
-effective in hard problems, such as (...). However, the use of EC
-techniques in seismology studies, and in particular in the development
-of earthquake risk models, is extremely scarse.
+Therefore, the goal of this paper is to explore the suitability of
+Evolutionary Computation to the problem of earthquake forecast
+generation. To this end, we outline the problem as understood today,
+with a focus on the ``best practices'' suggested by the
+\emph{Collaboratory for the Study of Earthquake Predictability} (CSEP)
+for testing earthquake forecast models.
 
-(WRITE) We believe that a real contribution can be make by the use of
-evolutionary techniques in this field. Therefore in this paper we make
-a tutorial on earthquakes,
+Using this information, we design and implement a simple Genetic
+Algorithm that evolves a forecast model, the \emph{GAModel}. We
+compare the GAModel with the Relative Intensity (RI) algorithm and an
+information-less forecast. These comparisons use the CSEP-recommended
+Area Skill Score (ASS) test, using data from the Japanese
+Metereological Agency (JMA) between 2005 and 2012.
 
-(WRITE) We illustrate these ideas by designing a simple genetic algorithm
-that creates an earthquake prediction model as defined by the CSEP. We
-compare this algorithm with a ``skilless'' model (random model), and
-the RI model. Using Data from the JMA catalog between 2000 and 2012
-
-(WRITE) Our Results
+The GA-based forecasts are generally competitive when compared to the
+RI algorithm, even though they still have difficulty in some of the
+harder scenarios. The results shows that while there is vast room for
+improvement, Evolutionary Algorithm approaches definitely have
+potential to collaborate with the study of Earthquake Predictability.
 
 %% I hate this kind of paragraph.
 Section 2 of this papers outlines the earthquake prediction
@@ -140,6 +147,14 @@ last section.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Earthquake Prediction Problem}
+
+% Because of the large amount of study works, drawing from many
+% different sources, there is a need for a standardization of testing.
+
+% This is where the CSEP comes in.
+
+
+%%%%%
 
 (WRITE) What is the Earthquake Prediction Problem
 

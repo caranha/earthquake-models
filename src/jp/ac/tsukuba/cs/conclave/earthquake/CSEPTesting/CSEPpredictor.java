@@ -94,19 +94,6 @@ public class CSEPpredictor {
 		System.out.println(ASSTesting.calculateAreaSkillScore(ri, testmodel));
 		System.out.println(ASSTesting.calculateAreaSkillScore(ga, testmodel));
 		
-//		List<double[]> l;
-//		l = ASSTesting.calculateMolchanTrajectory(random, testmodel);
-//		for (double[] aux:l)
-//			System.out.println(aux[0]+" "+aux[1]);
-//		System.out.println("===");
-//		l = ASSTesting.calculateMolchanTrajectory(ri, testmodel);
-//		for (double[] aux:l)
-//			System.out.println(aux[0]+" "+aux[1]);
-//		System.out.println("===");
-//		l = ASSTesting.calculateMolchanTrajectory(ga, testmodel);
-//		for (double[] aux:l)
-//			System.out.println(aux[0]+" "+aux[1]);
-		
 		
 	}
 	
