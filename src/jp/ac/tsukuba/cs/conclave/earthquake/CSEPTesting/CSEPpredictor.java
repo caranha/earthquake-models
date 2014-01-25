@@ -65,7 +65,10 @@ public class CSEPpredictor {
 		seedRandomGenerator();
 		loadDataFile();
 		
-		GARepetitionTest();
+		CSEPModel trainmodel = factory.modelFromData(training_data);
+		trainmodel.getAreaMap().saveToFile(fileprefix+"_map.png");
+		
+		//GARepetitionTest();
 	}
 
 	static void defaultTest()

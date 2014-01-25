@@ -142,7 +142,7 @@ In section 2, we describe the Earthquake predictability problem.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Earthquake Prediction Problem}
 
-- What is the Earthquake Prediction Problem
+(WRITE) What is the Earthquake Prediction Problem
 
 %% What is the CSEP
 In this context, the Collaboratory Study for Earthquake Predictability
@@ -155,27 +155,43 @@ forecast models of earthquake rupture processes.
 
 In order to objectively compare forecasts 
 
-\subsection{Earthquake Forecast Model}\label{CSEP_definition}
+\subsection{Earthquake Forecast Model}\label{CSEP_definition} 
+%% TO REVIEW
 
-In the CSEP framework, a testable forecast model is defined by a
-geographical region and a time period of interest. 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{img/kantomap.png}
+  \end{center}
+  \caption{Target area for the Kanto region and its bins}
+  \label{fig:kantomap}
+\end{figure}
 
-The region will be divided in bins
+The forecast target is defined as a geographical region, a starting
+date and an ending date. A forecast model will estimate the number
+(and sometimes the magnitude) of earthquakes happening within this
+target time/space.
 
+A forecast is composed of \emph{bins}. Each bins represents a
+geographical interval, measured in latitude and longitude, and
+sometimes a magnitude interval. 
 
+For example, in this paper we define the ``kanto'' region as as the
+area covered by latitude N34.8 to N36.3, and longitude E138.8 to
+E140.3. This area is divided into 2025 (45x45) bins of approximately
+$5km^2$ (Figure~\ref{fig:kantomap}).
 
+For each bin in the forecast we associate a (positive, integer) number
+of expected earthquakes for that bin. A good forecast is that which
+the number of estimated earthquakes in each bin corresponds to the
+actual number of earthquakes that occurs in the target time period.
 
-A good forecast model will...
-
-%%% IMAGE HERE: A forecast model with the earthquakes in it.
-
-\subsection{The CSEP Tests}
+\subsection{The CSEP Tests} 
+%% TO REVIEW, 2nd paragraph can be reduced if needed.
 
 The CSEP framework uses six different tests to compare earthquake
 forecasts. These are divided into two groups: log-likelihood based
 tests, and alarm based tests.
 
-%% REDUCE THE EXPLANATION HERE IF WE NEED SPACE
 Log likelihood tests are based on a direct analysis of the similarity
 between the forecast and the actual earthquake
 catalog~\cite{Schorlemmer2007}. A Poissonian probability distribution
@@ -202,7 +218,8 @@ Diagram into a single number. A Receiver Operating Characteristic
 take into account the total number of earthquakes, either from the
 forecast or the data.
 
-\subsection{The Relative Intensity Algorithm} %% DONE
+\subsection{The Relative Intensity Algorithm}
+%% TO REVIEW
 
 The Relative Intensity (RI) algorithm is a commonly used benchmark for
 earthquake prediction models~\cite{Nanjo2011}. In this paper, we use
@@ -220,9 +237,8 @@ For more details on the implementation of the RI, please see the paper
 by Nanjo~\cite{Nanjo2011}. In the experiments in this paper, we use
 the following parameters: $b = 0.8$ and $s = 5$.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Evolutionary Computation for Earthquake Risk Analysis}
-%% Partially done. Need to Merge with Yuri's version.
+%% TO REVIEW, needs to merge with Yuri's data
 
 In the field of seismology and earthquake risk analysis, the few cases
 of Evolutionary Algorithm approaches have usually taken one of two
@@ -246,7 +262,8 @@ GA, and then use this system to produce a forecast. Unfortunately that
 work did not provide enough information to reproduce the proposed
 GA+ANN system or their results.
 
-\section{A Forecast Model Using Genetic Algorithms} %% DONE
+\section{A Forecast Model Using Genetic Algorithms} 
+%% TO REVIEW
 
 To investigate the ability of Evolutionary Computation to generate
 earthquake forecast models, we design and test a simple Genetic
@@ -271,10 +288,11 @@ Secondly, the design of the fitness function deserves a lot of
 attention, to avoid the risk of the system overfitting to the training
 data.
 
-\subsection{Genome Representation} %% DONE
-
-%% TODO: Define bin here (as well as in the problem definition), if
-%% there is enough space
+\subsection{Genome Representation}
+%% TO REVIEW
+% IF space: add that mu can be adjusted if the intervals of test and
+% train are different.
+% IF space: might want to add a review of the bin definition
 
 In GAModel, each individual represents an entire forecast model. The
 genome is a real valued array $X$, where each element corresponds to

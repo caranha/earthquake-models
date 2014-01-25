@@ -9,8 +9,8 @@ coastfile = data/coast_japan.m
 
 ## file with geographical information about the area to be tested
 # base, alljapan, kagoshima, kansai, kantocesp, kantomini, niigata, touhoku
-geofile = assets/base
-fileprefix = base_
+geofile = assets/touhoku
+fileprefix = touhoku_
 
 # Selects the type of model used by the predictor
 # modeltype options: {geographical}
