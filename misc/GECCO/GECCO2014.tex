@@ -101,43 +101,42 @@ happen. Such information can be put to good use for mitigating damage
 through urban planning, civil engineering codes, emergency
 preparedness, et cetera.
 
-%TODO:
 % - Outline of earthquake model research
 % - Prediction models
-% -- RELM and CESP
-
-% - GA contributions (a few in other 
-
-
-** However, the specifics of earthquake generation mechanisms are not
+% - CSEP
+(WRITE) However, the specifics of earthquake generation mechanisms are not
 yet completely understood. In this sense, the development of accurate
 models for the risk assessment of earthquake activity is a very active
 area of study.
 
-** In the study of Earthquake predictability, we highlight the RELM
+(WRITE) In the study of Earthquake predictability, we highlight the RELM
 (Relative Earthquake Log-likelihood Model) and the CSEP
 
-**** Evolutionary algorithms have shown themselves to be very
+% - EC is so sucessful, but is not used here.
+(WRITE) Evolutionary algorithms have shown themselves to be very
 effective in hard problems, such as (...). However, the use of EC
 techniques in seismology studies, and in particular in the development
 of earthquake risk models, is extremely scarse.
 
-** We believe that a real contribution can be make by the use of
-evolutionary techniques in this field. Therefore in this paper we ****
-make a tutorial on earthquakes,
+(WRITE) We believe that a real contribution can be make by the use of
+evolutionary techniques in this field. Therefore in this paper we make
+a tutorial on earthquakes,
 
-*** We illustrate these ideas by designing a simple genetic algorithm
+(WRITE) We illustrate these ideas by designing a simple genetic algorithm
 that creates an earthquake prediction model as defined by the CSEP. We
 compare this algorithm with a ``skilless'' model (random model), and
 the RI model. Using Data from the JMA catalog between 2000 and 2012
 
-** Our Results
+(WRITE) Our Results
 
--- Our main goal is to understand X
-
-** Outline of the paper
-In section 2, we describe the Earthquake predictability problem.
-
+%% I hate this kind of paragraph.
+Section 2 of this papers outlines the earthquake prediction
+problem. Section 3 reviews how Evolutionary Computation has been used
+up until now in the context of seismic research. In section 4, we
+detail the Genetic Algorithm system for generating forecast models. In
+section 5 we compare the performance of this system with the RI
+algorithm, and the implications of the results are discussed in the
+last section.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Earthquake Prediction Problem}
@@ -149,10 +148,9 @@ In this context, the Collaboratory Study for Earthquake Predictability
 (CSEP) is a global project to support rigorous research into the
 forecast models of earthquake rupture processes.  
 
-%% What does it do
+(WRITE) What does it do (defines standard tests and experiments)
 
-%% Why it is important for us
-
+(WRITE) Why this is relevant for us EC researchers.
 In order to objectively compare forecasts 
 
 \subsection{Earthquake Forecast Model}\label{CSEP_definition} 
@@ -380,7 +378,8 @@ seismocity of a larger period and a shorter one.
 To avoid this overfitting, we have developed two alternative fitness
 functions.
 
-\subsubsection{Simulated Log Likelihood Fitness Function} %% DONE
+\subsubsection{Simulated Log Likelihood Fitness Function}
+%% REVIEW -- TODO: Possibly remove this subsection
 
 In the Simulated Log Likelihood fitness function, we generate $k$
 ``simulations'' from the observed data $\Omega$, and compare an
@@ -403,7 +402,8 @@ number of similar, but slightly different training data sets at the
 same time, we might be able to avoid overfitting the forecast to the
 observed training data set.
 
-\subsubsection{Time-slice Log Likelihood Fitness Function} %% DONE
+\subsubsection{Time-slice Log Likelihood Fitness Function}
+%% REVIEW
 
 In the time-slice log likelihood fitness function we break up the
 training data set into smaller \emph{slices}. These slices are based
@@ -428,7 +428,8 @@ than the desired forecast. By breaking the training data into smaller
 periods, we are trying to make the evolutionary algorithm learn any
 time-repeating pattern that might exist in the data.
 
-\subsection{Evolutionary Operators and Parameters} %% DONE
+\subsection{Evolutionary Operators and Parameters}
+%% REVIEW
 
 GAModel uses a regular generational genetic algorithm. For selection,
 we use Elitism and Tournament selection. 
