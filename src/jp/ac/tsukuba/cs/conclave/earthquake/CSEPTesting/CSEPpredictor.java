@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -65,10 +66,7 @@ public class CSEPpredictor {
 		seedRandomGenerator();
 		loadDataFile();
 		
-		CSEPModel trainmodel = factory.modelFromData(training_data);
-		trainmodel.getAreaMap().saveToFile(fileprefix+"_map.png");
-		
-		//GARepetitionTest();
+		defaultTest();
 	}
 
 	static void defaultTest()
@@ -87,10 +85,29 @@ public class CSEPpredictor {
 		CSEPModel ri;
 		ri = RIsolver();		
 		testModel(ri,"RIModel");
-
+		
 		CSEPModel ga;
 		ga = GAsolver(0);
 		testModel(ga,"GAModel");
+
+		System.out.println(ASSTesting.calculateAreaSkillScore(random, testmodel));
+		System.out.println(ASSTesting.calculateAreaSkillScore(ri, testmodel));
+		System.out.println(ASSTesting.calculateAreaSkillScore(ga, testmodel));
+		
+//		List<double[]> l;
+//		l = ASSTesting.calculateMolchanTrajectory(random, testmodel);
+//		for (double[] aux:l)
+//			System.out.println(aux[0]+" "+aux[1]);
+//		System.out.println("===");
+//		l = ASSTesting.calculateMolchanTrajectory(ri, testmodel);
+//		for (double[] aux:l)
+//			System.out.println(aux[0]+" "+aux[1]);
+//		System.out.println("===");
+//		l = ASSTesting.calculateMolchanTrajectory(ga, testmodel);
+//		for (double[] aux:l)
+//			System.out.println(aux[0]+" "+aux[1]);
+		
+		
 	}
 	
 	static void GARepetitionTest()
@@ -167,7 +184,6 @@ public class CSEPpredictor {
 		// Output LogLikelihood Value
 		System.out.println("Log Likelihood for model "+modelname+" against train data: "+m.calcLogLikelihood(trainmodel));
 		System.out.println("Log Likelihood for model "+modelname+" against test data: "+m.calcLogLikelihood(testmodel));
-		System.out.println("AIC (?) for model "+modelname+" against test data "+(2*m.getTotalBins()-2*m.getLogLikelihood()));
 		
 		// Draw Testing Events
 		eventMapWithTestQuakes(m,modelname);

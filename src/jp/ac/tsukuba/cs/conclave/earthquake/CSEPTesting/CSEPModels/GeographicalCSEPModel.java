@@ -94,6 +94,11 @@ public class GeographicalCSEPModel extends CSEPModel {
 	{
 		return totalevents;
 	}
+	
+	public int getMaxEvents()
+	{
+		return maxevents;
+	}
 
 	@Override
 	public Iterator<Integer> iterator() {
