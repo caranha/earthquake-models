@@ -10,6 +10,9 @@
 
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage[caption=false]{subfig}
+% \usepackage{caption}
+% \usepackage{subcaption}
 
 \begin{document}
 
@@ -281,7 +284,7 @@ and Kennett and Sambridge~\cite{Kennett1992} used evolutionary
 computation to determine the Fault Model parameters (such as epicenter
 location, strike, dip, etc) of a given earthquake.
 
-\section{A Forecast Model Using Genetic Algorithms} 
+\section{A Forecast Model Using Genetic Algorithms}\label{implementation}
 %% TO REVIEW
 
 To investigate the ability of Evolutionary Computation to generate
@@ -455,9 +458,10 @@ time-repeating pattern that might exist in the data.
 GAModel uses a regular generational genetic algorithm. For selection,
 we use Elitism and Tournament selection. 
 
-For the crossover operator we use \emph{aNDX}, recently proposed by
-Someya~\cite{Someya2013}. If the value of a chromossome after the
-crossover falls outside the $[0,1)$ boundary, it is truncated to these
+%For the crossover operator we use \emph{aNDX}, recently proposed by
+%Someya~\cite{Someya2013}. If the value of a chromossome after the
+We use a simple Uniform Crossover for the crossover operator. If a gene's value
+falls outside the $[0,1)$ boundary, it is truncated to these
   limits. For the mutation operator, we sample entirely new values
   from $[0,1)$ for each mutated chromossome.
 
@@ -470,9 +474,9 @@ crossover falls outside the $[0,1)$ boundary, it is truncated to these
     Elite Size & 1\\
     Tournament Size & 50\\
     Crossover Chance & 0.9\\
-    aNDX parents & 4\\
-    aNDX zeta & 0.5\\
-    aNDX sigma & 1\\
+%    aNDX parents & 4\\
+%    aNDX zeta & 0.5\\
+%    aNDX sigma & 1\\
     Mutation Chance (individual) & 0.8\\
     Mutation Chance (chromossome) & (genome size)$^{-1}$\\
     \hline    
@@ -507,20 +511,43 @@ latitude, longitude and depth of the hypocenter.
 The part of the catalog used in this work spans a period from 2000 to
 2013, and has over 220.000 earthquakes recorded in the Japanese
 archipelago. In order to better understand the predictive power of
-GAModel, we divide the catalog into 5 areas, which are used in the
-experiments below. The relative position and size of these areas can
-be seen in Figure~\ref{areamap}.
+GAModel, we choose four areas from the catalog, which are used in the
+experiments below~(see Figure~\ref{areamap}). The first three areas
+focus on inland earthquakes, while the fourth area includes inland and
+off-shore events. We also only use earthquakes from the catalog with
+depth less than 100km.
 
 \begin{enumerate}
-  \item {\bf All Japan:}
-  \item {\bf Sendai:}
-  \item {\bf Kantou:}
-  \item {\bf Kansai:}
-  \item {\bf Touhoku:}
+  \item {\bf Kantou:} Kantou is the area at and nearby Tokyo. There is
+    a large amount of seismic activity in the target period. In this
+    study, we define this region as starting at N34.8,W138.8, with
+    2025 bins arranged in a 45x45 grid. Each bin corresponds to a
+    5km$x$5km square.
+  \item {\bf Kansai:} The Kansai area includes Kyoto, Osaka, Kobe and
+    nearby cities. This area shows a relatively lower amount of
+    seismic activity in the period considered. We define this region
+    as starting at N34,W134.5, with 1600 bins arranged in a 40x40
+    grid. Each bin corresponds to a 5km$x$5km square.
+  \item {\bf Touhoku:} The Touhoku region is defined as the northern
+    provinces of the main island. It shows some clusters of seismic
+    activity during the period studied. We define this region as
+    starting at N37.8,W139.8, with 800 bins arranged in a 40x20
+    grid. Each bin corresponds to a 10km$x$10km square.
+  \item {\bf East Japan:} This area corresponds to Japan's
+    north-eastern coast. It includes both inland and off-shore events,
+    which makes it more difficult to forecast. It also includes the
+    location of the M9 earthquake of 2011. We define this region as
+    starting at N37,W140, with 1600 bins arranged in a 40x40
+    grid. Each bin corresponds to a 10km$x$10km square.
 \end{enumerate}
 
-%% TODO: Geographical Description of the Data (depth, number of bins, reasoning)
-%% TODO: Figures of the locations we chose for the experiments
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=0.40\textwidth]{img/alljapan.png}
+  \end{center}
+  \caption{The four areas used in our experiments}
+  \label{areamap}
+\end{figure}
 
 \subsection{Experimental Design} %% DONE
 
@@ -542,7 +569,6 @@ generate their respectives forecasts. For the sake of statistical
 testing, we generate 20 forecasts using the GAModel. Unless noted
 otherwise, all results reported are an average of these runs.
 
-%% TODO: Remove ASS if we end up not using it.
 We compare the forecasts in three different ways: Using the
 log-likelihood between the forecast and the testing data, Using the
 ASS value, and visually by comparing the forecast maps of some
@@ -596,25 +622,77 @@ significative scenarios.
   \end{tabular}
   \end{center}
   \caption{Results from the simulation experiments. The parenthesis
-    after the GA values are the standard deviation of 20 runs. The two
-    ``p-value'' columns report the significance of the mean-test for
-    the alternate hypothesis: ``The GA average is higher than the RI
-    result''.}
+    after the GA values are the standard deviation (average of 20
+    runs). The two ``p-value'' columns report the significance of the
+    mean-test for the alternate hypothesis: ``The GA average is higher
+    than the RI result''.}
   \label{bigtable}
 \end{table*}
 
-%% TODO: Table with all the log likelihood results
-%% Indicate whether the difference between RI and GA is statistically significant
+The results of our simulation experiments are summarized in
+Table~\ref{bigtable}. In this table we compare three forecast models:
+\emph{random} is a randomly generated model, representing a total lack
+of information. \emph{RI} is the forecast model generated by the
+Relative Intensity algorithm. This algorithm is deterministic, and
+always generates the same output for the same input data, so no
+variance is reported. \emph{GA} is the GAModel system described in
+Section~\ref{implementation}, using a time-slice fitness function. The
+reported results for the GAModel are the average of 20 runs, with the
+standard deviation reported in brackets.
 
-%% TODO: Table with the ASS results
-%% Indicate whether the difference between RI and GA is statistically significant
+%% Explain the measures used
 
-%% TODO: Choose some scenarios (maybe 3?) to visually compare
+%% Comment on the results
 
-%% TODO: If there is not enough space, indicate that extra results
-%% will be left as additional material
 
-%% TODO: Justify the use of Molcham Diagrams and ASS
+%% Image: Random
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.4\textwidth]{img/kansai07_random.png}
+  \end{center}
+  \caption{A random forecast (Kansai Region, 2007)}
+  \label{randomforecast}
+\end{figure}
+
+%% Images: Comparisons
+\begin{figure*}
+
+  \begin{center}
+    \subfloat[Touhoku 2009, RI forecast]{
+      \includegraphics[width=0.38\textwidth]{img/touhoku09_RI.png}
+    }
+    \subfloat[Touhoku 2009, GA forecast]{
+      \includegraphics[width=0.38\textwidth]{img/touhoku09_ga.png}
+    }
+    
+    \subfloat[Kanto 2010, RI forecast]{
+      \includegraphics[width=0.38\textwidth]{img/kanto10_RI.png}
+    }
+    \subfloat[Kanto 2010, GA forecast]{
+      \includegraphics[width=0.38\textwidth]{img/kanto10_ga.png}
+    }
+
+    \subfloat[Kanto 2012, RI forecast]{
+      \includegraphics[width=0.38\textwidth]{img/kanto12_RI.png}
+    }
+    \subfloat[Kanto 2012, GA forecast]{
+      \includegraphics[width=0.38\textwidth]{img/kanto12_ga.png}
+    }
+    
+  \end{center}
+  \caption{Some forecast images for the RI algorithm and the
+    GAModel. Red squares indicate the intensity of the forecast. Blue
+    circles indicate actual earthquakes in the test data. Note that
+    the intensity of the red color indicates relative values in the
+    forecast. In other words, uniform forecasts will tend to appear as
+    a darker red color than forecasts with high and low values.}
+  \label{fig:results}
+\end{figure*}
+
+
+
+
+
 
 \section{Conclusion}
 
