@@ -65,7 +65,7 @@ public class ASSTesting {
 			count--;
 		} while (count >= 0);
 	
-		return area/data.getTotalEvents();
+		return 1.0 - (area/data.getTotalEvents());
 	}
 	
 	/**

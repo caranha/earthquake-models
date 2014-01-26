@@ -30,7 +30,8 @@ public class RandomSolver {
 	public void execute(boolean verbose)
 	{
 		int sdcount = suddendeath;
-		System.out.print("Running Random Solver");
+		if (verbose) 
+			System.out.print("Running Random Solver");
 		for (int i = 0; i < repetitions; i++)
 		{
 			CSEPModel current = factory.modelFromRandom(data.getTotalEvents());			
@@ -54,7 +55,8 @@ public class RandomSolver {
 				return;
 			}
 		}
-		System.out.println();
+		if (verbose)
+			System.out.println();
 	}
 	
 	public CSEPModel getBest()

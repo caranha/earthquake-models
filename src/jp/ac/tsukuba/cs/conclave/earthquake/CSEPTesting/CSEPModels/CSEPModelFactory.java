@@ -1,5 +1,10 @@
 package jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.utils.Parameter;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPpredictor;
@@ -47,5 +52,28 @@ public class CSEPModelFactory {
 	public CSEPModel simulationFromModel(CSEPModel reference)
 	{
 		return factory.simulationFromModel(reference);
+	}
+	
+	public CSEPModel modelFromTextFile(String filename)
+	{
+		int[] array = null;
+		
+		BufferedReader reader;
+    	String line = null;
+    	try {
+			reader = new BufferedReader(new FileReader(new File(filename)));
+			
+			line = reader.readLine(); // first line: identifier
+			line = reader.readLine(); // second line: number of elements;
+			int bins = Integer.parseInt(line.split(" ")[0]);
+			array = new int[bins];
+			for (int i = 0; i < bins; i++)
+				array[i] = Integer.parseInt(reader.readLine());
+		} catch (IOException e) {
+			System.err.println("Error Trying to load a model file: "+filename+" Error: "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return factory.modelFromIntegerArray(array);
 	}
 }

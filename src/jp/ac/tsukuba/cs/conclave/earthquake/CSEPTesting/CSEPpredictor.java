@@ -65,10 +65,48 @@ public class CSEPpredictor {
 		
 		seedRandomGenerator();
 		loadDataFile();
+		extractASSfromFile();
 		
-		defaultTest();
+		//defaultTest();
 	}
 
+	static void extractASSfromFile()
+	{
+		CSEPModel testmodel = factory.modelFromData(testing_data);
+		
+		param.addParameter("repetition number","1");
+		double[] randomASS = new double[20];
+		double riASS = 0;
+		double[] gaASS = new double[20];
+
+		
+		for (int i = 0; i < 20; i++)
+		{
+			randomASS[i] = ASSTesting.calculateAreaSkillScore(RandomSolver(),testmodel);
+			gaASS[i] = ASSTesting.calculateAreaSkillScore(factory.modelFromTextFile(param.getParameter("fileprefix", "")+"gaUNI_"+i+".txt"), testmodel);
+		}
+			
+		riASS = ASSTesting.calculateAreaSkillScore(RIsolver(),testmodel);
+		
+		System.out.print("random = c(");
+		for (int i = 0; i < 20; i++)
+		{
+			System.out.print(randomASS[i]);
+			System.out.print((i==19?")":","));
+		}	
+		System.out.println();
+		
+		System.out.println("ri = "+riASS);
+
+		System.out.print("ga = c(");
+		for (int i = 0; i < 20; i++)
+		{
+			System.out.print(gaASS[i]);
+			System.out.print((i==19?")":","));
+		}	
+		System.out.println();
+	}
+	
 	static void defaultTest()
 	{
 		CSEPModel trainmodel = factory.modelFromData(training_data);
@@ -227,7 +265,7 @@ public class CSEPpredictor {
 	{
 		RandomSolver r = new RandomSolver();
 		r.setup(training_data, param);
-		r.execute(true);
+		r.execute(false);
 		return r.getBest();
 	}
 	
