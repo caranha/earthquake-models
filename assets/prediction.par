@@ -1,21 +1,20 @@
 # Comment for random seed, uncomment to fix seed
 # random seed = 10
 
-#### Data Filtering Parameters
+#### Data Files
 #datafile = data/jma_cat_2000_2012_Mth2.5_formatted.dat
 datafile = data/jmacat_20000101_20131115_Mth2.5.dat
 filetype = jma
 coastfile = data/coast_japan.m
 
 ## file with geographical information about the area to be tested
-# base, alljapan, kagoshima, kansai, kantocesp, kantomini, niigata, touhoku
+# base, kantomini, kansai, touhoku, alljapan, kagoshima,  kantocesp,  niigata, 
 geofile = assets/base
-fileprefix = base_
+fileprefix = base_ #prefix for output file names
 
-# Selects the type of model used by the predictor
-# modeltype options: {geographical}
+# modeltype options
 modeltype = geographical
-magnitude bins = false # Remove this later
+magnitude bins = false
 
 # Start and End date for the training data, format YYYY-MM-DD [HH-mm-SS]
 training start date = 2000-01-01
@@ -29,7 +28,7 @@ testing end date = 2006-01-01
 population size = 500
 generation number = 100
 
-GAM output = true
+GAM output = false
 repetition number = 1
 
 # Fitness: simple, simulated, timeslice
@@ -52,7 +51,7 @@ ri b parameter = 0.9
 ri s parameter = 5
 
 ### Random Parameters ###
-random search max = 100
+random search max = 1
 random death count = -1
 
 ### Fitness Parameters ###
@@ -62,7 +61,6 @@ fitness time slices = 5
 andx parents = 4
 andx zeta = 0.5
 andx sigma = 1
-
 
 ### Gene Clamp values ###
 clamp maximum value = 0.999

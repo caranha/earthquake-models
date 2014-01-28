@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -56,7 +55,7 @@ public class CSEPpredictor {
 
 		if (args.length == 0)
 		{
-			System.err.println("Error: Parameter file not specified.");
+			System.err.println("Error: You need to specify a parameter file");
 			System.exit(EXIT_ERROR);
 		}
 		
@@ -65,9 +64,7 @@ public class CSEPpredictor {
 		
 		seedRandomGenerator();
 		loadDataFile();
-		extractASSfromFile();
-		
-		//defaultTest();
+		defaultTest();
 	}
 
 	static void extractASSfromFile()
@@ -107,8 +104,10 @@ public class CSEPpredictor {
 		System.out.println();
 	}
 	
+	
 	static void defaultTest()
 	{
+		System.out.println("Printing map with train and test data: "+fileprefix+"trainmodel.png and "+fileprefix+"testmodel.png");
 		CSEPModel trainmodel = factory.modelFromData(training_data);
 		trainmodel.getEventMap().saveToFile(fileprefix+"trainmodel.png");
 		CSEPModel testmodel = factory.modelFromData(testing_data);
@@ -116,23 +115,20 @@ public class CSEPpredictor {
 
 		System.out.println("Executing for area "+fileprefix);
 		
+		System.out.println("************** Random Model ************");
 		CSEPModel random;
 		random = RandomSolver();		
 		testModel(random,"RandomModel");
 		
+		System.out.println("************** RI Model ************");
 		CSEPModel ri;
 		ri = RIsolver();		
 		testModel(ri,"RIModel");
 		
+		System.out.println("************** GA Model ************");
 		CSEPModel ga;
 		ga = GAsolver(0);
 		testModel(ga,"GAModel");
-
-		System.out.println(ASSTesting.calculateAreaSkillScore(random, testmodel));
-		System.out.println(ASSTesting.calculateAreaSkillScore(ri, testmodel));
-		System.out.println(ASSTesting.calculateAreaSkillScore(ga, testmodel));
-		
-		
 	}
 	
 	static void GARepetitionTest()
@@ -209,6 +205,8 @@ public class CSEPpredictor {
 		// Output LogLikelihood Value
 		System.out.println("Log Likelihood for model "+modelname+" against train data: "+m.calcLogLikelihood(trainmodel));
 		System.out.println("Log Likelihood for model "+modelname+" against test data: "+m.calcLogLikelihood(testmodel));
+		System.out.println("Ass Score for model "+modelname+" against test data: "+ASSTesting.calculateAreaSkillScore(m, testmodel));
+		System.out.println("Drawing Forecast map at file "+(fileprefix+modelname)+".png");
 		
 		// Draw Testing Events
 		eventMapWithTestQuakes(m,modelname);
@@ -256,7 +254,7 @@ public class CSEPpredictor {
 	{
 		GASolver gas = new GASolver();
 		gas.configureGA(training_data, param, dice);
-		gas.setVerbose(false);
+		gas.setVerbose(true);
 		gas.runGA(rep);
 		return gas.getBest();		
 	}

@@ -30,13 +30,17 @@ public class GASolver {
 		ga.initializeRun();
 		ga.setRepetition(rep);
 		
+		if (verbose)
+			System.out.print("Running GA:");
 		while (!ga.runGenerations(1))
 		{
 			ga.GAMOutput();
 			// TODO: make periods proportional to 5% progress
-			if (verbose && (ga.getCurrentGeneration()%50 == 0))
+			if (verbose && (ga.getCurrentGeneration()%10 == 0))
 				System.out.print(".");
 		}
+		if (verbose)
+			System.out.println();
 	}
 	
 	public void configureGA(DataList data, Parameter p, Random d)
