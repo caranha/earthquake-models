@@ -18,12 +18,12 @@ public class CSEPModelFactory {
 	{
 		String mode = p.getParameter("modeltype", null);
 		
-		switch (mode)
+		if (mode == "geographical")
 		{
-		case "geographical":
 			factory = new GeographicalCSEPModelFactory(p);
-			break;
-		default:
+		}
+		else
+		{
 			System.err.println("Error: No valid modeltype parameter");
 			System.exit(CSEPpredictor.EXIT_ERROR);
 		}

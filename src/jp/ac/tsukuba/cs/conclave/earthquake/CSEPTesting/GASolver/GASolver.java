@@ -52,16 +52,21 @@ public class GASolver {
 		double lambdamult = Double.parseDouble(p.getParameter("lambda multiplier", "2"));
 
 		String fitness = p.getParameter("fitness operator","simple");
-
-		switch(fitness)
+		int fit = -1;
+		if (fitness == "simulated") fit = 0;
+		if (fitness == "timeslice") fit = 1;
+		if (fitness == "simple") fit = 2;
+		
+		
+		switch(fit)
 		{
-		case "simulated":
+		case 0:
 			fittest = new SimulatedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
 			break;
-		case "timeslice":
+		case 1:
 			fittest = new TimeWeightedLogLikelihoodFitness(CSEPpredictor.getTrainingData(), comparator, factory,lambdamult);
 			break;
-		case "simple":
+		case 2:
 			fittest = new SimpleLogLikelihoodFitness(comparator, factory,lambdamult);	
 			break;
 		default:			
@@ -75,10 +80,15 @@ public class GASolver {
 		BreedingPipeline mutation = new RALinearMutation();
 		
 		String crossover = p.getParameter("crossover operator", "uniform");
+		int xoveridx = -1;
+		if (crossover == "andx") xoveridx = 0;
+		if (crossover == "uniform") xoveridx = 1;
 		BreedingPipeline xover;
-		switch(crossover)
+		
+		
+		switch(xoveridx)
 		{
-		case "andx":
+		case 0:
 			BreedingPipeline andx = new RAandx();
 			int parents = Integer.parseInt(p.getParameter("andx parents","3"));
 			for (int i = 0; i < parents; i++)
@@ -88,7 +98,7 @@ public class GASolver {
 			break;
 		default:
 			System.err.println("Error: Crossover parameter not recognized, using uniform");
-		case "uniform":
+		case 1:
 			xover = new RAUniformCrossover();
 			xover.chainBreedingPipeline(new TournamentSelection());
 			xover.chainBreedingPipeline(new TournamentSelection());
