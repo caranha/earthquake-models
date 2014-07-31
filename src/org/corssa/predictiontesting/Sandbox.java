@@ -161,22 +161,22 @@ public class Sandbox {
      */
     public static void molchanASSComputation(String forecastFile, String[] otherForecastFiles, String catalogFile, String xmlFile, float alpha,
             long seed, boolean saveResultsInMatlab, boolean useMaskBit) {
-        // Instantiate the reference rate forecast of interest from ForecastML file
+        // ---Instantiate the reference rate forecast of interest from ForecastML file
 //        System.out.println("Instantiate the reference rate forecast of interest from ForecastML file");
 //        CSEPForecast referenceForecast = new CSEPForecast(forecastFile, useMaskBit);
 
-        // Instantiate the rate forecasts that we wish to compare to the reference forecast
+        // ---Instantiate the rate forecasts that we wish to compare to the reference forecast
 //        System.out.println("Instantiate the rate forecasts that we wish to compare to the reference forecast");
 //        CSEPForecast[] forecasts = new CSEPForecast[otherForecastFiles.length];
 //        for (int i = 0; i < forecasts.length; i++) {
 //            forecasts[i] = new CSEPForecast(otherForecastFiles[i]);
 //        }
 
-        // Instantiate a catalog of observed eqks from a ZMAP file
+        // ---Instantiate a catalog of observed eqks from a ZMAP file
         System.out.println("Instantiate a catalog of observed eqks from a ZMAP file");
         Catalog catalog = new Catalog(catalogFile);
 
-        // Compute Molchan/ASS and confidence bounds for the given forecast and catalog, and save in Matlab and then XML format
+        // ---Compute Molchan/ASS and confidence bounds for the given forecast and catalog, and save in Matlab and then XML format
         System.out.println("Compute Molchan/ASS and confidence bounds for the given forecast and catalog, and save");
         MolchanTools.molchanAndASS(forecastFile, otherForecastFiles, catalog, xmlFile, alpha, seed, saveResultsInMatlab, useMaskBit);
     }

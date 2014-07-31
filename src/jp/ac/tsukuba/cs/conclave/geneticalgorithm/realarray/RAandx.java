@@ -89,7 +89,8 @@ public class RAandx implements BreedingPipeline {
 					double movement = dice.nextGaussian();
 					for (int k = 0; k < length; k++)
 						xc.genes[k] -= paux.genes[k]*movement;
-				}				
+				}
+			c.add(xc);
 		}
 			
 		return c;
