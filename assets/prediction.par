@@ -9,8 +9,8 @@ coastfile = data/coast_japan.m
 
 ## file with geographical information about the area to be tested
 # base, kantomini, kansai, touhoku, alljapan, kagoshima,  kantocesp,  niigata, 
-geofile = assets/base
-fileprefix = base_ #prefix for output file names
+geofile = assets/kantomini
+fileprefix = neutraltest_ #prefix for output file names
 
 # modeltype options
 modeltype = geographical
@@ -21,8 +21,8 @@ training start date = 2000-01-01
 training end date = 2005-01-01
 
 # Start and End date for the testing data, format YYYY-MM-DD [HH-mm-SS]
-testing start date = 2005-01-01
-testing end date = 2006-01-01
+testing start date = 2011-01-01
+testing end date = 2012-01-01
 
 ### GA Parameters ###
 population size = 500

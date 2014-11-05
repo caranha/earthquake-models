@@ -18,7 +18,7 @@ public class CSEPModelFactory {
 	{
 		String mode = p.getParameter("modeltype", null);
 		
-		if (mode == "geographical")
+		if (mode.equals("geographical"))
 		{
 			factory = new GeographicalCSEPModelFactory(p);
 		}
@@ -34,6 +34,11 @@ public class CSEPModelFactory {
 		return factory.modelFromRandom(event);
 	}
 
+	public CSEPModel modelFromNeutral()
+	{
+		return factory.modelFromNeutral();
+	}
+	
 	public CSEPModel modelFromData(DataList data)
 	{
 		return factory.modelFromData(data);

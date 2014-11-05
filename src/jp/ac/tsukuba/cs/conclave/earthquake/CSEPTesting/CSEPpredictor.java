@@ -13,6 +13,7 @@ import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.CSEPModels.CSEPModelFact
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.GASolver.GASolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RISolver.RISolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.RandomSolver;
+import jp.ac.tsukuba.cs.conclave.earthquake.CSEPTesting.RandomSolver.NeutralSolver;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataPoint;
 import jp.ac.tsukuba.cs.conclave.earthquake.data.DataList;
 import jp.ac.tsukuba.cs.conclave.earthquake.filtering.CompositeEarthquakeFilter;
@@ -64,7 +65,8 @@ public class CSEPpredictor {
 		
 		seedRandomGenerator();
 		loadDataFile();
-		defaultTest();
+		//defaultTest();
+		neutralTest();
 	}
 
 	static void extractASSfromFile()
@@ -104,6 +106,12 @@ public class CSEPpredictor {
 		System.out.println();
 	}
 	
+	static void neutralTest()
+	{
+		CSEPModel testmodel = factory.modelFromData(testing_data);
+		CSEPModel neutral = NeutralSolver();
+		testModel(neutral,"RandomModel");
+	}
 	
 	static void defaultTest()
 	{
@@ -267,6 +275,13 @@ public class CSEPpredictor {
 		return r.getBest();
 	}
 	
+	static CSEPModel NeutralSolver()
+	{
+		NeutralSolver r = new NeutralSolver();
+		r.setup(training_data, param);
+		r.execute(false);
+		return r.getBest();
+	}
 	
 	
 	static public Parameter getParameter()

@@ -58,6 +58,22 @@ public class GeographicalCSEPModelFactory implements CSEPModelFactoryMethod {
 		
 		return ret;
 	}
+	
+	@Override
+	public CSEPModel modelFromNeutral() {
+
+		GeographicalCSEPModel ret = new GeographicalCSEPModel(startlon,startlat,deltalon,deltalat,binlon,binlat);
+		
+		// We need to guarantee that each bin has at least one event.
+		ret.maxevents = 1;
+		for (int i = 0; i < ret.dimlength[0]; i++)
+			for (int j = 0; j < ret.dimlength[1]; j++)
+			{
+				ret.bins[i][j] = 1;
+				ret.totalevents++;
+			}
+		return ret;
+	}
 
 	@Override
 	public CSEPModel modelFromData(DataList data) {
