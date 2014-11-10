@@ -59,7 +59,7 @@ public class TimeWeightedLogLikelihoodFitness extends CSEPFitness {
 			lambda = +((double)trainModels[i].getTotalEvents())/trainModels[i].getTotalBins();
 		}
 		
-		lambda = lambda/4;
+		lambda = lambda/n;
 	}
 
 	@Override
